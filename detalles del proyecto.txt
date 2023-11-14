@@ -1,0 +1,21 @@
+-Pasar vista a POO
+-definir las funciones de la vista
+	-controlar los botones
+	-limpiar los entry
+	-funcion auxiliar Alta
+	-funcion auxiliar Baja
+	-funcion auxiliar Modificacion
+	-funcion auxiliar Estadisticas
+	-funcion auxiliar Categoria Monotributo
+-generar Validaciones POO
+-grafico
+
+-Generar Modelo POO
+	-Alta
+	-Baja
+	-Modificacion
+	-Config
+
+-Link a la Afip
+
+
