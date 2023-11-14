@@ -1,12 +1,13 @@
 from tkinter import *
 from tkcalendar import DateEntry
 from tkinter.ttk import Combobox,Treeview
-import Base.modelo as modelo
 import tkinter as tk
 from tkcalendar import Calendar
+from modelo import MiBaseDeDatos
 
 def vista_principal(root):
     
+    mibase = MiBaseDeDatos()
     
     root.title ("FACTURACIÓN")
     root.geometry("1000x600")
@@ -106,7 +107,7 @@ def vista_principal(root):
     tabla.column("Fecha",width=100,minwidth=100,anchor=CENTER)
     tabla.column("Concepto",width=150,minwidth=80,anchor=CENTER)
     tabla.column("Monto",width=150,minwidth=80,anchor=CENTER)
-    modelo.actualizar_treeview(tabla)
+    #modelo.actualizar_treeview(tabla)
 
 
 # BOTONES:
@@ -124,7 +125,7 @@ def vista_principal(root):
     btn_borrar.place (x=220, y=520 )
    
     global btn_actualizar_categoria
-    btn_actualizar_categoria = Button (root,text="DATOS DE \n CATEGORIZACIÓN",command="",anchor=CENTER)
+    btn_actualizar_categoria = Button (root,text="DATOS DE \n CATEGORIZACIÓN",command=lambda:ventana_informacion_categoria(),anchor=CENTER)
     btn_actualizar_categoria.place(x=790,y=190)
 
     global btn_modificar_carga 
@@ -149,7 +150,7 @@ def vista_principal(root):
     menubar.add_cascade(label="Información",menu=menu_ayuda)
     root.config(menu=menubar)   
     
-   
+
 def ventana_informacion_categoria():
         
         global inf_categoria
@@ -157,7 +158,7 @@ def ventana_informacion_categoria():
         inf_categoria.title("Información para categorizar")
         inf_categoria.geometry("600x600")
         
-        inf_categoria.config(bg="")
+        inf_categoria.config(bg=fondo)
         
         
         ########################CATEGORÍAS:
@@ -177,7 +178,7 @@ def ventana_informacion_categoria():
         
         global txt_fecha_sqlite
         txt_fecha_sqlite = StringVar()
-        txt_fecha_sqlite= ""
+        txt_fecha_sqlite= "2023/01/01"
         
         global txt_fecha_categoria
         txt_fecha_categoria = DateEntry(inf_categoria,date_pattern="yyyy/mm/dd", width=15,justify="center",textvariable=txt_fecha_sqlite)
@@ -278,7 +279,7 @@ def ventana_informacion_categoria():
         var_H.set("")
         txt_H = Entry(inf_categoria, width=20, textvariable=var_H, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_H.place(x=135, y=262)
-        txt_H.config(bg="")
+        txt_H.config(bg=fondo)
 
-def aux_modificar_datos_categorizacion(var_A):
-        modelo.modificar_datos_categorizacion(var_A)
+def aux_modificar_datos_categorizacion(var_A):pass
+        #modelo.modificar_datos_categorizacion(var_A)
