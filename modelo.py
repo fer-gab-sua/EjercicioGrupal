@@ -108,77 +108,60 @@ class MiBaseDeDatos():
                 data = ('color_fondo','#004080')
                 self.cursor.execute(sql, data)
 
+                sql = """
+                INSERT INTO config_app (config_txt_tipo , config_txt_valor) 
+                SELECT ?,?
+                WHERE NOT EXISTS (SELECT 1 FROM config_app WHERE config_txt_tipo = 'link_afip')
+                """
+                data = ('link_afip','https://www.afip.gob.ar/monotributo/categorias.asp')
+                self.cursor.execute(sql, data)
+
+
                 self.conexion.commit()
                 print("datos cargados correctamente")
             except sqlite3.Error as error:
                 print(f"Error en la carga inicial: {error}")
                 self.conexion.rollback()
 
-    def modificar_factura(self,factura_id, nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente):
-        """MODIFICA UNA FACTURA EXISTENTE EN LA BASE DE DATOS
-
-        Args:
-            factura_id (_int_): _factura a modificar_
-            nueva_fecha (_date_): _nueva fecha_
-            nuevo_id_concepto (_int_): _nuevo id concepto_
-            nuevo_monto (_bol_): _nuevo monto_
-            nuevo_cuil_cliente (_str_): _nuevo cuil de cliente_
-        """        
-        try:
-            self.conectar()
-            sql = "UPDATE facturacion SET fac_date_fecha = ?, fac_int_idconcepto = ?, fac_bol_monto = ?, fac_txt_cuilcliente = ? WHERE fac_int_id = ?"
-            data = (nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente, factura_id)
-            self.cursor.execute(sql,data)
-            self.conexion.commit()
-            print(f"Factura con ID {factura_id} modificada correctamente")
-        except sqlite3.Error as error:
-            print(f"Error al modificar la factura: {error}")
-            self.conexion.rollback()
-        
-    def borrar_factura(self,factura_id):
-        try:
-            self.conectar()
-            sql = "DELETE FROM facturacion WHERE fac_int_id = ?"
-            data = (factura_id,)
-            self.cursor.execute(sql,data)
-            self.conexion.commit()
-            print(f"Factura con ID {factura_id} fue eliminada correctamente ")
-        except sqlite3.Error as error:
-            print(f"Error al eliminar la factura: {error}")
-            self.conexion.rollback()
 
 
-class Factura():
-    def __init__(self, fecha, id_concepto, monto, cuil_cliente):
-        self.fecha = fecha
-        self.id_concepto = id_concepto
-        self.monto = monto
-        self.cuil_cliente = cuil_cliente
 
-    def validar_factura(self):
-        if not self.fecha or not self.id_concepto or self.monto <= 0 or not self.cuil_cliente:
-            return False
-        return True
-    
-    def agregar_a_base_de_datos(self, base_de_datos):
-        """AGREGA LA FACTURA A LA BASE DE DATOS
 
-        Args:
-            base_de_datos (_obj_): _objeto de base de datos donde tiene que ingresar la fatura_
-        """            
-        if self.validar_factura():
-            try:
-                base_de_datos.conectar()
-                sql = "INSERT INTO facturacion (fac_date_fecha, fac_int_idconcepto, fac_bol_monto, fac_txt_cuilcliente) VALUES (?,?,?,?)"
-                data = (self.fecha, self.id_concepto, self.monto, self.cuil_cliente)
-                base_de_datos.cursor.execute(sql, data)
-                base_de_datos.conexion.commit()
-                print("Factura agregada correctamente a la base de datos")
-            except sqlite3.Error as error:
-                print(f"Error al agregar la factura a la base de datos: {error}")
-                base_de_datos.conexion.rollback()
-        else:
-            print("Factura no válida. No se ha agregado a la base de datos")
+
+#    def modificar_factura(self,factura_id, nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente):
+#        """MODIFICA UNA FACTURA EXISTENTE EN LA BASE DE DATOS
+#
+#        Args:
+#            factura_id (_int_): _factura a modificar_
+#            nueva_fecha (_date_): _nueva fecha_
+#            nuevo_id_concepto (_int_): _nuevo id concepto_
+#            nuevo_monto (_bol_): _nuevo monto_
+#            nuevo_cuil_cliente (_str_): _nuevo cuil de cliente_
+#        """        
+#        try:
+#            self.conectar()
+#            sql = "UPDATE facturacion SET fac_date_fecha = ?, fac_int_idconcepto = ?, fac_bol_monto = ?, fac_txt_cuilcliente = ? WHERE fac_int_id = ?"
+#            data = (nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente, factura_id)
+#            self.cursor.execute(sql,data)
+#            self.conexion.commit()
+#            print(f"Factura con ID {factura_id} modificada correctamente")
+#        except sqlite3.Error as error:
+#            print(f"Error al modificar la factura: {error}")
+#            self.conexion.rollback()
+#        
+#    def borrar_factura(self,factura_id):
+#        try:
+#            self.conectar()
+#            sql = "DELETE FROM facturacion WHERE fac_int_id = ?"
+#            data = (factura_id,)
+#            self.cursor.execute(sql,data)
+#            self.conexion.commit()
+#            print(f"Factura con ID {factura_id} fue eliminada correctamente ")
+#        except sqlite3.Error as error:
+#            print(f"Error al eliminar la factura: {error}")
+#            self.conexion.rollback()
+
+
 
 
 if __name__ == "__main__":
