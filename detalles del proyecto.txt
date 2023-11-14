@@ -11,10 +11,13 @@
 -grafico
 
 -Generar Modelo POO
+	-init
 	-Alta
 	-Baja
 	-Modificacion
 	-Config
+		-init
+		-modificacion
 
 -Link a la Afip
 
