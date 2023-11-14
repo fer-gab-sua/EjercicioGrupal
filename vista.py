@@ -8,64 +8,40 @@ from tkcalendar import Calendar
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
-    
-    
         ventana1.title ("FACTURACIÓN")
         ventana1.geometry("1000x600")
         global fondo
         fondo = "blue4"
         ventana1.config(bg=fondo)
 
-        
-
-
         ### FRAME CATEGORÍA:
         frame_categoria = Frame(ventana1)
         frame_categoria.config(width=230,height=130,bg="gray50")
         frame_categoria.place(x=750,y=50)
 
-
-
         ################################WIDGETS###########################################
 
         # ETIQUETAS:
-
-    
-
-    
-
-        
-
         etiqueta_categoria = Label(ventana1, text="CATEGORIA: ",font= ("arial",15,"bold"))
         etiqueta_categoria.place (x=795,y=50)
         etiqueta_categoria.config(bg="gray50",foreground="black")
-
-
         global etiqueta_categoria_rdo_nulo
         etiqueta_categoria_rdo_nulo = Label(ventana1, text="",foreground="green",anchor=CENTER)
         etiqueta_categoria_rdo_nulo.place (x=760,y=90)
         etiqueta_categoria_rdo_nulo.config(bg="gray50", font=("arial",14,"bold"))
 
         ############ MOSTRAR TOTALES: 
-        
         etiqueta_total = Label(ventana1)
         etiqueta_total.place (x=430,y=350)
         etiqueta_total.config(bg=fondo,text="Total de facturas: ",font=("Arial",16,"bold"))
-
         global etiqueta_total_facturas
-        
         etiqueta_total_facturas = Label(ventana1, text="")
         etiqueta_total_facturas.place (x=470,y=370)
         etiqueta_total_facturas.config(bg=fondo,text="prueba",font=("Arial",16,"bold"),foreground="RED")
-
-
-        
-        
         
         ########FECHA
         global fecha
         fecha = StringVar()
-        
         etiqueta_fecha = Label(ventana1, text="Fecha: ", font= ("arial",13,"bold"))
         etiqueta_fecha.place (x=10,y=45)
         etiqueta_fecha.config(bg=fondo)
@@ -77,12 +53,10 @@ class VentanaPrincipal():
         
         calendar= Calendar(ventana1, selectmode="day", date_pattern="dd/MM/yyyy")
         calendar.place(x=60,y=85)
-        
-
 
     ######## Concepto
         etiqueta_concepto = Label(ventana1, text="Concepto: ",font= ("arial",13,"bold"))
-        etiqueta_concepto.place (x=10,y=255)
+        etiqueta_concepto.place (x=10,y=275)
         etiqueta_concepto.config(bg=fondo)
     
         global concepto
@@ -90,7 +64,7 @@ class VentanaPrincipal():
         lista_concepto = ["Colegio médico","Hospital","Intecnus","Particular"]
         global combobox_concepto
         combobox_concepto = Combobox(ventana1,values=lista_concepto,state="readonly",width=19,justify="center",textvariable=concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
-        combobox_concepto.place (x=83,y=255) 
+        combobox_concepto.place (x=100,y=275) 
 
         ###########MONTO:
         etiqueta_monto = Label(ventana1, text="Monto:",font= ("arial",13,"bold"))
@@ -102,7 +76,6 @@ class VentanaPrincipal():
         global txt_monto
         txt_monto = Entry(ventana1, width=19, textvariable=monto, justify="center")
         txt_monto.place(x=83, y=10)
-
 
         # TABLA:
         global tabla
@@ -119,13 +92,11 @@ class VentanaPrincipal():
         tabla.column("Concepto",width=150,minwidth=80,anchor=CENTER)
         tabla.column("Monto",width=150,minwidth=80,anchor=CENTER)
         
-
-
     # BOTONES:
         
         global btn_cargar
         btn_cargar = Button(ventana1, text="CARGAR",command="") 
-        btn_cargar.place (x=320,y=260)
+        btn_cargar.place (x=320,y=270)
         
         global btn_ver_graficos
         btn_ver_graficos = Button(ventana1, text="VISUALIZAR\n DATOS",command="")
@@ -133,15 +104,15 @@ class VentanaPrincipal():
         
         global btn_borrar
         btn_borrar = Button(ventana1, text="  BORRAR  ",command= "")
-        btn_borrar.place (x=220, y=520 )
+        btn_borrar.place (x=220, y=540 )
     
         global btn_actualizar_categoria
-        btn_actualizar_categoria = Button (ventana1,text="DATOS DE \n CATEGORIZACIÓN",command="",anchor=CENTER)
+        btn_actualizar_categoria = Button (ventana1,text="DATOS DE \n CATEGORIZACIÓN",command=lambda:self.ventana_informacion_categoria(),anchor=CENTER)
         btn_actualizar_categoria.place(x=790,y=190)
 
         global btn_modificar_carga 
         btn_modificar_carga = Button(ventana1,text="MODIFICAR",command="")
-        btn_modificar_carga.place(x=100, y=520)
+        btn_modificar_carga.place(x=100, y=540)
 
         global btn_guardar_modificar_carga 
         btn_guardar_modificar_carga = Button(ventana1,text="GUARDAR",command="")
@@ -161,15 +132,12 @@ class VentanaPrincipal():
         menubar.add_cascade(label="Información",menu=menu_ayuda)
         ventana1.config(menu=menubar)   
     
-   
-def ventana_informacion_categoria():
-        
-        global inf_categoria
+    def ventana_informacion_categoria(self):
+        fondo = "blue4"
         inf_categoria = Toplevel()
         inf_categoria.title("Información para categorizar")
         inf_categoria.geometry("600x600")
-        
-        inf_categoria.config(bg="")
+        inf_categoria.config(bg=fondo)
         
         
         ########################CATEGORÍAS:
@@ -189,7 +157,7 @@ def ventana_informacion_categoria():
         
         global txt_fecha_sqlite
         txt_fecha_sqlite = StringVar()
-        txt_fecha_sqlite= ""
+        txt_fecha_sqlite= "2023/01/01"
         
         global txt_fecha_categoria
         txt_fecha_categoria = DateEntry(inf_categoria,date_pattern="yyyy/mm/dd", width=15,justify="center",textvariable=txt_fecha_sqlite)
@@ -290,7 +258,7 @@ def ventana_informacion_categoria():
         var_H.set("")
         txt_H = Entry(inf_categoria, width=20, textvariable=var_H, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_H.place(x=135, y=262)
-        txt_H.config(bg="")
+        txt_H.config(bg=fondo)
 
 def aux_modificar_datos_categorizacion(var_A):
         modelo.modificar_datos_categorizacion(var_A)
@@ -298,5 +266,6 @@ def aux_modificar_datos_categorizacion(var_A):
 if __name__== "__main__":
     root = Tk()
     app = VentanaPrincipal(root)
-
+    
+    #ventana = VentanaInformacionCategoria(root)
     root.mainloop()
