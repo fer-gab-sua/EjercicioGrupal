@@ -1,18 +1,20 @@
 from tkinter import *
 from tkcalendar import DateEntry
 from tkinter.ttk import Combobox,Treeview
-import Base.modelo as modelo
+from modelo import MiBaseDeDatos
 import tkinter as tk
 from tkcalendar import Calendar
 
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
+        self.mibase = MiBaseDeDatos()
         ventana1.title ("FACTURACIÓN")
         ventana1.geometry("1000x600")
-        global fondo
-        fondo = "blue4"
-        ventana1.config(bg=fondo)
+
+        #Funcion que trae la configuracion del color 
+        self.fondo = self.mibase.return_config('color_fondo')
+        ventana1.config(bg=self.fondo)
 
         ### FRAME CATEGORÍA:
         frame_categoria = Frame(ventana1)
@@ -33,18 +35,18 @@ class VentanaPrincipal():
         ############ MOSTRAR TOTALES: 
         etiqueta_total = Label(ventana1)
         etiqueta_total.place (x=430,y=350)
-        etiqueta_total.config(bg=fondo,text="Total de facturas: ",font=("Arial",16,"bold"))
+        etiqueta_total.config(bg=self.fondo,text="Total de facturas: ",font=("Arial",16,"bold"))
         global etiqueta_total_facturas
         etiqueta_total_facturas = Label(ventana1, text="")
         etiqueta_total_facturas.place (x=470,y=370)
-        etiqueta_total_facturas.config(bg=fondo,text="prueba",font=("Arial",16,"bold"),foreground="RED")
+        etiqueta_total_facturas.config(bg=self.fondo,text="prueba",font=("Arial",16,"bold"),foreground="RED")
         
         ########FECHA
         global fecha
         fecha = StringVar()
         etiqueta_fecha = Label(ventana1, text="Fecha: ", font= ("arial",13,"bold"))
         etiqueta_fecha.place (x=10,y=45)
-        etiqueta_fecha.config(bg=fondo)
+        etiqueta_fecha.config(bg=self.fondo)
         
         global txt_fecha
         txt_fecha = Entry (ventana1, width=19, textvariable=fecha, justify="center")
@@ -57,7 +59,7 @@ class VentanaPrincipal():
     ######## Concepto
         etiqueta_concepto = Label(ventana1, text="Concepto: ",font= ("arial",13,"bold"))
         etiqueta_concepto.place (x=10,y=275)
-        etiqueta_concepto.config(bg=fondo)
+        etiqueta_concepto.config(bg=self.fondo)
     
         global concepto
         concepto = StringVar()
@@ -69,7 +71,7 @@ class VentanaPrincipal():
         ###########MONTO:
         etiqueta_monto = Label(ventana1, text="Monto:",font= ("arial",13,"bold"))
         etiqueta_monto.place (x=10,y=11)
-        etiqueta_monto.config(bg=fondo)
+        etiqueta_monto.config(bg=self.fondo)
         
         global monto
         monto = StringVar()
@@ -133,26 +135,27 @@ class VentanaPrincipal():
         ventana1.config(menu=menubar)   
     
     def ventana_informacion_categoria(self):
-        fondo = "blue4"
         inf_categoria = Toplevel()
         inf_categoria.title("Información para categorizar")
         inf_categoria.geometry("600x600")
-        inf_categoria.config(bg=fondo)
+        inf_categoria.config(bg=self.fondo)
+
+        
         
         
         ########################CATEGORÍAS:
         
         et_categorias = Label(inf_categoria,text="CATEGORIAS",justify="center",font=("arial",11,"bold"),foreground="RED")
         et_categorias.place (x=27,y=20)
-        et_categorias.config(bg=fondo)
+        et_categorias.config(bg=self.fondo)
         
         et_montos = Label(inf_categoria,text="MONTOS",justify="center",font=("arial",11,"bold"),foreground="RED")
         et_montos.place (x=180,y=20)
-        et_montos.config(bg=fondo)
+        et_montos.config(bg=self.fondo)
         
         et_fecha = Label(inf_categoria,text=" FECHA PARA\nCATEGORIZACION",justify="center",font=("arial",11,"bold"),foreground="RED")
         et_fecha.place (x=400,y=100)
-        et_fecha.config(bg=fondo)
+        et_fecha.config(bg=self.fondo)
         
         
         global txt_fecha_sqlite
@@ -173,7 +176,7 @@ class VentanaPrincipal():
         
         et_A = Label(inf_categoria,text="CATEGORIA A: ",justify="center",font=("arial",11,"bold"))
         et_A.place(x=20,y=50)
-        et_A.config(bg=fondo)
+        et_A.config(bg=self.fondo)
         
         global var_A,txt_A
         var_A = StringVar()
@@ -181,84 +184,84 @@ class VentanaPrincipal():
         
         txt_A = Entry(inf_categoria, width=20, textvariable=var_A, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_A.place(x=135, y=52)
-        txt_A.config(bg=fondo)
+        txt_A.config(bg=self.fondo)
         
         et_B = Label(inf_categoria,text="CATEGORIA B: ",justify="center",font=("arial",11,"bold"))
         et_B.place(x=20,y=80)
-        et_B.config(bg=fondo)
+        et_B.config(bg=self.fondo)
         
         global var_B,txt_B
         var_B = StringVar()
         var_B.set("")
         txt_B = Entry(inf_categoria, width=20, textvariable=var_B, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_B.place(x=135, y=82)
-        txt_B.config(bg=fondo)
+        txt_B.config(bg=self.fondo)
         
         et_C = Label(inf_categoria,text="CATEGORIA C: ",justify="center",font=("arial",11,"bold"))
         et_C.place(x=20,y=110)
-        et_C.config(bg=fondo)
+        et_C.config(bg=self.fondo)
         
         global var_C,txt_C
         var_C = StringVar()
         var_C.set("")
         txt_C = Entry(inf_categoria, width=20, textvariable=var_C, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_C.place(x=135, y=112)
-        txt_C.config(bg=fondo)
+        txt_C.config(bg=self.fondo)
         
         et_D = Label(inf_categoria,text="CATEGORIA D: ",justify="center",font=("arial",11,"bold"))
         et_D.place(x=20,y=140)
-        et_D.config(bg=fondo)
+        et_D.config(bg=self.fondo)
         
         global var_D,txt_D
         var_D = StringVar()
         var_D.set("")
         txt_D = Entry(inf_categoria, width=20, textvariable=var_D, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_D.place(x=135, y=142)
-        txt_D.config(bg=fondo)
+        txt_D.config(bg=self.fondo)
         
         et_E = Label(inf_categoria,text="CATEGORIA E: ",justify="center",font=("arial",11,"bold"))
         et_E.place(x=20,y=170)
-        et_E.config(bg=fondo)
+        et_E.config(bg=self.fondo)
         
         global var_E,txt_E
         var_E = StringVar()
         var_E.set("")
         txt_E = Entry(inf_categoria, width=20, textvariable=var_E, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_E.place(x=135, y=172)
-        txt_E.config(bg=fondo)
+        txt_E.config(bg=self.fondo)
         
         et_F = Label(inf_categoria,text="CATEGORIA F: ",justify="center",font=("arial",11,"bold"))
         et_F.place(x=20,y=200)
-        et_F.config(bg=fondo)
+        et_F.config(bg=self.fondo)
         
         global var_F,txt_F
         var_F = StringVar()
         var_F.set("")
         txt_F = Entry(inf_categoria, width=20, textvariable=var_F, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_F.place(x=135, y=202)
-        txt_F.config(bg=fondo)
+        txt_F.config(bg=self.fondo)
         
         et_G = Label(inf_categoria,text="CATEGORIA G: ",justify="center",font=("arial",11,"bold"))
         et_G.place(x=20,y=230)
-        et_G.config(bg=fondo)
+        et_G.config(bg=self.fondo)
         
         global var_G,txt_G
         var_G = StringVar()
         var_G.set("")
         txt_G = Entry(inf_categoria, width=20, textvariable=var_G, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_G.place(x=135, y=232)
-        txt_G.config(bg=fondo)
+        txt_G.config(bg=self.fondo)
         
         et_H = Label(inf_categoria,text="CATEGORIA H: ",justify="center",font=("arial",11,"bold"))
         et_H.place(x=20,y=260)
-        et_H.config(bg=fondo)
+        et_H.config(bg=self.fondo)
         
         global var_H,txt_H
         var_H = StringVar()
         var_H.set("")
         txt_H = Entry(inf_categoria, width=20, textvariable=var_H, justify="center",font=("arial",11,"bold"),foreground="white")
         txt_H.place(x=135, y=262)
-        txt_H.config(bg=fondo)
+        txt_H.config(bg=self.fondo)
 
 def aux_modificar_datos_categorizacion(var_A):
         modelo.modificar_datos_categorizacion(var_A)

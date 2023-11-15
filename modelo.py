@@ -123,8 +123,36 @@ class MiBaseDeDatos():
                 print(f"Error en la carga inicial: {error}")
                 self.conexion.rollback()
 
+    def return_config(self,parametro):
+            if self.cursor:
+                        try:
+                            sql = """
+                                SELECT config_txt_valor 
+                                FROM config_app 
+                                WHERE config_txt_tipo = ?
+                            """
+                            data = (parametro,)
+                            self.cursor.execute(sql, data)
+                            retorno = (self.cursor.fetchall()[0][0])
+                            return retorno
+                        except sqlite3.Error as error:
+                            print(f"Error a retornar {parametro}: {error}")
+                            self.conexion.rollback()
+                        
 
-
+    def grabar_config(self,config_txt_tipo, cinfig_txt_valor):
+            if self.cursor:
+                        try:
+                            sql = """
+                                UPDATE config_app
+                                SET config_txt_valor = ?
+                                WHERE config_txt_tipo = ?
+                            """
+                            data = (cinfig_txt_valor,config_txt_tipo,)
+                            self.cursor.execute(sql, data)
+                        except sqlite3.Error as error:
+                            print(f"Error a retornar {cinfig_txt_valor,config_txt_tipo}: {error}")
+                            self.conexion.rollback()
 
 
 
