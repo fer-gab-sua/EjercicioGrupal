@@ -288,6 +288,7 @@ class VentanaPrincipal():
 
 
 
+
 if __name__== "__main__":
     root = Tk()
     app = VentanaPrincipal(root)
