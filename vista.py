@@ -1,87 +1,88 @@
 from tkinter import *
-from tkcalendar import DateEntry
 from tkinter.ttk import Combobox,Treeview
-from modelo import MiBaseDeDatos
 import tkinter as tk
-from tkcalendar import Calendar
+from tkcalendar import Calendar , DateEntry
+from tkinter.colorchooser import askcolor
+import webbrowser
+
+from modelo import MiBaseDeDatos
 
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
         self.mibase = MiBaseDeDatos()
-        ventana1.title ("FACTURACIÓN")
-        ventana1.geometry("1000x600")
+        self.ventana1 = ventana1
+        self.ventana1.title ("FACTURACIÓN")
+        self.ventana1.geometry("1000x600")
 
         #Funcion que trae la configuracion del color 
         self.fondo = self.mibase.return_config('color_fondo')
-        ventana1.config(bg=self.fondo)
+        self.ventana1.config(bg=self.fondo)
 
         ### FRAME CATEGORÍA:
-        frame_categoria = Frame(ventana1)
+        frame_categoria = Frame(self.ventana1)
         frame_categoria.config(width=230,height=130,bg="gray50")
         frame_categoria.place(x=750,y=50)
 
         ################################WIDGETS###########################################
 
         # ETIQUETAS:
-        etiqueta_categoria = Label(ventana1, text="CATEGORIA: ",font= ("arial",15,"bold"))
-        etiqueta_categoria.place (x=795,y=50)
-        etiqueta_categoria.config(bg="gray50",foreground="black")
-        global etiqueta_categoria_rdo_nulo
-        etiqueta_categoria_rdo_nulo = Label(ventana1, text="",foreground="green",anchor=CENTER)
-        etiqueta_categoria_rdo_nulo.place (x=760,y=90)
-        etiqueta_categoria_rdo_nulo.config(bg="gray50", font=("arial",14,"bold"))
+        self.etiqueta_categoria = Label(self.ventana1, text="CATEGORIA: ",font= ("arial",15,"bold"))
+        self.etiqueta_categoria.place (x=795,y=50)
+        self.etiqueta_categoria.config(bg="gray50",foreground="black")
+        self.etiqueta_categoria_rdo_nulo = Label(self.ventana1, text="",foreground="green",anchor=CENTER)
+        self.etiqueta_categoria_rdo_nulo.place (x=760,y=90)
+        self.etiqueta_categoria_rdo_nulo.config(bg="gray50", font=("arial",14,"bold"))
 
         ############ MOSTRAR TOTALES: 
-        etiqueta_total = Label(ventana1)
-        etiqueta_total.place (x=430,y=350)
-        etiqueta_total.config(bg=self.fondo,text="Total de facturas: ",font=("Arial",16,"bold"))
-        global etiqueta_total_facturas
-        etiqueta_total_facturas = Label(ventana1, text="")
-        etiqueta_total_facturas.place (x=470,y=370)
-        etiqueta_total_facturas.config(bg=self.fondo,text="prueba",font=("Arial",16,"bold"),foreground="RED")
+        self.etiqueta_total = Label(self.ventana1)
+        self.etiqueta_total.place (x=430,y=350)
+        self.etiqueta_total.config(bg=self.fondo,text="Total de facturas: ",font=("Arial",16,"bold"))
+        self.etiqueta_total_facturas = Label(self.ventana1, text="")
+        self.etiqueta_total_facturas.place (x=470,y=370)
+        self.etiqueta_total_facturas.config(bg=self.fondo,text="prueba",font=("Arial",16,"bold"),foreground="RED")
         
         ########FECHA
         global fecha
         fecha = StringVar()
-        etiqueta_fecha = Label(ventana1, text="Fecha: ", font= ("arial",13,"bold"))
-        etiqueta_fecha.place (x=10,y=45)
-        etiqueta_fecha.config(bg=self.fondo)
+        self.etiqueta_fecha = Label(self.ventana1, text="Fecha: ", font= ("arial",13,"bold"))
+        self.etiqueta_fecha.place(x=10,y=45)
+        self.etiqueta_fecha.config(bg=self.fondo)
         
         global txt_fecha
-        txt_fecha = Entry (ventana1, width=19, textvariable=fecha, justify="center")
+        txt_fecha = Entry (self.ventana1, width=19, textvariable=fecha, justify="center")
         txt_fecha.place(x=83,y=45)
         txt_fecha.config(state="readonly")
         
-        calendar= Calendar(ventana1, selectmode="day", date_pattern="dd/MM/yyyy")
+        calendar= Calendar(self.ventana1, selectmode="day", date_pattern="dd/MM/yyyy")
         calendar.place(x=60,y=85)
 
     ######## Concepto
-        etiqueta_concepto = Label(ventana1, text="Concepto: ",font= ("arial",13,"bold"))
-        etiqueta_concepto.place (x=10,y=275)
-        etiqueta_concepto.config(bg=self.fondo)
+        self.etiqueta_concepto = Label(self.ventana1, text="Concepto: ",font= ("arial",13,"bold"))
+        self.etiqueta_concepto.place (x=10,y=275)
+        self.etiqueta_concepto.config(bg=self.fondo)
     
         global concepto
         concepto = StringVar()
         lista_concepto = ["Colegio médico","Hospital","Intecnus","Particular"]
         global combobox_concepto
-        combobox_concepto = Combobox(ventana1,values=lista_concepto,state="readonly",width=19,justify="center",textvariable=concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
+        combobox_concepto = Combobox(self.ventana1,values=lista_concepto,state="readonly",width=19,justify="center",textvariable=concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
         combobox_concepto.place (x=100,y=275) 
 
         ###########MONTO:
-        etiqueta_monto = Label(ventana1, text="Monto:",font= ("arial",13,"bold"))
-        etiqueta_monto.place (x=10,y=11)
-        etiqueta_monto.config(bg=self.fondo)
+        self.etiqueta_monto = Label(self.ventana1, text="Monto:",font= ("arial",13,"bold"))
+        self.etiqueta_monto.place (x=10,y=11)
+        self.etiqueta_monto.config(bg=self.fondo)
         
         global monto
         monto = StringVar()
         global txt_monto
-        txt_monto = Entry(ventana1, width=19, textvariable=monto, justify="center")
+        txt_monto = Entry(self.ventana1, width=19, textvariable=monto, justify="center")
         txt_monto.place(x=83, y=10)
 
         # TABLA:
         global tabla
-        tabla = Treeview(ventana1,) 
+        tabla = Treeview(self.ventana1,) 
         tabla.tag_configure('negrita',font=("TkDefaultFont",15,"bold"))
         tabla.place(x=10,y=300) 
         tabla["columns"] = ("Fecha","Concepto","Monto") 
@@ -97,42 +98,42 @@ class VentanaPrincipal():
     # BOTONES:
         
         global btn_cargar
-        btn_cargar = Button(ventana1, text="CARGAR",command="") 
+        btn_cargar = Button(self.ventana1, text="CARGAR",command="") 
         btn_cargar.place (x=320,y=270)
         
         global btn_ver_graficos
-        btn_ver_graficos = Button(ventana1, text="VISUALIZAR\n DATOS",command="")
+        btn_ver_graficos = Button(self.ventana1, text="VISUALIZAR\n DATOS",command="")
         btn_ver_graficos.place(x=420,y=450)
         
         global btn_borrar
-        btn_borrar = Button(ventana1, text="  BORRAR  ",command= "")
+        btn_borrar = Button(self.ventana1, text="  BORRAR  ",command= "")
         btn_borrar.place (x=220, y=540 )
     
         global btn_actualizar_categoria
-        btn_actualizar_categoria = Button (ventana1,text="DATOS DE \n CATEGORIZACIÓN",command=lambda:self.ventana_informacion_categoria(),anchor=CENTER)
+        btn_actualizar_categoria = Button (self.ventana1,text="DATOS DE \n CATEGORIZACIÓN",command=lambda:self.ventana_informacion_categoria(),anchor=CENTER)
         btn_actualizar_categoria.place(x=790,y=190)
 
         global btn_modificar_carga 
-        btn_modificar_carga = Button(ventana1,text="MODIFICAR",command="")
+        btn_modificar_carga = Button(self.ventana1,text="MODIFICAR",command="")
         btn_modificar_carga.place(x=100, y=540)
 
         global btn_guardar_modificar_carga 
-        btn_guardar_modificar_carga = Button(ventana1,text="GUARDAR",command="")
+        btn_guardar_modificar_carga = Button(self.ventana1,text="GUARDAR",command="")
         btn_guardar_modificar_carga.pack_forget()
 
 
-        menubar = Menu(ventana1)
+        menubar = Menu(self.ventana1)
         menu_archivo = Menu(menubar,tearoff=0)
         menu_archivo.add_command(label="Exportar",command="")
         menu_archivo.add_separator()
-        menu_archivo.add_command(label="Cambiar estilo", command="")
+        menu_archivo.add_command(label="Cambiar estilo", command=lambda:self.cambio_color())
         menu_archivo.add_separator()
-        menu_archivo.add_command(label="Salir", command=ventana1.quit)
+        menu_archivo.add_command(label="Salir", command=lambda:self.salir())
         menubar.add_cascade (label="Archivo",menu=menu_archivo)
         menu_ayuda = Menu(menubar, tearoff=0)
         menu_ayuda.add_command(label="Acerca del programa",command="")
         menubar.add_cascade(label="Información",menu=menu_ayuda)
-        ventana1.config(menu=menubar)   
+        self.ventana1.config(menu=menubar)   
     
     def ventana_informacion_categoria(self):
         inf_categoria = Toplevel()
@@ -172,6 +173,8 @@ class VentanaPrincipal():
         btn_modificar_datos = Button(inf_categoria,text="MODIFICAR DATOS",command="")
         btn_modificar_datos.place(x=160,y=300)
         
+        btn_ir_afip = Button(inf_categoria,text="Ir a Afip",command=lambda:self.ir_a_afip())
+        btn_ir_afip.place(x=190,y=340)
         
         
         et_A = Label(inf_categoria,text="CATEGORIA A: ",justify="center",font=("arial",11,"bold"))
@@ -263,8 +266,27 @@ class VentanaPrincipal():
         txt_H.place(x=135, y=262)
         txt_H.config(bg=self.fondo)
 
-def aux_modificar_datos_categorizacion(var_A):
-        modelo.modificar_datos_categorizacion(var_A)
+    def salir(self):
+        self.mibase.desconectar()
+        self.ventana1.quit()
+
+    def cambio_color(self):
+        color = askcolor(color="#00ff00")
+        eleccion_color = color[1]
+        self.mibase.grabar_config('color_fondo',eleccion_color)
+        root.configure(bg=eleccion_color)
+        self.etiqueta_concepto.config(bg=eleccion_color)
+        self.etiqueta_fecha.config(bg=eleccion_color)
+        self.etiqueta_monto.config(bg=eleccion_color)
+        self.etiqueta_total.config(bg=eleccion_color)
+        self.etiqueta_total_facturas.config(bg=eleccion_color)
+        self.fondo= eleccion_color
+
+    def ir_a_afip(self):
+        web = self.mibase.return_config('link_afip')
+        webbrowser.open(web)
+
+
 
 if __name__== "__main__":
     root = Tk()

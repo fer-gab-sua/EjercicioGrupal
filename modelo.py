@@ -100,6 +100,7 @@ class MiBaseDeDatos():
                 data = ('H',7996484.12,"activo",'H')
                 self.cursor.execute(sql, data)
 
+                #ACA ESTOY CARGANDO EN UNA BASE config el tipo color_fondo y el valor #004080
                 sql = """
                 INSERT INTO config_app (config_txt_tipo , config_txt_valor) 
                 SELECT ?,?
@@ -108,6 +109,7 @@ class MiBaseDeDatos():
                 data = ('color_fondo','#004080')
                 self.cursor.execute(sql, data)
 
+                #ACA ESTOY CARGANDO EN UNA BASE config el tipo 'link_afip' y el valor 'https://www.afip.gob.ar/monotributo/categorias.asp'
                 sql = """
                 INSERT INTO config_app (config_txt_tipo , config_txt_valor) 
                 SELECT ?,?
@@ -124,7 +126,15 @@ class MiBaseDeDatos():
                 self.conexion.rollback()
 
     def return_config(self,parametro):
-            if self.cursor:
+        """CONSULA EN LA BASE DE DATOS, DEPENDIENDO DEL PARAMETRO EN LA TABLA CONFIGURACION
+
+        Args:
+            parametro (STR): 'color_fondo','link_afip'
+
+        Returns:
+            str: config_txt_valor 
+        """            
+        if self.cursor:
                         try:
                             sql = """
                                 SELECT config_txt_valor 
@@ -139,20 +149,26 @@ class MiBaseDeDatos():
                             print(f"Error a retornar {parametro}: {error}")
                             self.conexion.rollback()
                         
-
     def grabar_config(self,config_txt_tipo, cinfig_txt_valor):
-            if self.cursor:
-                        try:
-                            sql = """
-                                UPDATE config_app
-                                SET config_txt_valor = ?
-                                WHERE config_txt_tipo = ?
-                            """
-                            data = (cinfig_txt_valor,config_txt_tipo,)
-                            self.cursor.execute(sql, data)
-                        except sqlite3.Error as error:
-                            print(f"Error a retornar {cinfig_txt_valor,config_txt_tipo}: {error}")
-                            self.conexion.rollback()
+        """GRABA UNA NUEVA CONFIGURACION
+
+        Args:
+            config_txt_tipo (STR): 'color_fondo','link_afip'
+            cinfig_txt_valor (STR): nuevo_valor
+        """            
+        if self.cursor:
+                    try:
+                        sql = """
+                            UPDATE config_app
+                            SET config_txt_valor = ?
+                            WHERE config_txt_tipo = ?
+                        """
+                        data = (cinfig_txt_valor,config_txt_tipo,)
+                        self.cursor.execute(sql, data)
+                        print(f"-->configuracion {config_txt_tipo}grabada exitosamente")
+                    except sqlite3.Error as error:
+                        print(f"Error a retornar {cinfig_txt_valor,config_txt_tipo}: {error}")
+                        self.conexion.rollback()
 
 
 
@@ -198,11 +214,4 @@ if __name__ == "__main__":
 
     mibase.carga_datos_iniciales()
 
-    nueva_factura = Factura('2023-11-08', 1, 100.0, '1234567890')
-    nueva_factura.agregar_a_base_de_datos(mibase)
-
-
-    mibase.modificar_factura()
-
-    nueva_factura.agregar_a_base_de_datos()
 
