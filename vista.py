@@ -10,6 +10,9 @@ from modelo import MiBaseDeDatos , BaseDeDatos
 
 ###HOL
 
+
+###QUE TAL
+
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
