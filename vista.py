@@ -8,7 +8,6 @@ from tkinter import simpledialog, messagebox
 import re
 from modelo import MiBaseDeDatos , BaseDeDatos
 
-###
 
 class VentanaPrincipal():
 
