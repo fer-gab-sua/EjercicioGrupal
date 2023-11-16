@@ -11,8 +11,10 @@ from modelo import MiBaseDeDatos , BaseDeDatos
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
+
         self.mibase = MiBaseDeDatos()
         self.objeto_modelo_bd = BaseDeDatos() #BASE DAMIAN
+
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
         self.ventana1.geometry("1000x600")
@@ -46,19 +48,18 @@ class VentanaPrincipal():
         self.etiqueta_total_facturas.config(bg=self.fondo,text="prueba",font=("Arial",16,"bold"),foreground="RED")
         
         ########FECHA
-        global fecha
-        fecha = StringVar()
+        self.fecha = StringVar()
         self.etiqueta_fecha = Label(self.ventana1, text="Fecha: ", font= ("arial",13,"bold"))
         self.etiqueta_fecha.place(x=10,y=45)
         self.etiqueta_fecha.config(bg=self.fondo)
         
-        global txt_fecha
-        txt_fecha = Entry (self.ventana1, width=19, textvariable=fecha, justify="center")
-        txt_fecha.place(x=83,y=45)
-        txt_fecha.config(state="readonly")
+        self.txt_fecha = Entry (self.ventana1, width=19, textvariable=self.fecha, justify="center")
+        self.txt_fecha.place(x=83,y=45)
+        #self.txt_fecha.config(state="readonly")
         
-        calendar= Calendar(self.ventana1, selectmode="day", date_pattern="dd/MM/yyyy")
-        calendar.place(x=60,y=85)
+        self.calendar= Calendar(self.ventana1, selectmode="day", date_pattern="dd/MM/yyyy")
+        self.calendar.bind("<<CalendarSelected>>", self.actualizar_fecha)
+        self.calendar.place(x=60,y=85)
 
     ######## Concepto
         self.etiqueta_concepto = Label(self.ventana1, text="Concepto: ",font= ("arial",13,"bold"))
@@ -85,52 +86,52 @@ class VentanaPrincipal():
         self.etiqueta_monto.place (x=10,y=11)
         self.etiqueta_monto.config(bg=self.fondo)
         
-        global monto
-        monto = StringVar()
-        global txt_monto
-        txt_monto = Entry(self.ventana1, width=19, textvariable=monto, justify="center")
-        txt_monto.place(x=83, y=10)
+
+        self.monto = StringVar()
+        self.txt_monto = Entry(self.ventana1, width=19, textvariable=self.monto, justify="center")
+        self.txt_monto.place(x=83, y=10)
 
         # TABLA:
-        global tabla
-        tabla = Treeview(self.ventana1,) 
-        tabla.tag_configure('negrita',font=("TkDefaultFont",15,"bold"))
-        tabla.place(x=10,y=300) 
-        tabla["columns"] = ("Fecha","Concepto","Monto") 
-        tabla.heading("#0", text="Id") 
-        tabla.heading("Fecha", text="Fecha",)
-        tabla.heading("Concepto",text="Concepto")
-        tabla.heading("Monto",text="Monto")
-        tabla.column("#0",width=0,minwidth=0,anchor=CENTER) 
-        tabla.column("Fecha",width=100,minwidth=100,anchor=CENTER)
-        tabla.column("Concepto",width=150,minwidth=80,anchor=CENTER)
-        tabla.column("Monto",width=150,minwidth=80,anchor=CENTER)
+        self.tabla = Treeview(self.ventana1,) 
+        self.tabla.tag_configure('negrita',font=("TkDefaultFont",15,"bold"))
+        self.tabla.place(x=10,y=300) 
+        self.tabla["columns"] = ("Fecha","Concepto","Monto") 
+        self.tabla.heading("#0", text="Id") 
+        self.tabla.heading("Fecha", text="Fecha",)
+        self.tabla.heading("Concepto",text="Concepto")
+        self.tabla.heading("Monto",text="Monto")
+        self.tabla.column("#0",width=0,minwidth=0,anchor=CENTER) 
+        self.tabla.column("Fecha",width=100,minwidth=100,anchor=CENTER)
+        self.tabla.column("Concepto",width=150,minwidth=80,anchor=CENTER)
+        self.tabla.column("Monto",width=150,minwidth=80,anchor=CENTER)
         
+        self.actualizar_treeview()
+
     # BOTONES:
         
-        global btn_cargar
-        btn_cargar = Button(self.ventana1, text="CARGAR",command="") 
-        btn_cargar.place (x=320,y=270)
+
+        self.btn_cargar = Button(self.ventana1, text="CARGAR",command=self.auxiliar_carga) 
+        self.btn_cargar.place (x=320,y=270)
         
-        global btn_ver_graficos
-        btn_ver_graficos = Button(self.ventana1, text="VISUALIZAR\n DATOS",command="")
-        btn_ver_graficos.place(x=420,y=450)
+
+        self.btn_ver_graficos = Button(self.ventana1, text="VISUALIZAR\n DATOS",command="")
+        self.btn_ver_graficos.place(x=420,y=450)
         
-        global btn_borrar
-        btn_borrar = Button(self.ventana1, text="  BORRAR  ",command= "")
-        btn_borrar.place (x=220, y=540 )
+
+        self.btn_borrar = Button(self.ventana1, text="  BORRAR  ",command= "")
+        self.btn_borrar.place (x=220, y=540 )
     
-        global btn_actualizar_categoria
-        btn_actualizar_categoria = Button (self.ventana1,text="DATOS DE \n CATEGORIZACIÓN",command=lambda:self.ventana_informacion_categoria(),anchor=CENTER)
-        btn_actualizar_categoria.place(x=790,y=190)
 
-        global btn_modificar_carga 
-        btn_modificar_carga = Button(self.ventana1,text="MODIFICAR",command="")
-        btn_modificar_carga.place(x=100, y=540)
+        self.btn_actualizar_categoria = Button (self.ventana1,text="DATOS DE \n CATEGORIZACIÓN",command=lambda:self.ventana_informacion_categoria(),anchor=CENTER)
+        self.btn_actualizar_categoria.place(x=790,y=190)
 
-        global btn_guardar_modificar_carga 
-        btn_guardar_modificar_carga = Button(self.ventana1,text="GUARDAR",command="")
-        btn_guardar_modificar_carga.pack_forget()
+
+        self.btn_modificar_carga = Button(self.ventana1,text="MODIFICAR",command="")
+        self.btn_modificar_carga.place(x=100, y=540)
+
+
+        self.btn_guardar_modificar_carga = Button(self.ventana1,text="GUARDAR",command="")
+        self.btn_guardar_modificar_carga.pack_forget()
 
 
         menubar = Menu(self.ventana1)
@@ -353,7 +354,10 @@ class VentanaPrincipal():
             for x in datos:
                 self.tabla.insert("",0,text=x[0],values=(x[1],x[2],("$"+str(x[3]))))
     
-
+    def actualizar_fecha(self,event):
+        fecha = self.calendar.get_date()
+        self.fecha.set(fecha)
+        print(fecha)
 
 
 
