@@ -392,7 +392,7 @@ class VentanaPrincipal():
             self.btn_cargar.config(state="disabled")
             self.btn_ver_graficos.config(state="disabled")
             self.btn_modificar_carga.config(state="disabled")
-            self.btn_guardar_modificar_carga.place(x=500, y=190)
+            self.btn_guardar_modificar_carga.place(x=420, y=270)
             
             seleccion = self.tabla.focus()
             item=self.tabla.item(seleccion)
@@ -414,17 +414,24 @@ class VentanaPrincipal():
             
         
         actualizacion = self.tabla.get_children() 
+        
+        
         for R in actualizacion: 
             self.tabla.delete(R) 
-            self.actualizar_treeview()
+        self.actualizar_treeview()
         
 
-            self.btn_actualizar_categoria.config(state="active")
-            self.btn_borrar.config(state="active")
-            self.btn_cargar.config(state="active")
-            self.btn_ver_graficos.config(state="active")
-            self.btn_modificar_carga.config(state="active")
-            self.btn_guardar_modificar_carga.place_forget()
+        self.btn_actualizar_categoria.config(state="active")
+        self.btn_borrar.config(state="active")
+        self.btn_cargar.config(state="active")
+        self.btn_ver_graficos.config(state="active")
+        self.btn_modificar_carga.config(state="active")
+        self.btn_guardar_modificar_carga.place_forget()
+        
+
+        self.fecha.set("")
+        self.concepto.set("")
+        self.monto.set("")
             
             
             
