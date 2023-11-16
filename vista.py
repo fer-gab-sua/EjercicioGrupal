@@ -8,6 +8,8 @@ from tkinter import simpledialog, messagebox
 import re
 from modelo import MiBaseDeDatos , BaseDeDatos
 
+###HOLa
+
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
