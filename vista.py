@@ -77,8 +77,7 @@ class VentanaPrincipal():
         self.combobox_concepto.place (x=100,y=275) 
 
         #agrego la funcionalidad de agregar a la base de datos un nuevo registro
-        self.combobox_concepto.bind("<<ComboboxSelected>>", self.agregar_concepto(self.concepto))
-
+        self.combobox_concepto.bind("<<ComboboxSelected>>", lambda event: self.agregar_concepto(self.concepto)) 
         ###########MONTO:
         self.etiqueta_monto = Label(self.ventana1, text="Monto:",font= ("arial",13,"bold"))
         self.etiqueta_monto.place (x=10,y=11)
@@ -297,7 +296,7 @@ class VentanaPrincipal():
         webbrowser.open(web)
 
     def agregar_concepto(self,concepto_elegido):
-        print(concepto_elegido)
+        concepto_elegido = concepto_elegido.get()
         if concepto_elegido == "Agregar Nuevo":
 
             # configuro el mensaje
@@ -307,7 +306,15 @@ class VentanaPrincipal():
             seleccion = simpledialog.askstring("Mensaje", mensaje, parent=self.ventana1)
 
             if seleccion:
-                print("Opción seleccionada:", seleccion)
+                self.mibase.agrega_concepto(seleccion)
+        
+            self.lista_concepto = []
+            datos = self.mibase.trae_conceptos()
+            self.lista_concepto = [tupla[1] for tupla in datos]
+            #Agrego a la lista el "Agregar Nuevo"
+            self.lista_concepto += ["Agregar Nuevo"]
+            print("hastaa aca llego bien")
+            self.combobox_concepto = Combobox(self.ventana1,values=self.lista_concepto,state="readonly",width=19,justify="center",textvariable=self.concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
 
 
 

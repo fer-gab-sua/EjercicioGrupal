@@ -188,7 +188,19 @@ class MiBaseDeDatos():
                 print(f"Error a retornar conceptos: {error}")
                 self.conexion.rollback()
         
-
+    def agrega_concepto(self,concepto):
+        if self.cursor:
+            try:
+                sql = """
+                    INSERT INTO conceptos (con_txt_descripcion , con_txt_estado) 
+                    SELECT ?,?
+                    WHERE NOT EXISTS (SELECT 1 FROM conceptos WHERE con_txt_descripcion = ?)
+                """
+                data = [concepto,"activo",concepto]
+                self.cursor.execute(sql,data)
+            except sqlite3.Error as error:
+                        print(f"Error a grabar {concepto}: {error}")
+                        self.conexion.rollback()
 
 
 
