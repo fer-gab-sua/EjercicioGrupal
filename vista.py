@@ -4,6 +4,7 @@ import tkinter as tk
 from tkcalendar import Calendar , DateEntry
 from tkinter.colorchooser import askcolor
 import webbrowser
+from tkinter import simpledialog
 
 from modelo import MiBaseDeDatos
 
@@ -62,12 +63,21 @@ class VentanaPrincipal():
         self.etiqueta_concepto.place (x=10,y=275)
         self.etiqueta_concepto.config(bg=self.fondo)
     
-        global concepto
-        concepto = StringVar()
-        lista_concepto = ["Colegio médico","Hospital","Intecnus","Particular"]
-        global combobox_concepto
-        combobox_concepto = Combobox(self.ventana1,values=lista_concepto,state="readonly",width=19,justify="center",textvariable=concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
-        combobox_concepto.place (x=100,y=275) 
+        self.concepto = StringVar()
+
+        #cargo la lista llamando al modelo 
+        self.lista_concepto = []
+        datos = self.mibase.trae_conceptos()
+        self.lista_concepto = [tupla[1] for tupla in datos]
+        #Agrego a la lista el "Agregar Nuevo"
+        self.lista_concepto += ["Agregar Nuevo"]
+        
+        
+        self.combobox_concepto = Combobox(self.ventana1,values=self.lista_concepto,state="readonly",width=19,justify="center",textvariable=self.concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
+        self.combobox_concepto.place (x=100,y=275) 
+
+        #agrego la funcionalidad de agregar a la base de datos un nuevo registro
+        self.combobox_concepto.bind("<<ComboboxSelected>>", self.agregar_concepto(self.concepto))
 
         ###########MONTO:
         self.etiqueta_monto = Label(self.ventana1, text="Monto:",font= ("arial",13,"bold"))
@@ -286,6 +296,19 @@ class VentanaPrincipal():
         web = self.mibase.return_config('link_afip')
         webbrowser.open(web)
 
+    def agregar_concepto(self,concepto_elegido):
+        print(concepto_elegido)
+        if concepto_elegido == "Agregar Nuevo":
+
+            # configuro el mensaje
+            mensaje = "Ingrese un nuevo Concepto:"
+
+            # Mostrar la ventana emergente con un ComboBox
+            seleccion = simpledialog.askstring("Mensaje", mensaje, parent=self.ventana1)
+
+            if seleccion:
+                print("Opción seleccionada:", seleccion)
+
 
 
 
@@ -295,3 +318,5 @@ if __name__== "__main__":
     
     #ventana = VentanaInformacionCategoria(root)
     root.mainloop()
+
+

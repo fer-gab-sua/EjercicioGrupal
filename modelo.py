@@ -170,6 +170,27 @@ class MiBaseDeDatos():
                         print(f"Error a retornar {cinfig_txt_valor,config_txt_tipo}: {error}")
                         self.conexion.rollback()
 
+    def trae_conceptos(self):
+        #datos =["Ingreso Nuevo","Colegio médico","Hospital","Intecnus","Particular"] 
+        #return datos
+        if self.cursor:
+            try:
+                sql = """
+                    SELECT *
+                    FROM conceptos
+                    WHERE con_txt_estado = 'activo'
+                    """ 
+                self.cursor.execute(sql)
+                retorno = (self.cursor.fetchall())
+                print(retorno)
+                return retorno
+            except sqlite3.Error as error:
+                print(f"Error a retornar conceptos: {error}")
+                self.conexion.rollback()
+        
+
+
+
 
 
 #    def modificar_factura(self,factura_id, nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente):
