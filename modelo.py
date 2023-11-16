@@ -16,6 +16,13 @@ class BaseDeDatos():
         self.cursor.execute(sql_carga,datos)
         self.conexion.commit()
     
+    def borrar_datos(self,borrar):
+         
+        sql = "DELETE FROM facturacion WHERE id = ?;" 
+        borrar_datos = borrar
+        self.cursor.execute(sql,borrar_datos) 
+
+         
     def actualizar_treeview(self):
         sql_treeview = "SELECT* FROM facturacion ORDER BY Fecha ASC"
         self.cursor.execute(sql_treeview)

@@ -8,12 +8,6 @@ from tkinter import simpledialog, messagebox
 import re
 from modelo import MiBaseDeDatos , BaseDeDatos
 
-###HOL
-### ESCRIBO COSAS
-### ESCRIBO MAS COSAS....
-#BLA BLCAS DKD
-
-###QUE TAL
 
 class VentanaPrincipal():
 
@@ -125,7 +119,7 @@ class VentanaPrincipal():
         self.btn_ver_graficos.place(x=420,y=450)
         
 
-        self.btn_borrar = Button(self.ventana1, text="  BORRAR  ",command= "")
+        self.btn_borrar = Button(self.ventana1, text="  BORRAR  ",command= self.aux_borrar_factura)
         self.btn_borrar.place (x=220, y=540 )
     
 
@@ -133,11 +127,11 @@ class VentanaPrincipal():
         self.btn_actualizar_categoria.place(x=790,y=190)
 
 
-        self.btn_modificar_carga = Button(self.ventana1,text="MODIFICAR",command="")
+        self.btn_modificar_carga = Button(self.ventana1,text="MODIFICAR",command=self.auxiliar_modificar_factura)
         self.btn_modificar_carga.place(x=100, y=540)
 
 
-        self.btn_guardar_modificar_carga = Button(self.ventana1,text="GUARDAR",command="")
+        self.btn_guardar_modificar_carga = Button(self.ventana1,text="GUARDAR",command=self.guardar_modificacion)
         self.btn_guardar_modificar_carga.pack_forget()
 
 
@@ -366,7 +360,76 @@ class VentanaPrincipal():
         self.fecha.set(fecha)
         print(fecha)
 
+    def aux_borrar_factura(self):
+        seleccion= self.tabla.focus() 
+        if seleccion ==(""):
+            messagebox.showwarning("AVISO","Tenes que seleccionar el registro que queres borrar.")
+            exit
+        else:
+            respuesta = messagebox.askquestion("Consulta","Estas seguro que vas a borrar el registro?")
+            if respuesta =="yes":
+                item=self.tabla.item(seleccion) 
+                borrar =(item.get("text"),) 
+                self.objeto_modelo_bd.borrar_datos(borrar) 
+            
+                actualizacion = self.tabla.get_children() 
+                for R in actualizacion: 
+                    self.tabla.delete(R) 
+                self.actualizar_treeview() 
+                print ("El registro se borró con éxito.")
+            else:
+                exit      
+    
+    
+    def auxiliar_modificar_factura(self):
+        seleccion= self.tabla.focus() 
+        if seleccion ==(""):
+            messagebox.showwarning("AVISO","Tenes que seleccionar el registro que queres modificar.")
+            exit
+        else:
+            self.btn_actualizar_categoria.config(state="disabled")
+            self.btn_borrar.config(state="disabled")
+            self.btn_cargar.config(state="disabled")
+            self.btn_ver_graficos.config(state="disabled")
+            self.btn_modificar_carga.config(state="disabled")
+            self.btn_guardar_modificar_carga.place(x=500, y=190)
+            
+            seleccion = self.tabla.focus()
+            item=self.tabla.item(seleccion)
+            self.txt_fecha.insert(0,item['values'][0])
+            self.combobox_concepto.set(item['values'][1])
+            con_simbolo= item['values'][2]
+            sin_simbolo= con_simbolo.replace('$',"")
+            self.txt_monto.insert(0,sin_simbolo)
+            self.txt_monto.focus()
 
+            
+    def guardar_modificacion(self):
+        seleccion = self.tabla.focus()
+        item=self.tabla.item(seleccion) 
+            
+        borrar =(item.get("text"),) 
+        self.objeto_modelo_bd.borrar_datos(borrar) 
+        self.objeto_modelo_bd.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get()) 
+            
+        
+        actualizacion = self.tabla.get_children() 
+        for R in actualizacion: 
+            self.tabla.delete(R) 
+            self.actualizar_treeview()
+        
+
+            self.btn_actualizar_categoria.config(state="active")
+            self.btn_borrar.config(state="active")
+            self.btn_cargar.config(state="active")
+            self.btn_ver_graficos.config(state="active")
+            self.btn_modificar_carga.config(state="active")
+            self.btn_guardar_modificar_carga.place_forget()
+            
+            
+            
+            
+          
 
 
 
