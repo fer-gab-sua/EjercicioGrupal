@@ -4,20 +4,22 @@ import tkinter as tk
 from tkcalendar import Calendar , DateEntry
 from tkinter.colorchooser import askcolor
 import webbrowser
-from tkinter import simpledialog
-
-from modelo import MiBaseDeDatos
+from tkinter import simpledialog, messagebox
+import re
+from modelo import MiBaseDeDatos , BaseDeDatos
 
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
         self.mibase = MiBaseDeDatos()
+        self.objeto_modelo_bd = BaseDeDatos() #BASE DAMIAN
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
         self.ventana1.geometry("1000x600")
 
         #Funcion que trae la configuracion del color 
         self.fondo = self.mibase.return_config('color_fondo')
+        
         self.ventana1.config(bg=self.fondo)
 
         ### FRAME CATEGORÍA:
@@ -313,8 +315,49 @@ class VentanaPrincipal():
             self.lista_concepto = [tupla[1] for tupla in datos]
             #Agrego a la lista el "Agregar Nuevo"
             self.lista_concepto += ["Agregar Nuevo"]
-            print("hastaa aca llego bien")
-            self.combobox_concepto = Combobox(self.ventana1,values=self.lista_concepto,state="readonly",width=19,justify="center",textvariable=self.concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
+            self.combobox_concepto['values'] = self.lista_concepto
+
+    def auxiliar_carga(self):
+    ### VALIDACIONES DE LOS 3 campos de entrada Fecha, concepto y monto
+    
+        patron = r"^\d+(\.\d+)?$" #Valida numeros enteros y decimales.
+        cadena =  self.txt_monto.get()
+        if re.match (patron,cadena):
+            pass
+        else:
+            messagebox.showinfo("AVISO","Para cargar una facturación tenes que completar un monto, pueden ser solo números. Si es decimal, va separado de punto.")
+            self.txt_monto.focus()
+            return
+        
+        validacion_concepto= self.concepto.get()
+        if validacion_concepto == "":
+            messagebox.showinfo ("AVISO","Tenes que ingresar el concepto de la factura.")
+            self.combobox_concepto.focus()
+            return
+            
+        else:
+            self.objeto_modelo_bd.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get())
+
+        self.fecha.set("")
+        self.concepto.set("")
+        self.monto.set("")
+        print ("Los registros fueron guardados con éxito.")
+        
+        self.actualizar_treeview()
+
+    def actualizar_treeview(self):
+        datos = self.objeto_modelo_bd.actualizar_treeview() 
+        if datos == []:
+            exit
+        else:
+            for x in datos:
+                self.tabla.insert("",0,text=x[0],values=(x[1],x[2],("$"+str(x[3]))))
+    
+
+
+
+
+
 
 
 

@@ -1,5 +1,27 @@
 import sqlite3
 
+class BaseDeDatos():
+    def __init__(self) -> None:
+        self.conexion = sqlite3.connect("base.db")
+        self.cursor = self.conexion.cursor()
+        
+        ###CREO LAS TABLAS NECESARIAS:
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS Facturacion (id INTEGER, Fecha TEXT, Concepto TEXT, Monto NUMERIC, PRIMARY KEY(id AUTOINCREMENT))")
+        self.conexion.commit()
+
+    def cargar_datos(self,fecha,concepto,monto):
+        
+        sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?)"
+        datos=(fecha,concepto,monto)
+        self.cursor.execute(sql_carga,datos)
+        self.conexion.commit()
+    
+    def actualizar_treeview(self):
+        sql_treeview = "SELECT* FROM facturacion ORDER BY Fecha ASC"
+        self.cursor.execute(sql_treeview)
+        datos = self.cursor.fetchall()
+        return datos
+
 class MiBaseDeDatos():
     def __init__(self, nombre_base_de_datos = "facturacion.db"):
         """Creacion de la base datos y sus conexiones 
@@ -244,7 +266,7 @@ class MiBaseDeDatos():
 if __name__ == "__main__":
     # Uso de la clase Factura
     mibase = MiBaseDeDatos()
-
-    mibase.carga_datos_iniciales()
+    print("si le pido a la funcion link_afip, me devuelve:" , mibase.return_config('link_afip'))
+    print("si le pido a la funcion color_fondo, me devuelve:" , mibase.return_config('color_fondo'))
 
 
