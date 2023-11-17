@@ -149,25 +149,53 @@ class VentanaPrincipal():
         self.ventana1.config(menu=menubar)   
     
     def ventana_informacion_categoria(self):
-        inf_categoria = Toplevel()
-        inf_categoria.title("Información para categorizar")
-        inf_categoria.geometry("600x600")
-        inf_categoria.config(bg=self.fondo)
+        
+        self.inf_categoria = Toplevel()
+        self.inf_categoria.title("Información para categorizar")
+        self.inf_categoria.geometry("600x600")
+        self.inf_categoria.config(bg=self.fondo)
 
-        
-        
-        
+
+        #DECLARO LAS VARIABLES DE LOS ENTRY
+
+
         ########################CATEGORÍAS:
-        
-        et_categorias = Label(inf_categoria,text="CATEGORIAS",justify="center",font=("arial",11,"bold"),foreground="RED")
+        #TRAIGO LAS CATEGORIAS ACTIVAS DE LAS BASES Y LLENO LOS ENTRY
+        resultado = {}
+        categorias = self.mibase.traer_categorias()
+        for dato in categorias:
+            letra = dato[1]
+            importe = dato[2]
+            resultado[letra] = importe
+
+        var_A = StringVar()
+        var_B = StringVar()
+        var_C = StringVar()
+        var_D = StringVar()
+        var_E = StringVar()
+        var_F = StringVar()
+        var_G = StringVar()
+        var_H = StringVar()
+
+        var_A.set(resultado['A'])
+        var_B.set(resultado['B'])
+        var_C.set(resultado['C'])
+        var_D.set(resultado['D'])
+        var_E.set(resultado['E'])
+        var_F.set(resultado['F'])
+        var_G.set(resultado['G'])
+        var_H.set(resultado['H'])
+
+
+        et_categorias = Label(self.inf_categoria,text="CATEGORIAS",justify="center",font=("arial",11,"bold"),foreground="RED")
         et_categorias.place (x=27,y=20)
         et_categorias.config(bg=self.fondo)
         
-        et_montos = Label(inf_categoria,text="MONTOS",justify="center",font=("arial",11,"bold"),foreground="RED")
+        et_montos = Label(self.inf_categoria,text="MONTOS",justify="center",font=("arial",11,"bold"),foreground="RED")
         et_montos.place (x=180,y=20)
         et_montos.config(bg=self.fondo)
         
-        et_fecha = Label(inf_categoria,text=" FECHA PARA\nCATEGORIZACION",justify="center",font=("arial",11,"bold"),foreground="RED")
+        et_fecha = Label(self.inf_categoria,text=" FECHA PARA\nCATEGORIZACION",justify="center",font=("arial",11,"bold"),foreground="RED")
         et_fecha.place (x=400,y=100)
         et_fecha.config(bg=self.fondo)
         
@@ -177,107 +205,107 @@ class VentanaPrincipal():
         txt_fecha_sqlite= "2023/01/01"
         
         global txt_fecha_categoria
-        txt_fecha_categoria = DateEntry(inf_categoria,date_pattern="yyyy/mm/dd", width=15,justify="center",textvariable=txt_fecha_sqlite)
+        txt_fecha_categoria = DateEntry(self.inf_categoria,date_pattern="yyyy/mm/dd", width=15,justify="center",textvariable=txt_fecha_sqlite)
         txt_fecha_categoria.place(x=420,y=150)
         txt_fecha_categoria.config(state="readonly")
         txt_fecha_categoria.set_date(txt_fecha_sqlite)
         
     
-        btn_modificar_datos = Button(inf_categoria,text="MODIFICAR DATOS",command="")
-        btn_modificar_datos.place(x=160,y=300)
+        self.btn_modificar_datos = Button(self.inf_categoria,text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
+        self.btn_modificar_datos.place(x=160,y=300)
         
-        btn_ir_afip = Button(inf_categoria,text="Ir a Afip",command=lambda:self.ir_a_afip())
+        btn_ir_afip = Button(self.inf_categoria,text="Ir a Afip",command=lambda:self.ir_a_afip())
         btn_ir_afip.place(x=190,y=340)
         
         
-        et_A = Label(inf_categoria,text="CATEGORIA A: ",justify="center",font=("arial",11,"bold"))
+        et_A = Label(self.inf_categoria,text="CATEGORIA A: ",justify="center",font=("arial",11,"bold"))
         et_A.place(x=20,y=50)
         et_A.config(bg=self.fondo)
         
-        global var_A,txt_A
-        var_A = StringVar()
-        var_A.set("")
+        self.txt_A = Entry(self.inf_categoria, width=20, textvariable=var_A, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_A.place(x=135, y=52)
+        self.txt_A.config(bg=self.fondo)
         
-        txt_A = Entry(inf_categoria, width=20, textvariable=var_A, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_A.place(x=135, y=52)
-        txt_A.config(bg=self.fondo)
-        
-        et_B = Label(inf_categoria,text="CATEGORIA B: ",justify="center",font=("arial",11,"bold"))
+        et_B = Label(self.inf_categoria,text="CATEGORIA B: ",justify="center",font=("arial",11,"bold"))
         et_B.place(x=20,y=80)
         et_B.config(bg=self.fondo)
         
-        global var_B,txt_B
-        var_B = StringVar()
-        var_B.set("")
-        txt_B = Entry(inf_categoria, width=20, textvariable=var_B, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_B.place(x=135, y=82)
-        txt_B.config(bg=self.fondo)
+        self.txt_B = Entry(self.inf_categoria, width=20, textvariable=var_B, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_B.place(x=135, y=82)
+        self.txt_B.config(bg=self.fondo)
         
-        et_C = Label(inf_categoria,text="CATEGORIA C: ",justify="center",font=("arial",11,"bold"))
+        et_C = Label(self.inf_categoria,text="CATEGORIA C: ",justify="center",font=("arial",11,"bold"))
         et_C.place(x=20,y=110)
         et_C.config(bg=self.fondo)
         
-        global var_C,txt_C
-        var_C = StringVar()
-        var_C.set("")
-        txt_C = Entry(inf_categoria, width=20, textvariable=var_C, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_C.place(x=135, y=112)
-        txt_C.config(bg=self.fondo)
+        self.txt_C = Entry(self.inf_categoria, width=20, textvariable=var_C, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_C.place(x=135, y=112)
+        self.txt_C.config(bg=self.fondo)
         
-        et_D = Label(inf_categoria,text="CATEGORIA D: ",justify="center",font=("arial",11,"bold"))
+        et_D = Label(self.inf_categoria,text="CATEGORIA D: ",justify="center",font=("arial",11,"bold"))
         et_D.place(x=20,y=140)
         et_D.config(bg=self.fondo)
         
-        global var_D,txt_D
-        var_D = StringVar()
-        var_D.set("")
-        txt_D = Entry(inf_categoria, width=20, textvariable=var_D, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_D.place(x=135, y=142)
-        txt_D.config(bg=self.fondo)
+        self.txt_D = Entry(self.inf_categoria, width=20, textvariable=var_D, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_D.place(x=135, y=142)
+        self.txt_D.config(bg=self.fondo)
         
-        et_E = Label(inf_categoria,text="CATEGORIA E: ",justify="center",font=("arial",11,"bold"))
+        et_E = Label(self.inf_categoria,text="CATEGORIA E: ",justify="center",font=("arial",11,"bold"))
         et_E.place(x=20,y=170)
         et_E.config(bg=self.fondo)
+
+        self.txt_E = Entry(self.inf_categoria, width=20, textvariable=var_E, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_E.place(x=135, y=172)
+        self.txt_E.config(bg=self.fondo)
         
-        global var_E,txt_E
-        var_E = StringVar()
-        var_E.set("")
-        txt_E = Entry(inf_categoria, width=20, textvariable=var_E, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_E.place(x=135, y=172)
-        txt_E.config(bg=self.fondo)
-        
-        et_F = Label(inf_categoria,text="CATEGORIA F: ",justify="center",font=("arial",11,"bold"))
+        et_F = Label(self.inf_categoria,text="CATEGORIA F: ",justify="center",font=("arial",11,"bold"))
         et_F.place(x=20,y=200)
         et_F.config(bg=self.fondo)
         
-        global var_F,txt_F
-        var_F = StringVar()
-        var_F.set("")
-        txt_F = Entry(inf_categoria, width=20, textvariable=var_F, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_F.place(x=135, y=202)
-        txt_F.config(bg=self.fondo)
+        self.txt_F = Entry(self.inf_categoria, width=20, textvariable=var_F, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_F.place(x=135, y=202)
+        self.txt_F.config(bg=self.fondo)
         
-        et_G = Label(inf_categoria,text="CATEGORIA G: ",justify="center",font=("arial",11,"bold"))
+        et_G = Label(self.inf_categoria,text="CATEGORIA G: ",justify="center",font=("arial",11,"bold"))
         et_G.place(x=20,y=230)
         et_G.config(bg=self.fondo)
         
-        global var_G,txt_G
-        var_G = StringVar()
-        var_G.set("")
-        txt_G = Entry(inf_categoria, width=20, textvariable=var_G, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_G.place(x=135, y=232)
-        txt_G.config(bg=self.fondo)
+        self.txt_G = Entry(self.inf_categoria, width=20, textvariable=var_G, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_G.place(x=135, y=232)
+        self.txt_G.config(bg=self.fondo)
         
-        et_H = Label(inf_categoria,text="CATEGORIA H: ",justify="center",font=("arial",11,"bold"))
+        et_H = Label(self.inf_categoria,text="CATEGORIA H: ",justify="center",font=("arial",11,"bold"))
         et_H.place(x=20,y=260)
         et_H.config(bg=self.fondo)
         
-        global var_H,txt_H
-        var_H = StringVar()
-        var_H.set("")
-        txt_H = Entry(inf_categoria, width=20, textvariable=var_H, justify="center",font=("arial",11,"bold"),foreground="white")
-        txt_H.place(x=135, y=262)
-        txt_H.config(bg=self.fondo)
+        self.txt_H = Entry(self.inf_categoria, width=20, textvariable=var_H, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_H.place(x=135, y=262)
+        self.txt_H.config(bg=self.fondo)
+
+    def modificar_categorias_aux(self):
+        self.txt_A.config(state="normal")
+        self.txt_B.config(state="normal")
+        self.txt_C.config(state="normal")
+        self.txt_D.config(state="normal")
+        self.txt_E.config(state="normal")
+        self.txt_F.config(state="normal")
+        self.txt_G.config(state="normal")
+        self.txt_H.config(state="normal")
+        self.btn_modificar_datos.config(text="GUARDAR DATOS",command=lambda:self.guardar_categorias_aux())
+
+    def guardar_categorias_aux(self):
+        self.txt_A.config(state="disabled")
+        self.txt_B.config(state="disabled")
+        self.txt_C.config(state="disabled")
+        self.txt_D.config(state="disabled")
+        self.txt_E.config(state="disabled")
+        self.txt_F.config(state="disabled")
+        self.txt_G.config(state="disabled")
+        self.txt_H.config(state="disabled")
+        self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
+
+        
+
 
     def salir(self):
         self.mibase.desconectar()
@@ -404,7 +432,7 @@ class VentanaPrincipal():
             self.txt_monto.focus()
 
             
-    def guardar_modificacion(self):
+    def guardar_modificacion(self):  #OJO QUE ESTAS BORRANDO Y VOLVIENDO A CARGAR, PARA ESTO SE USA EL UPDATE, SINO ESTAS CAMBIANDO EL ID 
         seleccion = self.tabla.focus()
         item=self.tabla.item(seleccion) 
             

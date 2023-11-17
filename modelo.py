@@ -200,8 +200,6 @@ class MiBaseDeDatos():
                         self.conexion.rollback()
 
     def trae_conceptos(self):
-        #datos =["Ingreso Nuevo","Colegio médico","Hospital","Intecnus","Particular"] 
-        #return datos
         if self.cursor:
             try:
                 sql = """
@@ -231,7 +229,20 @@ class MiBaseDeDatos():
                         print(f"Error a grabar {concepto}: {error}")
                         self.conexion.rollback()
 
-
+    def traer_categorias(self):
+        if self.cursor:
+            try:
+                sql = """
+                    SELECT *
+                    FROM categoria_monotributo
+                    WHERE cat_txt_estado = 'activo'
+                    """ 
+                self.cursor.execute(sql)
+                retorno = (self.cursor.fetchall())
+                return retorno
+            except sqlite3.Error as error:
+                print(f"Error a retornar conceptos: {error}")
+                self.conexion.rollback()
 
 
 #    def modificar_factura(self,factura_id, nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente):
