@@ -6,13 +6,13 @@ from tkinter.colorchooser import askcolor
 import webbrowser
 from tkinter import simpledialog, messagebox
 import re
-from modelo import MiBaseDeDatos , BaseDeDatos
+from modelo import MiBaseDeDatos , BaseDeDatos , Validador
 
 
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
-
+        self.validador = Validador()
         self.mibase = MiBaseDeDatos()
         self.objeto_modelo_bd = BaseDeDatos() #BASE DAMIAN
 
@@ -74,6 +74,7 @@ class VentanaPrincipal():
         datos = self.mibase.trae_conceptos()
         self.lista_concepto = [tupla[1] for tupla in datos]
         #Agrego a la lista el "Agregar Nuevo"
+        self.lista_concepto += ["--"*5]
         self.lista_concepto += ["Agregar Nuevo"]
         
         
@@ -319,9 +320,6 @@ class VentanaPrincipal():
         self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
 
 
-        
-
-
     def salir(self):
         self.mibase.desconectar()
         self.ventana1.quit()
@@ -364,7 +362,11 @@ class VentanaPrincipal():
 
     def auxiliar_carga(self):
     ### VALIDACIONES DE LOS 3 campos de entrada Fecha, concepto y monto
-    
+        texto = self.txt_monto.get()
+        if self.validador.valida_fecha(texto) == "OK":
+            pass
+
+
         patron = r"^\d+(\.\d+)?$" #Valida numeros enteros y decimales.
         cadena =  self.txt_monto.get()
         if re.match (patron,cadena):

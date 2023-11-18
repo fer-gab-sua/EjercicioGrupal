@@ -267,7 +267,16 @@ class MiBaseDeDatos():
                 print(f"Error a retornar categorias: {error}")
                 self.conexion.rollback()
 
-
+class Validador():
+     def valida_texto(texto):
+          return "Ok"
+     
+     def valida_numero():
+          pass
+     
+     def valida_fecha():
+          pass
+          
 
 #    def modificar_factura(self,factura_id, nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente):
 #        """MODIFICA UNA FACTURA EXISTENTE EN LA BASE DE DATOS
