@@ -97,7 +97,7 @@ class MiBaseDeDatos():
 
     def carga_datos_iniciales(self):
         """ingresa los datos iniciales de categoria de monotributo, configuracion inicial.
-        """        
+        """  
         if self.cursor:
             try:
                 sql = """
@@ -153,6 +153,7 @@ class MiBaseDeDatos():
             except sqlite3.Error as error:
                 print(f"Error en la carga inicial: {error}")
                 self.conexion.rollback()
+
 
     def return_config(self,parametro):
         """CONSULA EN LA BASE DE DATOS, DEPENDIENDO DEL PARAMETRO EN LA TABLA CONFIGURACION

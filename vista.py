@@ -314,6 +314,7 @@ class VentanaPrincipal():
         
 
         bloque_categorias = a,b,c,d,e,f,g,h
+        print(bloque_categorias)
         self.mibase.cambiar_categorias(bloque_categorias)
         self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
 
