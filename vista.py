@@ -5,7 +5,7 @@ from tkcalendar import Calendar , DateEntry
 from tkinter.colorchooser import askcolor
 import webbrowser
 from tkinter import simpledialog, messagebox
-import re
+#import re
 from modelo import MiBaseDeDatos , BaseDeDatos , Validador
 
 
@@ -54,7 +54,7 @@ class VentanaPrincipal():
         self.etiqueta_fecha.place(x=10,y=45)
         self.etiqueta_fecha.config(bg=self.fondo)
         
-        self.txt_fecha = Entry (self.ventana1, width=19, textvariable=self.fecha, justify="center")
+        self.txt_fecha = Entry (self.ventana1, width=19, textvariable=self.fecha, justify="center",state="readonly")
         self.txt_fecha.place(x=83,y=45)
         #self.txt_fecha.config(state="readonly")
         
@@ -132,7 +132,7 @@ class VentanaPrincipal():
         self.btn_modificar_carga.place(x=100, y=540)
 
 
-        self.btn_guardar_modificar_carga = Button(self.ventana1,text="GUARDAR",command=self.guardar_modificacion)
+        self.btn_guardar_modificar_carga = Button(self.ventana1,text="GUARDAR",command=self.auxiliar_guardar_modificacion)
         self.btn_guardar_modificar_carga.pack_forget()
 
 
@@ -362,26 +362,28 @@ class VentanaPrincipal():
 
     def auxiliar_carga(self):
     ### VALIDACIONES DE LOS 3 campos de entrada Fecha, concepto y monto
-        texto = self.txt_monto.get()
-        if self.validador.valida_fecha(texto) == "OK":
-            pass
-
-
-        patron = r"^\d+(\.\d+)?$" #Valida numeros enteros y decimales.
-        cadena =  self.txt_monto.get()
-        if re.match (patron,cadena):
+        valido_monto = self.txt_monto.get()
+        
+        
+        if self.validador.valida_monto(valido_monto) == "OK":
             pass
         else:
-            messagebox.showinfo("AVISO","Para cargar una facturación tenes que completar un monto, pueden ser solo números. Si es decimal, va separado de punto.")
-            self.txt_monto.focus()
+            messagebox.showwarning ("AVISO","Para cargar una facturación tenes que completar un monto, pueden ser solo números. Si es decimal, va separado de punto.")
             return
         
         validacion_concepto= self.concepto.get()
-        if validacion_concepto == "":
+        
+        if self.validador.valida_concepto(validacion_concepto) == "ERROR":
             messagebox.showinfo ("AVISO","Tenes que ingresar el concepto de la factura.")
             self.combobox_concepto.focus()
             return
-            
+        
+        valido_fecha = self.txt_fecha.get()
+        if self.validador.valida_fecha (valido_fecha) == "ERROR":
+            messagebox.showinfo("AVISO","Tenes que llenar la fecha para cargar la factura.")
+            self.txt_fecha.focus()
+            return
+        
         else:
             self.objeto_modelo_bd.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get())
 
@@ -393,6 +395,10 @@ class VentanaPrincipal():
         self.actualizar_treeview()
 
     def actualizar_treeview(self):
+        actualizacion = self.tabla.get_children() 
+        for R in actualizacion: 
+            self.tabla.delete(R)
+        
         datos = self.objeto_modelo_bd.actualizar_treeview() 
         if datos == []:
             exit
@@ -416,10 +422,6 @@ class VentanaPrincipal():
                 item=self.tabla.item(seleccion) 
                 borrar =(item.get("text"),) 
                 self.objeto_modelo_bd.borrar_datos(borrar) 
-            
-                actualizacion = self.tabla.get_children() 
-                for R in actualizacion: 
-                    self.tabla.delete(R) 
                 self.actualizar_treeview() 
                 print ("El registro se borró con éxito.")
             else:
@@ -448,21 +450,19 @@ class VentanaPrincipal():
             self.txt_monto.insert(0,sin_simbolo)
             self.txt_monto.focus()
 
-            
-    def guardar_modificacion(self):  #OJO QUE ESTAS BORRANDO Y VOLVIENDO A CARGAR, PARA ESTO SE USA EL UPDATE, SINO ESTAS CAMBIANDO EL ID 
+
+
+    def auxiliar_guardar_modificacion(self,):  #OJO QUE ESTAS BORRANDO Y VOLVIENDO A CARGAR, PARA ESTO SE USA EL UPDATE, SINO ESTAS CAMBIANDO EL ID 
         seleccion = self.tabla.focus()
         item=self.tabla.item(seleccion) 
+        id_factura = item["text"]
+       
+        act_fecha = self.txt_fecha.get()
+        act_concepto = self.combobox_concepto.get()
+        act_monto = self.txt_monto.get()
+        
+        self.objeto_modelo_bd.actualizar_datos(act_fecha,act_concepto,act_monto,id_factura)
             
-        borrar =(item.get("text"),) 
-        self.objeto_modelo_bd.borrar_datos(borrar) 
-        self.objeto_modelo_bd.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get()) 
-            
-        
-        actualizacion = self.tabla.get_children() 
-        
-        
-        for R in actualizacion: 
-            self.tabla.delete(R) 
         self.actualizar_treeview()
         
 
@@ -473,18 +473,15 @@ class VentanaPrincipal():
         self.btn_modificar_carga.config(state="active")
         self.btn_guardar_modificar_carga.place_forget()
         
-
         self.fecha.set("")
         self.concepto.set("")
         self.monto.set("")
+        messagebox.showinfo ("AVISO", "Los datos se modificaron con éxito.")
             
             
             
             
-          
-
-
-#HOLA MUNDO
+    
 
 
 

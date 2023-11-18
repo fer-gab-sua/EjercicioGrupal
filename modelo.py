@@ -1,4 +1,5 @@
 import sqlite3
+import re
 
 class BaseDeDatos():
     def __init__(self) -> None:
@@ -23,11 +24,22 @@ class BaseDeDatos():
         self.cursor.execute(sql,borrar_datos) 
 
          
+    def actualizar_datos(self,fecha,concepto,monto,id):
+         
+         sql_update = "UPDATE Facturacion set fecha = ?,\
+                                                concepto= ?,\
+                                                    monto =? \
+                                                    WHERE id = ? "
+         datos = (fecha,concepto,monto,id)
+         self.cursor.execute(sql_update,datos)
+    
     def actualizar_treeview(self):
         sql_treeview = "SELECT* FROM facturacion ORDER BY Fecha ASC"
         self.cursor.execute(sql_treeview)
         datos = self.cursor.fetchall()
         return datos
+    
+
 
 class MiBaseDeDatos():
     def __init__(self, nombre_base_de_datos = "facturacion.db"):
@@ -268,14 +280,24 @@ class MiBaseDeDatos():
                 self.conexion.rollback()
 
 class Validador():
-     def valida_texto(texto):
-          return "Ok"
      
-     def valida_numero():
-          pass
+     def valida_concepto (self,valido_concepto):
+          if valido_concepto == "":
+               return "ERROR"
+          
+     def valida_monto(self,texto):
+        patron = r"^\d+(\.\d+)?$" #Valida numeros enteros y decimales.
+        cadena =  texto
+        if re.match (patron,cadena):
+            return "OK"
+        else:
+             return "ERROR"
      
-     def valida_fecha():
-          pass
+
+     
+     def valida_fecha(self,valido_fecha):
+          if valido_fecha == "":
+               return "ERROR"
           
 
 #    def modificar_factura(self,factura_id, nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente):
