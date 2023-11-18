@@ -74,7 +74,7 @@ class MiBaseDeDatos():
                                     cat_int_idcategoria INTEGER PRIMARY KEY AUTOINCREMENT,
                                     cat_txt_descripcion TEXT,
                                     cat_bol_montotope REAL,
-                                    cat_txt_estado TEXT
+                                    cat_txt_fecha DATE
                                     )
                                     """)
                 #CREO TABLA  -  CONFIG_APP
@@ -101,32 +101,32 @@ class MiBaseDeDatos():
         if self.cursor:
             try:
                 sql = """
-                    INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_estado)
+                    INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_fecha)
                     SELECT ?, ?, ?
                     WHERE NOT EXISTS (SELECT 1 FROM categoria_monotributo WHERE cat_txt_descripcion = ?)
                 """
-                data = ('A',1414762.58,"activo",'A')
+                data = ('A',1414762.58,"01/01/2023",'A')
                 self.cursor.execute(sql, data)
 
-                data = ('B',2103025.45,"activo",'B')
+                data = ('B',2103025.45,"01/01/2023",'B')
                 self.cursor.execute(sql, data)
 
-                data = ('C',2944235.6,"activo",'C')
+                data = ('C',2944235.6,"01/01/2023",'C')
                 self.cursor.execute(sql, data)
 
-                data = ('D',3656604.33,"activo",'D')
+                data = ('D',3656604.33,"01/01/2023",'D')
                 self.cursor.execute(sql, data)
 
-                data = ('E',4305799.15,"activo",'E')
+                data = ('E',4305799.15,"01/01/2023",'E')
                 self.cursor.execute(sql, data)
 
-                data = ('F',5382248.94,"activo",'F')
+                data = ('F',5382248.94,"01/01/2023",'F')
                 self.cursor.execute(sql, data)
 
-                data = ('G',6458698.71,"activo",'G')
+                data = ('G',6458698.71,"01/01/2023",'G')
                 self.cursor.execute(sql, data)
 
-                data = ('H',7996484.12,"activo",'H')
+                data = ('H',7996484.12,"01/01/2023",'H')
                 self.cursor.execute(sql, data)
 
                 #ACA ESTOY CARGANDO EN UNA BASE config el tipo color_fondo y el valor #004080
@@ -232,17 +232,40 @@ class MiBaseDeDatos():
     def traer_categorias(self):
         if self.cursor:
             try:
+
+
                 sql = """
                     SELECT *
                     FROM categoria_monotributo
-                    WHERE cat_txt_estado = 'activo'
+                    WHERE cat_txt_fecha = "01/01/2023"
                     """ 
+                data = ("01/01/2023",)
                 self.cursor.execute(sql)
                 retorno = (self.cursor.fetchall())
                 return retorno
             except sqlite3.Error as error:
-                print(f"Error a retornar conceptos: {error}")
+                print(f"Error a retornar categorias: {error}")
                 self.conexion.rollback()
+
+    def cambiar_categorias(self,bloque):
+        if self.cursor:
+            try:
+                for cat in bloque:
+                    print(cat[0])
+                    print(cat[1])
+                    print(cat[2])
+                    sql = """INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_fecha)
+                    SELECT ?, ?, ?
+                    """
+                    #WHERE NOT EXISTS (SELECT 1 FROM categoria_monotributo WHERE cat_txt_estado = "activo")
+                    #   """
+                    data = (cat[0],(cat[1]),(cat[2]))
+                    self.cursor.execute(sql,data)
+
+            except sqlite3.Error as error:
+                print(f"Error a retornar categorias: {error}")
+                self.conexion.rollback()
+
 
 
 #    def modificar_factura(self,factura_id, nueva_fecha, nuevo_id_concepto, nuevo_monto, nuevo_cuil_cliente):
@@ -284,6 +307,7 @@ class MiBaseDeDatos():
 if __name__ == "__main__":
     # Uso de la clase Factura
     mibase = MiBaseDeDatos()
+    mibase.carga_datos_iniciales()
     print("si le pido a la funcion link_afip, me devuelve:" , mibase.return_config('link_afip'))
     print("si le pido a la funcion color_fondo, me devuelve:" , mibase.return_config('color_fondo'))
 

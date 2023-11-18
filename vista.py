@@ -168,23 +168,23 @@ class VentanaPrincipal():
             importe = dato[2]
             resultado[letra] = importe
 
-        var_A = StringVar()
-        var_B = StringVar()
-        var_C = StringVar()
-        var_D = StringVar()
-        var_E = StringVar()
-        var_F = StringVar()
-        var_G = StringVar()
-        var_H = StringVar()
+        self.var_A = StringVar()
+        self.var_B = StringVar()
+        self.var_C = StringVar()
+        self.var_D = StringVar()
+        self.var_E = StringVar()
+        self.var_F = StringVar()
+        self.var_G = StringVar()
+        self.var_H = StringVar()
 
-        var_A.set(resultado['A'])
-        var_B.set(resultado['B'])
-        var_C.set(resultado['C'])
-        var_D.set(resultado['D'])
-        var_E.set(resultado['E'])
-        var_F.set(resultado['F'])
-        var_G.set(resultado['G'])
-        var_H.set(resultado['H'])
+        self.var_A.set(resultado['A'])
+        self.var_B.set(resultado['B'])
+        self.var_C.set(resultado['C'])
+        self.var_D.set(resultado['D'])
+        self.var_E.set(resultado['E'])
+        self.var_F.set(resultado['F'])
+        self.var_G.set(resultado['G'])
+        self.var_H.set(resultado['H'])
 
 
         et_categorias = Label(self.inf_categoria,text="CATEGORIAS",justify="center",font=("arial",11,"bold"),foreground="RED")
@@ -222,7 +222,7 @@ class VentanaPrincipal():
         et_A.place(x=20,y=50)
         et_A.config(bg=self.fondo)
         
-        self.txt_A = Entry(self.inf_categoria, width=20, textvariable=var_A, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_A = Entry(self.inf_categoria, width=20, textvariable=self.var_A, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_A.place(x=135, y=52)
         self.txt_A.config(bg=self.fondo)
         
@@ -230,7 +230,7 @@ class VentanaPrincipal():
         et_B.place(x=20,y=80)
         et_B.config(bg=self.fondo)
         
-        self.txt_B = Entry(self.inf_categoria, width=20, textvariable=var_B, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_B = Entry(self.inf_categoria, width=20, textvariable=self.var_B, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_B.place(x=135, y=82)
         self.txt_B.config(bg=self.fondo)
         
@@ -238,7 +238,7 @@ class VentanaPrincipal():
         et_C.place(x=20,y=110)
         et_C.config(bg=self.fondo)
         
-        self.txt_C = Entry(self.inf_categoria, width=20, textvariable=var_C, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_C = Entry(self.inf_categoria, width=20, textvariable=self.var_C, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_C.place(x=135, y=112)
         self.txt_C.config(bg=self.fondo)
         
@@ -246,7 +246,7 @@ class VentanaPrincipal():
         et_D.place(x=20,y=140)
         et_D.config(bg=self.fondo)
         
-        self.txt_D = Entry(self.inf_categoria, width=20, textvariable=var_D, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_D = Entry(self.inf_categoria, width=20, textvariable=self.var_D, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_D.place(x=135, y=142)
         self.txt_D.config(bg=self.fondo)
         
@@ -254,7 +254,7 @@ class VentanaPrincipal():
         et_E.place(x=20,y=170)
         et_E.config(bg=self.fondo)
 
-        self.txt_E = Entry(self.inf_categoria, width=20, textvariable=var_E, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_E = Entry(self.inf_categoria, width=20, textvariable=self.var_E, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_E.place(x=135, y=172)
         self.txt_E.config(bg=self.fondo)
         
@@ -262,7 +262,7 @@ class VentanaPrincipal():
         et_F.place(x=20,y=200)
         et_F.config(bg=self.fondo)
         
-        self.txt_F = Entry(self.inf_categoria, width=20, textvariable=var_F, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_F = Entry(self.inf_categoria, width=20, textvariable=self.var_F, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_F.place(x=135, y=202)
         self.txt_F.config(bg=self.fondo)
         
@@ -270,7 +270,7 @@ class VentanaPrincipal():
         et_G.place(x=20,y=230)
         et_G.config(bg=self.fondo)
         
-        self.txt_G = Entry(self.inf_categoria, width=20, textvariable=var_G, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_G = Entry(self.inf_categoria, width=20, textvariable=self.var_G, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_G.place(x=135, y=232)
         self.txt_G.config(bg=self.fondo)
         
@@ -278,7 +278,7 @@ class VentanaPrincipal():
         et_H.place(x=20,y=260)
         et_H.config(bg=self.fondo)
         
-        self.txt_H = Entry(self.inf_categoria, width=20, textvariable=var_H, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
+        self.txt_H = Entry(self.inf_categoria, width=20, textvariable=self.var_H, justify="center",font=("arial",11,"bold"),foreground="white",state="disabled")
         self.txt_H.place(x=135, y=262)
         self.txt_H.config(bg=self.fondo)
 
@@ -302,7 +302,21 @@ class VentanaPrincipal():
         self.txt_F.config(state="disabled")
         self.txt_G.config(state="disabled")
         self.txt_H.config(state="disabled")
+        fecha_corte = "20/10/2020"
+        a = ["A",self.var_A.get(),fecha_corte]
+        b = ["B",self.var_B.get(),fecha_corte]
+        c = ["C",self.var_C.get(),fecha_corte]
+        d = ["D",self.var_D.get(),fecha_corte]
+        e = ["E",self.var_E.get(),fecha_corte]
+        f = ["F",self.var_F.get(),fecha_corte]
+        g = ["G",self.var_G.get(),fecha_corte]
+        h = ["H",self.var_H.get(),fecha_corte]
+        
+
+        bloque_categorias = a,b,c,d,e,f,g,h
+        self.mibase.cambiar_categorias(bloque_categorias)
         self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
+
 
         
 
