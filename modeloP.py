@@ -20,7 +20,7 @@ class Factura(BaseModel):
 db.connect()
 db.create_tables([Factura])
 
-class MiBaseDeDatos():
+class MiBaseDeDatosNw():
     def __init__(self) -> None:
         pass
 
@@ -34,9 +34,13 @@ class MiBaseDeDatos():
         factura.save()
 
     def actualizar_treeview(self):
-        datos = Factura.select()
+        datos = []
+        for fila in Factura.select():
+            datos.append((fila.fac_int_id,
+                        fila.fac_date_fecha, 
+                        fila.fac_txt_concepto, 
+                        fila.fac_bol_monto))
         return datos
 
-mibase = MiBaseDeDatos()
-mibase.alta("01/01/2023","coco","12.5")
+mibase = MiBaseDeDatosNw()
 print(mibase.actualizar_treeview())

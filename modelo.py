@@ -283,6 +283,7 @@ class MiBaseDeDatos():
             self.cursor.execute(sql_treeview)
             datos = self.cursor.fetchall()
             print("---> Datos traidos para el treeview generados correctamente metodo:actualizar_treeview")
+            print(datos)
             return datos
         except sqlite3.Error as error:
             print(f"Error a cargar_datos: {error}")
@@ -380,6 +381,7 @@ if __name__ == "__main__":
     # Uso de la clase Factura
     mibase = MiBaseDeDatos()
     mibase.carga_datos_iniciales()
+    print(mibase.actualizar_treeview())
     #print("si le pido a la funcion link_afip, me devuelve:" , mibase.return_config('link_afip'))
     #print("si le pido a la funcion color_fondo, me devuelve:" , mibase.return_config('color_fondo'))
 

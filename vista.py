@@ -7,6 +7,7 @@ import webbrowser
 from tkinter import simpledialog, messagebox
 #import re
 from modelo import MiBaseDeDatos , Validador
+from modeloP import MiBaseDeDatosNw
 
 
 class VentanaPrincipal():
@@ -15,6 +16,9 @@ class VentanaPrincipal():
         self.validador = Validador()
         self.mibase = MiBaseDeDatos()
         self.mibase.carga_datos_iniciales()
+
+        #SOLO A MODO PRUEBA
+        self.mibaseN = MiBaseDeDatosNw()
 
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
@@ -407,6 +411,7 @@ class VentanaPrincipal():
         for R in actualizacion: 
             self.tabla.delete(R)
         
+        #datos = self.mibaseN.actualizar_treeview()
         datos = self.mibase.actualizar_treeview()
         if datos == []:
             exit
