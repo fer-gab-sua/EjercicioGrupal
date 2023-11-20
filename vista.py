@@ -18,7 +18,7 @@ class VentanaPrincipal():
         self.mibase.carga_datos_iniciales()
 
         #SOLO A MODO PRUEBA
-        self.mibaseN = MiBaseDeDatosNw()
+        #self.mibaseN = MiBaseDeDatosNw()
 
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
