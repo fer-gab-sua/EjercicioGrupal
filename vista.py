@@ -6,7 +6,7 @@ from tkinter.colorchooser import askcolor
 import webbrowser
 from tkinter import simpledialog, messagebox
 #import re
-from modelo import MiBaseDeDatos , BaseDeDatos , Validador
+from modelo import MiBaseDeDatos , Validador
 
 
 class VentanaPrincipal():
@@ -14,7 +14,6 @@ class VentanaPrincipal():
     def __init__(self,ventana1) -> None:
         self.validador = Validador()
         self.mibase = MiBaseDeDatos()
-        self.objeto_modelo_bd = BaseDeDatos() #BASE DAMIAN
 
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
@@ -319,9 +318,7 @@ class VentanaPrincipal():
         self.mibase.cambiar_categorias(bloque_categorias)
         self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
 
-
     def salir(self):
-        self.mibase.desconectar()
         self.ventana1.quit()
 
     def cambio_color(self):
@@ -372,7 +369,7 @@ class VentanaPrincipal():
             return
         
         validacion_concepto= self.concepto.get()
-        
+
         if self.validador.valida_concepto(validacion_concepto) == "ERROR":
             messagebox.showinfo ("AVISO","Tenes que ingresar el concepto de la factura.")
             self.combobox_concepto.focus()
@@ -385,12 +382,12 @@ class VentanaPrincipal():
             return
         
         else:
-            self.objeto_modelo_bd.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get())
+            self.mibase.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get())
 
         self.fecha.set("")
         self.concepto.set("")
         self.monto.set("")
-        print ("Los registros fueron guardados con éxito.")
+
         
         self.actualizar_treeview()
 
@@ -399,7 +396,7 @@ class VentanaPrincipal():
         for R in actualizacion: 
             self.tabla.delete(R)
         
-        datos = self.objeto_modelo_bd.actualizar_treeview() 
+        datos = self.mibase.actualizar_treeview()
         if datos == []:
             exit
         else:
@@ -421,14 +418,14 @@ class VentanaPrincipal():
             if respuesta =="yes":
                 item=self.tabla.item(seleccion) 
                 borrar =(item.get("text"),) 
-                self.objeto_modelo_bd.borrar_datos(borrar) 
+                self.mibase.borrar_datos(borrar)
                 self.actualizar_treeview() 
-                print ("El registro se borró con éxito.")
             else:
                 exit      
     
-    
     def auxiliar_modificar_factura(self):
+
+        #VER TEMA VALIDACIONES CUANDO SE MODIFICA
         seleccion= self.tabla.focus() 
         if seleccion ==(""):
             messagebox.showwarning("AVISO","Tenes que seleccionar el registro que queres modificar.")
@@ -450,19 +447,18 @@ class VentanaPrincipal():
             self.txt_monto.insert(0,sin_simbolo)
             self.txt_monto.focus()
 
-
-
     def auxiliar_guardar_modificacion(self,):  #OJO QUE ESTAS BORRANDO Y VOLVIENDO A CARGAR, PARA ESTO SE USA EL UPDATE, SINO ESTAS CAMBIANDO EL ID 
         seleccion = self.tabla.focus()
         item=self.tabla.item(seleccion) 
         id_factura = item["text"]
-       
+
         act_fecha = self.txt_fecha.get()
         act_concepto = self.combobox_concepto.get()
         act_monto = self.txt_monto.get()
         
-        self.objeto_modelo_bd.actualizar_datos(act_fecha,act_concepto,act_monto,id_factura)
-            
+        self.mibase.actualizar_datos(act_fecha,act_concepto,act_monto,id_factura)
+
+        
         self.actualizar_treeview()
         
 
@@ -477,11 +473,6 @@ class VentanaPrincipal():
         self.concepto.set("")
         self.monto.set("")
         messagebox.showinfo ("AVISO", "Los datos se modificaron con éxito.")
-            
-            
-            
-            
-    
 
 
 

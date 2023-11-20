@@ -1,46 +1,6 @@
 import sqlite3
 import re
 
-class BaseDeDatos():
-    def __init__(self) -> None:
-        self.conexion = sqlite3.connect("base.db")
-        self.cursor = self.conexion.cursor()
-        
-        ###CREO LAS TABLAS NECESARIAS:
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS Facturacion (id INTEGER, Fecha TEXT, Concepto TEXT, Monto NUMERIC, PRIMARY KEY(id AUTOINCREMENT))")
-        self.conexion.commit()
-
-    def cargar_datos(self,fecha,concepto,monto):
-        
-        sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?)"
-        datos=(fecha,concepto,monto)
-        self.cursor.execute(sql_carga,datos)
-        self.conexion.commit()
-    
-    def borrar_datos(self,borrar):
-         
-        sql = "DELETE FROM facturacion WHERE id = ?;" 
-        borrar_datos = borrar
-        self.cursor.execute(sql,borrar_datos) 
-
-         
-    def actualizar_datos(self,fecha,concepto,monto,id):
-         
-         sql_update = "UPDATE Facturacion set fecha = ?,\
-                                                concepto= ?,\
-                                                    monto =? \
-                                                    WHERE id = ? "
-         datos = (fecha,concepto,monto,id)
-         self.cursor.execute(sql_update,datos)
-    
-    def actualizar_treeview(self):
-        sql_treeview = "SELECT* FROM facturacion ORDER BY Fecha ASC"
-        self.cursor.execute(sql_treeview)
-        datos = self.cursor.fetchall()
-        return datos
-    
-
-
 class MiBaseDeDatos():
     def __init__(self, nombre_base_de_datos = "facturacion.db"):
         """Creacion de la base datos y sus conexiones 
@@ -52,7 +12,6 @@ class MiBaseDeDatos():
         self.conexion = None
         self.cursor = None
         self.crear_tablas()
-
 
     def conectar(self):
         try:
@@ -70,7 +29,6 @@ class MiBaseDeDatos():
             self.conexion.close()
             print("---> Conexión cerrada")
 
-
     def crear_tablas(self):
         self.conectar()
         try:
@@ -78,9 +36,8 @@ class MiBaseDeDatos():
             self.cursor.execute("""CREATE TABLE IF NOT EXISTS facturacion (
                                 fac_int_id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 fac_date_fecha DATE,
-                                fac_int_idconcepto INTEGER,
-                                fac_bol_monto REAL,
-                                fac_txt_cuilcliente TEXT
+                                fac_txt_concepto TXT,
+                                fac_bol_monto REAL
                                 )
                                 """)
             #CREO TABLA  -  CONCEPTOS
@@ -112,8 +69,6 @@ class MiBaseDeDatos():
             self.conexion.rollback()
         finally:
             self.desconectar()
-
-
 
     def carga_datos_iniciales(self):
         """ingresa los datos iniciales de categoria de monotributo, configuracion inicial.
@@ -251,8 +206,9 @@ class MiBaseDeDatos():
                 SELECT ?,?
                 WHERE NOT EXISTS (SELECT 1 FROM conceptos WHERE con_txt_descripcion = ?)
             """
-            data = [concepto,"activo",concepto]
+            data = (concepto,"activo",concepto)
             self.cursor.execute(sql,data)
+            self.conexion.commit()
         except sqlite3.Error as error:
                     print(f"Error a grabar {concepto}: {error}")
                     self.conexion.rollback()
@@ -298,10 +254,75 @@ class MiBaseDeDatos():
         finally:
             self.desconectar()
 
+    def actualizar_treeview(self):
+        self.conectar()
+        try:
+            sql_treeview = """SELECT* 
+                            FROM facturacion 
+                            ORDER BY strftime('%Y-%m-%d', fac_date_fecha) ASC"""
+            self.cursor.execute(sql_treeview)
+            datos = self.cursor.fetchall()
+            return datos
+        except sqlite3.Error as error:
+            print(f"Error a cargar_datos: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+    ###ABM DE FACTURAS
+    def cargar_datos(self,fecha,concepto,monto):
+        self.conectar()
+        try:
+            sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?)"
+            datos=(fecha,concepto,monto)
+            self.cursor.execute(sql_carga,datos)
+            self.conexion.commit()
+            print ("Los registros fueron guardados con éxito.")
+        except sqlite3.Error as error:
+            print(f"Error a cargar_datos: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+    def borrar_datos(self,borrar):
+        self.conectar()
+        try:
+            sql = "DELETE FROM facturacion WHERE fac_int_id = ?;" 
+            borrar_datos = borrar
+            self.cursor.execute(sql,borrar_datos) 
+            self.conexion.commit()
+            print (f"El registro {borrar} se borró con éxito.")
+        except sqlite3.Error as error:
+            print(f"Error a borrar registro id {borrar}: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+    def actualizar_datos(self,fecha,concepto,monto,id):
+        self.conectar()
+        try:
+            sql_update = "UPDATE Facturacion set fac_date_fecha = ?,\
+                                                    fac_txt_concepto = ?,\
+                                                        fac_bol_monto =? \
+                                                        WHERE fac_int_id = ? "
+            datos = (fecha,concepto,monto,id)
+            self.cursor.execute(sql_update,datos)
+            self.conexion.commit()
+        except sqlite3.Error as error:
+            print(f"Error a cargar_datos: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+
+
+
+
 class Validador():
     
     def valida_concepto (self,valido_concepto):
-        if valido_concepto == "":
+        if valido_concepto == "" or valido_concepto == "Agregar Nuevo" or valido_concepto == ("--"*5):
+            print("error al validar concepto")
             return "ERROR"
         
     def valida_monto(self,texto):
