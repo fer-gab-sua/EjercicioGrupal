@@ -1,24 +1,28 @@
--Pasar vista a POO
+-Pasar vista a POO  ok
 -definir las funciones de la vista
-	-controlar los botones
-	-limpiar los entry
-	-funcion auxiliar Alta
-	-funcion auxiliar Baja
-	-funcion auxiliar Modificacion
-	-funcion auxiliar Estadisticas
-	-funcion auxiliar Categoria Monotributo
--generar Validaciones POO
--grafico
+	-controlar los botones - ok
+	-limpiar los entry - ok
+	-funcion auxiliar Alta - ok
+	-funcion auxiliar Baja - ok
+	-funcion auxiliar Modificacion - ok
+
+	-funcion auxiliar Estadisticas - pendiente
+	-funcion auxiliar Categoria Monotributo - ok
+	-logica de monotributo - pendiente
+
+-generar Validaciones POO - ok
+
+-grafico - pendiente
 
 -Generar Modelo POO
-	-init
-	-Alta
-	-Baja
-	-Modificacion
-	-Config
-		-init
-		-modificacion
+	-init - ok
+	-Alta - ok
+	-Baja - ok
+	-Modificacion - ok
+	-Config - ok
+		-modificacion - ok
 
--Link a la Afip
+-Link a la Afip - ok
+
 
 
