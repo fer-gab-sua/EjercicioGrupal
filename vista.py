@@ -14,6 +14,7 @@ class VentanaPrincipal():
     def __init__(self,ventana1) -> None:
         self.validador = Validador()
         self.mibase = MiBaseDeDatos()
+        self.mibase.carga_datos_iniciales()
 
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
@@ -44,8 +45,9 @@ class VentanaPrincipal():
         self.etiqueta_total.place (x=430,y=350)
         self.etiqueta_total.config(bg=self.fondo,text="Total de facturas: ",font=("Arial",16,"bold"))
         self.etiqueta_total_facturas = Label(self.ventana1, text="")
-        self.etiqueta_total_facturas.place (x=470,y=370)
-        self.etiqueta_total_facturas.config(bg=self.fondo,text="prueba",font=("Arial",16,"bold"),foreground="RED")
+        self.etiqueta_total_facturas.place (x=470,y=390)
+        suma = self.mibase.sumar_facturacion()
+        self.etiqueta_total_facturas.config(bg=self.fondo,text=suma,font=("Arial",16,"bold"),foreground="RED")
         
         ########FECHA
         self.fecha = StringVar()
@@ -70,7 +72,7 @@ class VentanaPrincipal():
 
         #cargo la lista llamando al modelo 
         self.lista_concepto = []
-        datos = self.mibase.trae_conceptos()
+        datos = self.mibase.return_conceptos()
         self.lista_concepto = [tupla[1] for tupla in datos]
         #Agrego a la lista el "Agregar Nuevo"
         self.lista_concepto += ["--"*5]
@@ -147,7 +149,8 @@ class VentanaPrincipal():
         menu_ayuda.add_command(label="Acerca del programa",command="")
         menubar.add_cascade(label="Información",menu=menu_ayuda)
         self.ventana1.config(menu=menubar)   
-    
+
+
     def ventana_informacion_categoria(self):
         
         self.inf_categoria = Toplevel()
@@ -155,14 +158,12 @@ class VentanaPrincipal():
         self.inf_categoria.geometry("600x600")
         self.inf_categoria.config(bg=self.fondo)
 
-
         #DECLARO LAS VARIABLES DE LOS ENTRY
-
 
         ########################CATEGORÍAS:
         #TRAIGO LAS CATEGORIAS ACTIVAS DE LAS BASES Y LLENO LOS ENTRY
         resultado = {}
-        categorias = self.mibase.traer_categorias()
+        categorias = self.mibase.return_categorias()
         for dato in categorias:
             letra = dato[1]
             importe = dato[2]
@@ -200,15 +201,14 @@ class VentanaPrincipal():
         et_fecha.config(bg=self.fondo)
         
         
-        global txt_fecha_sqlite
-        txt_fecha_sqlite = StringVar()
-        txt_fecha_sqlite= "2023/01/01"
         
-        global txt_fecha_categoria
-        txt_fecha_categoria = DateEntry(self.inf_categoria,date_pattern="yyyy/mm/dd", width=15,justify="center",textvariable=txt_fecha_sqlite)
-        txt_fecha_categoria.place(x=420,y=150)
-        txt_fecha_categoria.config(state="readonly")
-        txt_fecha_categoria.set_date(txt_fecha_sqlite)
+        self.txt_fecha_sqlite = StringVar()
+        self.txt_fecha_sqlite= "2023/01/01"
+        
+        self.txt_fecha_categoria = DateEntry(self.inf_categoria,date_pattern="yyyy/mm/dd", width=15,justify="center",textvariable=self.txt_fecha_sqlite)
+        self.txt_fecha_categoria.place(x=420,y=150)
+        self.txt_fecha_categoria.config(state="readonly")
+        self.txt_fecha_categoria.set_date(self.txt_fecha_sqlite)
         
     
         self.btn_modificar_datos = Button(self.inf_categoria,text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
@@ -294,15 +294,8 @@ class VentanaPrincipal():
         self.btn_modificar_datos.config(text="GUARDAR DATOS",command=lambda:self.guardar_categorias_aux())
 
     def guardar_categorias_aux(self):
-        self.txt_A.config(state="disabled")
-        self.txt_B.config(state="disabled")
-        self.txt_C.config(state="disabled")
-        self.txt_D.config(state="disabled")
-        self.txt_E.config(state="disabled")
-        self.txt_F.config(state="disabled")
-        self.txt_G.config(state="disabled")
-        self.txt_H.config(state="disabled")
-        fecha_corte = "20/10/2020"
+
+        fecha_corte = self.txt_fecha_categoria.get()
         a = ["A",self.var_A.get(),fecha_corte]
         b = ["B",self.var_B.get(),fecha_corte]
         c = ["C",self.var_C.get(),fecha_corte]
@@ -311,12 +304,30 @@ class VentanaPrincipal():
         f = ["F",self.var_F.get(),fecha_corte]
         g = ["G",self.var_G.get(),fecha_corte]
         h = ["H",self.var_H.get(),fecha_corte]
-        
-
         bloque_categorias = a,b,c,d,e,f,g,h
-        print(bloque_categorias)
-        self.mibase.cambiar_categorias(bloque_categorias)
-        self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
+
+        mostrar_advertencia = False
+
+        for categoria in bloque_categorias:
+            letra, valor, fecha = categoria
+            if self.validador.valida_monto(valor) == "ERROR":
+                mostrar_advertencia = True
+                self.inf_categoria.title("Información para categorizar - ¡Error!")
+        
+        if mostrar_advertencia:
+            messagebox.showwarning ("AVISO","Para cargar una categoria tenes que completar un monto, pueden ser solo números. Si es decimal, va separado de punto.")
+            self.txt_A.focus()
+        else:
+            self.mibase.cambiar_categorias(bloque_categorias)
+            self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
+            self.txt_A.config(state="disabled")
+            self.txt_B.config(state="disabled")
+            self.txt_C.config(state="disabled")
+            self.txt_D.config(state="disabled")
+            self.txt_E.config(state="disabled")
+            self.txt_F.config(state="disabled")
+            self.txt_G.config(state="disabled")
+            self.txt_H.config(state="disabled")
 
     def salir(self):
         self.ventana1.quit()
@@ -351,7 +362,7 @@ class VentanaPrincipal():
                 self.mibase.agrega_concepto(seleccion)
         
             self.lista_concepto = []
-            datos = self.mibase.trae_conceptos()
+            datos = self.mibase.return_conceptos()
             self.lista_concepto = [tupla[1] for tupla in datos]
             #Agrego a la lista el "Agregar Nuevo"
             self.lista_concepto += ["Agregar Nuevo"]
@@ -382,7 +393,7 @@ class VentanaPrincipal():
             return
         
         else:
-            self.mibase.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get())
+            self.mibase.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get(),"null")
 
         self.fecha.set("")
         self.concepto.set("")
@@ -406,7 +417,7 @@ class VentanaPrincipal():
     def actualizar_fecha(self,event):
         fecha = self.calendar.get_date()
         self.fecha.set(fecha)
-        print(fecha)
+
 
     def aux_borrar_factura(self):
         seleccion= self.tabla.focus() 
@@ -423,9 +434,9 @@ class VentanaPrincipal():
             else:
                 exit      
     
-    def auxiliar_modificar_factura(self):
+    def auxiliar_modificar_factura(self):#VER TEMA VALIDACIONES CUANDO SE MODIFICA
 
-        #VER TEMA VALIDACIONES CUANDO SE MODIFICA
+        
         seleccion= self.tabla.focus() 
         if seleccion ==(""):
             messagebox.showwarning("AVISO","Tenes que seleccionar el registro que queres modificar.")
@@ -447,7 +458,7 @@ class VentanaPrincipal():
             self.txt_monto.insert(0,sin_simbolo)
             self.txt_monto.focus()
 
-    def auxiliar_guardar_modificacion(self,):  #OJO QUE ESTAS BORRANDO Y VOLVIENDO A CARGAR, PARA ESTO SE USA EL UPDATE, SINO ESTAS CAMBIANDO EL ID 
+    def auxiliar_guardar_modificacion(self,):  
         seleccion = self.tabla.focus()
         item=self.tabla.item(seleccion) 
         id_factura = item["text"]
