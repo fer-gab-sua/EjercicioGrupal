@@ -6,16 +6,27 @@ from tkinter.colorchooser import askcolor
 import webbrowser
 from tkinter import simpledialog, messagebox
 #import re
-from modelo import MiBaseDeDatos , Validador
-from modeloP import MiBaseDeDatosNw
+from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Crud, ModeloConfig , Validador
+#from modeloP import MiBaseDeDatosNw
 
 
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
+        #inicio Objetos de base y validador
         self.validador = Validador()
-        self.mibase = MiBaseDeDatos()
+        #Base de datos general
+        self.mibase = MiBaseDeDatosConnect()
         self.mibase.carga_datos_iniciales()
+        #base de datos config
+        self.mibase_config = ModeloConfig()
+        #base de datos Crud
+        self.mibase_crud = Crud()
+        #base de datos Cateogorias
+        self.mibase_categorias = ModeloCategorias()
+        #base para las vistas
+        self.mibase_vista = ModeloParaVista()
+
 
         #SOLO A MODO PRUEBA
         #self.mibaseN = MiBaseDeDatosNw()
@@ -25,7 +36,7 @@ class VentanaPrincipal():
         self.ventana1.geometry("1000x600")
 
         #Funcion que trae la configuracion del color 
-        self.fondo = self.mibase.return_config('color_fondo')
+        self.fondo = self.mibase_config.return_config('color_fondo')
         
         self.ventana1.config(bg=self.fondo)
 
@@ -50,7 +61,7 @@ class VentanaPrincipal():
         self.etiqueta_total.config(bg=self.fondo,text="Total de facturas: ",font=("Arial",16,"bold"))
         self.etiqueta_total_facturas = Label(self.ventana1, text="")
         self.etiqueta_total_facturas.place (x=470,y=390)
-        suma = self.mibase.sumar_facturacion()
+        suma = self.mibase_vista.sumar_facturacion()
         self.etiqueta_total_facturas.config(bg=self.fondo,text=suma,font=("Arial",16,"bold"),foreground="RED")
         
         ########FECHA
@@ -76,7 +87,7 @@ class VentanaPrincipal():
 
         #cargo la lista llamando al modelo 
         self.lista_concepto = []
-        datos = self.mibase.return_conceptos()
+        datos = self.mibase_config.return_conceptos()
         self.lista_concepto = [tupla[1] for tupla in datos]
         #Agrego a la lista el "Agregar Nuevo"
         self.lista_concepto += ["--"*5]
@@ -322,7 +333,7 @@ class VentanaPrincipal():
             messagebox.showwarning ("AVISO","Para cargar una categoria tenes que completar un monto, pueden ser solo números. Si es decimal, va separado de punto.")
             self.txt_A.focus()
         else:
-            self.mibase.cambiar_categorias(bloque_categorias)
+            self.mibase_categorias.cambiar_categorias(bloque_categorias)
             self.btn_modificar_datos.config(text="MODIFICAR DATOS",command=lambda:self.modificar_categorias_aux())
             self.txt_A.config(state="disabled")
             self.txt_B.config(state="disabled")
@@ -339,7 +350,7 @@ class VentanaPrincipal():
     def cambio_color(self):
         color = askcolor(color="#00ff00")
         eleccion_color = color[1]
-        self.mibase.grabar_config('color_fondo',eleccion_color)
+        self.mibase_config.grabar_config('color_fondo',eleccion_color)
         root.configure(bg=eleccion_color)
         self.etiqueta_concepto.config(bg=eleccion_color)
         self.etiqueta_fecha.config(bg=eleccion_color)
@@ -349,7 +360,7 @@ class VentanaPrincipal():
         self.fondo= eleccion_color
 
     def ir_a_afip(self):
-        web = self.mibase.return_config('link_afip')
+        web = self.mibase_config.return_config('link_afip')
         webbrowser.open(web)
 
     def agregar_concepto(self,concepto_elegido):
@@ -363,10 +374,10 @@ class VentanaPrincipal():
             seleccion = simpledialog.askstring("Mensaje", mensaje, parent=self.ventana1)
 
             if seleccion:
-                self.mibase.agrega_concepto(seleccion)
+                self.mibase_config.agrega_concepto(seleccion)
         
             self.lista_concepto = []
-            datos = self.mibase.return_conceptos()
+            datos = self.mibase_config.return_conceptos()
             self.lista_concepto = [tupla[1] for tupla in datos]
             #Agrego a la lista el "Agregar Nuevo"
             self.lista_concepto += ["Agregar Nuevo"]
@@ -397,7 +408,7 @@ class VentanaPrincipal():
             return
         
         else:
-            self.mibase.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get(),"null")
+            self.mibase_crud.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get(),"null")
 
         self.fecha.set("")
         self.concepto.set("")
@@ -412,7 +423,7 @@ class VentanaPrincipal():
             self.tabla.delete(R)
         
         #datos = self.mibaseN.actualizar_treeview()
-        datos = self.mibase.actualizar_treeview()
+        datos = self.mibase_vista.actualizar_treeview()
         if datos == []:
             exit
         else:
@@ -434,7 +445,7 @@ class VentanaPrincipal():
             if respuesta =="yes":
                 item=self.tabla.item(seleccion) 
                 borrar =(item.get("text"),) 
-                self.mibase.borrar_datos(borrar)
+                self.mibase_crud.borrar_datos(borrar)
                 self.actualizar_treeview() 
             else:
                 exit      
@@ -472,7 +483,7 @@ class VentanaPrincipal():
         act_concepto = self.combobox_concepto.get()
         act_monto = self.txt_monto.get()
         
-        self.mibase.actualizar_datos(act_fecha,act_concepto,act_monto,id_factura)
+        self.mibase_crud.actualizar_datos(act_fecha,act_concepto,act_monto,id_factura)
 
         
         self.actualizar_treeview()

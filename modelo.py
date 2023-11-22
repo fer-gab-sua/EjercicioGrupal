@@ -1,7 +1,7 @@
 import sqlite3
 import re
 
-class MiBaseDeDatos():
+class MiBaseDeDatosConnect():
     def __init__(self, nombre_base_de_datos = "facturacion.db"):
         """Creacion de la base datos y sus conexiones 
 
@@ -142,7 +142,133 @@ class MiBaseDeDatos():
         finally:
             self.desconectar()
 
+class ModeloCategorias(MiBaseDeDatosConnect):
+#metodos de retorno y grabacion de categorias
+    def traer_categorias(self):
+        self.conectar()
+        try:
+            sql = """
+                SELECT *
+                FROM categoria_monotributo
+                WHERE cat_txt_fecha = "01/01/2023"
+                """ 
+            data = ("01/01/2023",)
+            self.cursor.execute(sql)
+            retorno = (self.cursor.fetchall())
+            print("---> Categorias retornados con exito metodo:trae_categorias()")
+            return retorno
+        except sqlite3.Error as error:
+            print(f"Error a retornar categorias: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
 
+    def cambiar_categorias(self,bloque):
+        self.conectar()
+        try:
+            for cat in bloque:
+                print(cat[0])
+                print(cat[1])
+                print(cat[2])
+                sql = """INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_fecha)
+                SELECT ?, ?, ?
+                """
+                #WHERE NOT EXISTS (SELECT 1 FROM categoria_monotributo WHERE cat_txt_estado = "activo")
+                #   """
+                data = (cat[0],(cat[1]),(cat[2]))
+                self.cursor.execute(sql,data)
+                print("---> Categorias agregadas con exito metodo:cambiar_categorias()")
+
+        except sqlite3.Error as error:
+            print(f"Error a retornar categorias: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+
+class ModeloParaVista(MiBaseDeDatosConnect):
+#metodos de retorno para funcionamiento de pantalla
+    def actualizar_treeview(self):
+        self.conectar()
+        try:
+            sql_treeview = """SELECT* 
+                            FROM facturacion 
+                            ORDER BY strftime('%Y-%m-%d', fac_date_fecha) ASC"""
+            self.cursor.execute(sql_treeview)
+            datos = self.cursor.fetchall()
+            print("---> Datos traidos para el treeview generados correctamente metodo:actualizar_treeview")
+            print(datos)
+            return datos
+        except sqlite3.Error as error:
+            print(f"Error a cargar_datos: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+    def sumar_facturacion(self):
+        self.conectar()
+        try:
+            sql = """SELECT SUM (fac_bol_monto)
+                            FROM facturacion 
+                            """
+            self.cursor.execute(sql)
+            datos = self.cursor.fetchall()
+            print("---> Suma generada con exito")
+            return datos
+        except sqlite3.Error as error:
+            print(f"Error en sumar facturas: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()      
+
+class Crud(MiBaseDeDatosConnect):
+###ABM DE FACTURAS
+    def cargar_datos(self,fecha,concepto,monto,instante):
+        self.conectar()
+        try:
+            sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?,?)"
+            datos=(fecha,concepto,monto,instante)
+            self.cursor.execute(sql_carga,datos)
+            self.conexion.commit()
+            print ("---> Los registros fueron guardados con éxito.")
+        except sqlite3.Error as error:
+            print(f"Error a cargar_datos: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+    def borrar_datos(self,borrar):
+        self.conectar()
+        try:
+            sql = "DELETE FROM facturacion WHERE fac_int_id = ?;" 
+            borrar_datos = borrar
+            self.cursor.execute(sql,borrar_datos) 
+            self.conexion.commit()
+            print (f"---> El registro {borrar} se borró con éxito.")
+        except sqlite3.Error as error:
+            print(f"Error a borrar registro id {borrar}: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+    def actualizar_datos(self,fecha,concepto,monto,id):
+        self.conectar()
+        try:
+            sql_update = "UPDATE Facturacion set fac_date_fecha = ?,\
+                                                    fac_txt_concepto = ?,\
+                                                        fac_bol_monto =? \
+                                                        WHERE fac_int_id = ? "
+            datos = (fecha,concepto,monto,id)
+            self.cursor.execute(sql_update,datos)
+            self.conexion.commit()
+            print(f"---> Registro {id}, con fecha {fecha} actualizado correctamente")
+        except sqlite3.Error as error:
+            print(f"Error a cargar_datos: {error}")
+            self.conexion.rollback()
+        finally:
+            self.desconectar()
+
+class ModeloConfig(MiBaseDeDatosConnect):
 #metodos de retorno y grabacion de configuraciones
     def return_config(self,parametro):
         """CONSULA EN LA BASE DE DATOS, DEPENDIENDO DEL PARAMETRO EN LA TABLA CONFIGURACION
@@ -212,7 +338,7 @@ class MiBaseDeDatos():
             self.conexion.rollback()
         finally:
             self.desconectar()
-        
+
     def agrega_concepto(self,concepto):
         self.conectar()
         try:
@@ -231,127 +357,8 @@ class MiBaseDeDatos():
         finally:
             self.desconectar()
 
-#metodos de retorno y grabacion de categorias
-    def traer_categorias(self):
-        self.conectar()
-        try:
-            sql = """
-                SELECT *
-                FROM categoria_monotributo
-                WHERE cat_txt_fecha = "01/01/2023"
-                """ 
-            data = ("01/01/2023",)
-            self.cursor.execute(sql)
-            retorno = (self.cursor.fetchall())
-            print("---> Categorias retornados con exito metodo:trae_categorias()")
-            return retorno
-        except sqlite3.Error as error:
-            print(f"Error a retornar categorias: {error}")
-            self.conexion.rollback()
-        finally:
-            self.desconectar()
 
-    def cambiar_categorias(self,bloque):
-        self.conectar()
-        try:
-            for cat in bloque:
-                print(cat[0])
-                print(cat[1])
-                print(cat[2])
-                sql = """INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_fecha)
-                SELECT ?, ?, ?
-                """
-                #WHERE NOT EXISTS (SELECT 1 FROM categoria_monotributo WHERE cat_txt_estado = "activo")
-                #   """
-                data = (cat[0],(cat[1]),(cat[2]))
-                self.cursor.execute(sql,data)
-                print("---> Categorias agregadas con exito metodo:cambiar_categorias()")
 
-        except sqlite3.Error as error:
-            print(f"Error a retornar categorias: {error}")
-            self.conexion.rollback()
-        finally:
-            self.desconectar()
-
-#metodos de retorno para funcionamiento de pantalla
-    def actualizar_treeview(self):
-        self.conectar()
-        try:
-            sql_treeview = """SELECT* 
-                            FROM facturacion 
-                            ORDER BY strftime('%Y-%m-%d', fac_date_fecha) ASC"""
-            self.cursor.execute(sql_treeview)
-            datos = self.cursor.fetchall()
-            print("---> Datos traidos para el treeview generados correctamente metodo:actualizar_treeview")
-            print(datos)
-            return datos
-        except sqlite3.Error as error:
-            print(f"Error a cargar_datos: {error}")
-            self.conexion.rollback()
-        finally:
-            self.desconectar()
-
-    def sumar_facturacion(self):
-        self.conectar()
-        try:
-            sql = """SELECT SUM (fac_bol_monto)
-                            FROM facturacion 
-                            """
-            self.cursor.execute(sql)
-            datos = self.cursor.fetchall()
-            print("---> Suma generada con exito")
-            return datos
-        except sqlite3.Error as error:
-            print(f"Error en sumar facturas: {error}")
-            self.conexion.rollback()
-        finally:
-            self.desconectar()      
-
-###ABM DE FACTURAS
-    def cargar_datos(self,fecha,concepto,monto,instante):
-        self.conectar()
-        try:
-            sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?,?)"
-            datos=(fecha,concepto,monto,instante)
-            self.cursor.execute(sql_carga,datos)
-            self.conexion.commit()
-            print ("---> Los registros fueron guardados con éxito.")
-        except sqlite3.Error as error:
-            print(f"Error a cargar_datos: {error}")
-            self.conexion.rollback()
-        finally:
-            self.desconectar()
-
-    def borrar_datos(self,borrar):
-        self.conectar()
-        try:
-            sql = "DELETE FROM facturacion WHERE fac_int_id = ?;" 
-            borrar_datos = borrar
-            self.cursor.execute(sql,borrar_datos) 
-            self.conexion.commit()
-            print (f"---> El registro {borrar} se borró con éxito.")
-        except sqlite3.Error as error:
-            print(f"Error a borrar registro id {borrar}: {error}")
-            self.conexion.rollback()
-        finally:
-            self.desconectar()
-
-    def actualizar_datos(self,fecha,concepto,monto,id):
-        self.conectar()
-        try:
-            sql_update = "UPDATE Facturacion set fac_date_fecha = ?,\
-                                                    fac_txt_concepto = ?,\
-                                                        fac_bol_monto =? \
-                                                        WHERE fac_int_id = ? "
-            datos = (fecha,concepto,monto,id)
-            self.cursor.execute(sql_update,datos)
-            self.conexion.commit()
-            print(f"---> Registro {id}, con fecha {fecha} actualizado correctamente")
-        except sqlite3.Error as error:
-            print(f"Error a cargar_datos: {error}")
-            self.conexion.rollback()
-        finally:
-            self.desconectar()
 
 class Validador():
     
@@ -379,7 +386,7 @@ class Validador():
 #ESTO ES PARA PRUEBAS
 if __name__ == "__main__":
     # Uso de la clase Factura
-    mibase = MiBaseDeDatos()
+    mibase = MiBaseDeDatosConnect()
     mibase.carga_datos_iniciales()
     print(mibase.actualizar_treeview())
     #print("si le pido a la funcion link_afip, me devuelve:" , mibase.return_config('link_afip'))
