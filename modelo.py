@@ -1,6 +1,6 @@
 import sqlite3
 import re
-from datetime import datetime
+
 
 class MiBaseDeDatosConnect():
     def __init__(self, nombre_base_de_datos = "facturacion.db"):
@@ -199,6 +199,7 @@ class ModeloParaVista(MiBaseDeDatosConnect):
             datos = self.cursor.fetchall()
             print("---> Datos traidos para el treeview generados correctamente metodo:actualizar_treeview")
             print(datos)
+
             return datos
         except sqlite3.Error as error:
             print(f"Error a cargar_datos: {error}")
@@ -225,13 +226,10 @@ class ModeloParaVista(MiBaseDeDatosConnect):
 class Crud(MiBaseDeDatosConnect):
 ###ABM DE FACTURAS
     def cargar_datos(self,fecha,concepto,monto,instante):
-        formatear_fecha = datetime.strptime(fecha, '%d/%m/%Y')
-        formato_fecha="%Y/%m/%d"
-        fecha_formateada = formatear_fecha.strftime(formato_fecha)
         self.conectar()
         try:
             sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?,?)"
-            datos=(fecha_formateada,concepto,monto,instante)
+            datos=(fecha,concepto,monto,instante)
             self.cursor.execute(sql_carga,datos)
             self.conexion.commit()
             print ("---> Los registros fueron guardados con éxito.")
@@ -360,6 +358,31 @@ class ModeloConfig(MiBaseDeDatosConnect):
                     self.conexion.rollback()
         finally:
             self.desconectar()
+
+class Estadisticas(MiBaseDeDatosConnect):
+        def calculos_total_facturas(self,mes):
+            self.conectar()
+            sql_total_facturas = ("SELECT COUNT(*) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?")
+            self.cursor.execute(sql_total_facturas,(mes,))
+            self.conexion.commit()
+            
+            total_facturas=self.cursor.fetchall()
+        
+            concatenar = str(total_facturas[0][0]) # Aca exraigo solo al primer numero del fetchall y le saco la ,
+            self.desconectar()
+            return concatenar
+        
+        def facturado_mes_actual(self):
+            pass
+
+        def total_facturado(self,fecha_ini = "2023/01/01",fecha_fin = "2023/12/01"):
+            pass
+
+        def falta_facturar_responsable_inscrito(self):
+            pass
+
+
+
 
 
 

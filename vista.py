@@ -6,8 +6,9 @@ from tkinter.colorchooser import askcolor
 import webbrowser
 from tkinter import simpledialog, messagebox
 #import re
-from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Crud, ModeloConfig , Validador
+from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Crud, ModeloConfig , Validador,Estadisticas
 #from modeloP import MiBaseDeDatosNw
+from datetime import datetime
 
 
 class VentanaPrincipal():
@@ -26,14 +27,15 @@ class VentanaPrincipal():
         self.mibase_categorias = ModeloCategorias()
         #base para las vistas
         self.mibase_vista = ModeloParaVista()
-
+        #Estadisticas
+        self.mibase_estadistica = Estadisticas()
 
         #SOLO A MODO PRUEBA
         #self.mibaseN = MiBaseDeDatosNw()
 
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
-        self.ventana1.geometry("1000x600")
+        self.ventana1.geometry("1050x600")
 
         #Funcion que trae la configuracion del color 
         self.fondo = self.mibase_config.return_config('color_fondo')
@@ -176,66 +178,66 @@ class VentanaPrincipal():
                                               anchor=CENTER)
         self.etiqueta_facturado_este_mes.place (x=680,y=250)
         self.etiqueta_facturado_este_mes.config(bg=self.fondo,
-                                             font=("arial",14,"bold"))
+                                             font=("arial",12,"bold"))
         
         self.etiqueta_facturado_este_mes_rdo = Label(self.ventana1,
                                               text="$ 1000000",
                                               foreground="red",
                                               anchor=CENTER)
-        self.etiqueta_facturado_este_mes_rdo.place (x=910,y=250)
+        self.etiqueta_facturado_este_mes_rdo.place (x=940,y=250)
         self.etiqueta_facturado_este_mes_rdo.config(bg=self.fondo,
-                                             font=("arial",14,"bold"))
+                                             font=("arial",12,"bold"))
         
         #PENDIENTE PARA PASAR DE CATEGORÍA:
         self.etiqueta_pendiente_pasar_categoria = Label(self.ventana1,
                                               text="FALTA PARA PASAR A: ",
                                               foreground="White",
                                               anchor=CENTER)
-        self.etiqueta_pendiente_pasar_categoria.place (x=680,y=270)
+        self.etiqueta_pendiente_pasar_categoria.place (x=680,y=280)
         self.etiqueta_pendiente_pasar_categoria.config(bg=self.fondo,
-                                             font=("arial",14,"bold"))
+                                             font=("arial",12,"bold"))
         
         self.etiqueta_pendiente_pasar_categoria_rdo = Label(self.ventana1,
                                               text="$ 100....",
                                               foreground="red",
                                               anchor=CENTER)
-        self.etiqueta_pendiente_pasar_categoria_rdo.place (x=910,y=270)
+        self.etiqueta_pendiente_pasar_categoria_rdo.place (x=940,y=280)
         self.etiqueta_pendiente_pasar_categoria_rdo.config(bg=self.fondo,
-                                             font=("arial",14,"bold"))
+                                             font=("arial",12,"bold"))
         
         # PENDIENTE PARA PASAR A RESPONSABLE INSCRIPTO
         self.etiqueta_pendiente_pasar_ri = Label(self.ventana1,
                                               text="FALTA PARA R.I: ",
                                               foreground="White",
                                               anchor=CENTER)
-        self.etiqueta_pendiente_pasar_ri.place (x=680,y=290)
+        self.etiqueta_pendiente_pasar_ri.place (x=680,y=310)
         self.etiqueta_pendiente_pasar_ri.config(bg=self.fondo,
-                                             font=("arial",14,"bold"))
+                                             font=("arial",12,"bold"))
         
         self.etiqueta_pendiente_pasar_ri_rdo = Label(self.ventana1,
                                               text="$ 10.00000",
                                               foreground="red",
                                               anchor=CENTER)
-        self.etiqueta_pendiente_pasar_ri_rdo.place (x=910,y=290)
+        self.etiqueta_pendiente_pasar_ri_rdo.place (x=940,y=310)
         self.etiqueta_pendiente_pasar_ri_rdo.config(bg=self.fondo,
-                                             font=("arial",14,"bold"))
+                                             font=("arial",12,"bold"))
         
         # TOTAL FACTURADO ESTE AŃO:
         self.etiqueta_total_facturado_anual = Label(self.ventana1,
                                               text="TOTAL FACTURADO ESTE AÑO: ",
                                               foreground="White",
                                               anchor=CENTER)
-        self.etiqueta_total_facturado_anual.place (x=680,y=310)
+        self.etiqueta_total_facturado_anual.place (x=680,y=340)
         self.etiqueta_total_facturado_anual.config(bg=self.fondo,
-                                             font=("arial",14,"bold"))
+                                             font=("arial",12,"bold"))
         
         self.etiqueta_total_facturado_anual_rdo = Label(self.ventana1,
                                               text="$ 5000000",
                                               foreground="red",
                                               anchor=CENTER)
-        self.etiqueta_total_facturado_anual_rdo.place (x=910,y=310)
+        self.etiqueta_total_facturado_anual_rdo.place (x=940,y=340)
         self.etiqueta_total_facturado_anual_rdo.config  (bg=self.fondo,
-                                                        font=("arial",14,"bold"))
+                                              font=("arial",12,"bold"))
         
         self.actualizar_calculos()
 
@@ -482,7 +484,11 @@ class VentanaPrincipal():
             return
         
         else:
-            self.mibase_crud.cargar_datos(self.txt_fecha.get(),self.combobox_concepto.get(),self.txt_monto.get(),"null")
+            print(self.txt_fecha.get())
+            formatear_fecha = datetime.strptime(self.txt_fecha.get(), '%d/%m/%Y')
+            formato_fecha="%Y/%m/%d"
+            fecha_formateada = formatear_fecha.strftime(formato_fecha)
+            self.mibase_crud.cargar_datos(fecha_formateada,self.combobox_concepto.get(),self.txt_monto.get(),"null")
 
         self.fecha.set("")
         self.concepto.set("")
@@ -502,12 +508,15 @@ class VentanaPrincipal():
             exit
         else:
             for x in datos:
-                self.tabla.insert("",0,text=x[0],values=(x[1],x[2],("$"+str(x[3]))))
+                formatear_fecha = datetime.strptime(x[1],"%Y/%m/%d")
+                formato_fecha="%d/%m/%Y"
+                fecha_formateada = formatear_fecha.strftime(formato_fecha) 
+                self.tabla.insert("",0,text=x[0],values=(fecha_formateada,x[2],("$"+str(x[3])))) #inserto la consulta en la tabla y convierto en string la 3er columna, para poder agregar el
+        self.actualizar_calculos()
     
     def actualizar_fecha(self,event):
         fecha = self.calendar.get_date()
         self.fecha.set(fecha)
-
 
     def aux_borrar_factura(self):
         seleccion= self.tabla.focus() 
@@ -577,8 +586,11 @@ class VentanaPrincipal():
 
 
     def actualizar_calculos(self):
-        cantidad_facturas = 3 #self.objeto_modelo_bd.calculos_total_facturas()
+        mes_actual = str(datetime.now().month)
+
+        cantidad_facturas = self.mibase_estadistica.calculos_total_facturas(mes_actual)
         self.etiqueta_total_facturas.config(text=cantidad_facturas)
+
 
 if __name__== "__main__":
     root = Tk()
