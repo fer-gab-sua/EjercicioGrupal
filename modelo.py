@@ -186,7 +186,7 @@ class ModeloCategorias(MiBaseDeDatosConnect):
         finally:
             self.desconectar()
 
-
+#Hola
 class ModeloParaVista(MiBaseDeDatosConnect):
 #metodos de retorno para funcionamiento de pantalla
     def actualizar_treeview(self):
