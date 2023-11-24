@@ -359,6 +359,22 @@ class ModeloConfig(MiBaseDeDatosConnect):
         finally:
             self.desconectar()
 
+    def borra_concepto(self,concepto):
+        self.conectar()
+        try:
+            sql = """
+                DELETE FROM conceptos WHERE con_txt_descripcion = ?
+            """
+            data = (concepto,)
+            self.cursor.execute(sql,data)
+            self.conexion.commit()
+            print("---> Concepto eliminado con exito metodo:borra_conceptos()")
+        except sqlite3.Error as error:
+                    print(f"Error a eliminar {concepto}: {error}")
+                    self.conexion.rollback()
+        finally:
+            self.desconectar()
+
 class Estadisticas(MiBaseDeDatosConnect):
         def calculos_total_facturas(self,mes):
             self.conectar()
@@ -395,9 +411,10 @@ class Estadisticas(MiBaseDeDatosConnect):
 class Validador():
     
     def valida_concepto (self,valido_concepto):
-        if valido_concepto == "" or valido_concepto == "Agregar Nuevo" or valido_concepto == ("--"*5):
+        if valido_concepto == "" or valido_concepto == "Agregar Nuevo" or valido_concepto == ("--"*5) or valido_concepto =="Eliminar Concepto":
             print("error al validar concepto")
             return "ERROR"
+        
         
     def valida_monto(self,texto):
         patron = r"^\d+(\.\d+)?$" #Valida numeros enteros y decimales.

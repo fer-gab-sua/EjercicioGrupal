@@ -167,13 +167,14 @@ class VentanaPrincipal():
         #Agrego a la lista el "Agregar Nuevo"
         self.lista_concepto += ["--"*5]
         self.lista_concepto += ["Agregar Nuevo"]
+        self.lista_concepto += ["Eliminar Concepto"]
         
         
         self.combobox_concepto = Combobox(self.ventana1,values=self.lista_concepto,state="readonly",width=19,justify="center",textvariable=self.concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
         self.combobox_concepto.place (x=100,y=275) 
 
         #agrego la funcionalidad de agregar a la base de datos un nuevo registro
-        self.combobox_concepto.bind("<<ComboboxSelected>>", lambda event: self.agregar_concepto(self.concepto)) 
+        self.combobox_concepto.bind("<<ComboboxSelected>>", lambda event: self.ab_concepto(self.concepto)) 
         ###########MONTO:
         self.etiqueta_monto = Label(self.ventana1, text="Monto:",font= ("arial",13,"bold"))
         self.etiqueta_monto.place (x=10,y=11)
@@ -440,7 +441,7 @@ class VentanaPrincipal():
         web = self.mibase_config.return_config('link_afip')
         webbrowser.open(web)
 
-    def agregar_concepto(self,concepto_elegido):
+    def ab_concepto(self,concepto_elegido):
         concepto_elegido = concepto_elegido.get()
         if concepto_elegido == "Agregar Nuevo":
 
@@ -458,6 +459,23 @@ class VentanaPrincipal():
             self.lista_concepto = [tupla[1] for tupla in datos]
             #Agrego a la lista el "Agregar Nuevo"
             self.lista_concepto += ["Agregar Nuevo"]
+            self.combobox_concepto['values'] = self.lista_concepto
+        elif concepto_elegido == "Eliminar Concepto":
+            # configuro el mensaje
+            mensaje = "Ingrese el Concepto a eliminar:"
+
+            # Mostrar la ventana emergente con un ComboBox
+            seleccion = simpledialog.askstring("Mensaje", mensaje, parent=self.ventana1)
+
+            if seleccion:
+                self.mibase_config.borra_concepto(seleccion)
+        
+            self.lista_concepto = []
+            datos = self.mibase_config.return_conceptos()
+            self.lista_concepto = [tupla[1] for tupla in datos]
+            #Agrego a la lista el "Agregar Nuevo"
+            self.lista_concepto += ["Agregar Nuevo"]
+            self.lista_concepto += ["Eliminar Concepto"]
             self.combobox_concepto['values'] = self.lista_concepto
 
     def auxiliar_carga(self):
