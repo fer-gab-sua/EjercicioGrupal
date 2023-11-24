@@ -186,7 +186,6 @@ class ModeloCategorias(MiBaseDeDatosConnect):
         finally:
             self.desconectar()
 
-
 class ModeloParaVista(MiBaseDeDatosConnect):
 #metodos de retorno para funcionamiento de pantalla
     def actualizar_treeview(self):
@@ -226,9 +225,13 @@ class Crud(MiBaseDeDatosConnect):
 ###ABM DE FACTURAS
     def cargar_datos(self,fecha,concepto,monto,instante):
         self.conectar()
+
+        formatear_fecha = datetime.strptime(fecha, '%d/%m/%Y')
+        formato_fecha="%Y/%m/%d"
+        fecha_formateada = formatear_fecha.strftime(formato_fecha)
         try:
             sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?,?)"
-            datos=(fecha,concepto,monto,instante)
+            datos=(fecha_formateada,concepto,monto,instante)
             self.cursor.execute(sql_carga,datos)
             self.conexion.commit()
             print ("---> Los registros fueron guardados con éxito.")
@@ -358,9 +361,6 @@ class ModeloConfig(MiBaseDeDatosConnect):
         finally:
             self.desconectar()
 
-
-
-
 class Validador():
     
     def valida_concepto (self,valido_concepto):
@@ -381,8 +381,6 @@ class Validador():
     def valida_fecha(self,valido_fecha):
         if valido_fecha == "":
             return "ERROR"
-
-
 
 #ESTO ES PARA PRUEBAS
 if __name__ == "__main__":

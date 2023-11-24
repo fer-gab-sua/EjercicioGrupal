@@ -1,5 +1,6 @@
 import sqlite3
 import re
+from datetime import datetime
 
 class MiBaseDeDatosConnect():
     def __init__(self, nombre_base_de_datos = "facturacion.db"):
@@ -224,10 +225,13 @@ class ModeloParaVista(MiBaseDeDatosConnect):
 class Crud(MiBaseDeDatosConnect):
 ###ABM DE FACTURAS
     def cargar_datos(self,fecha,concepto,monto,instante):
+        formatear_fecha = datetime.strptime(fecha, '%d/%m/%Y')
+        formato_fecha="%Y/%m/%d"
+        fecha_formateada = formatear_fecha.strftime(formato_fecha)
         self.conectar()
         try:
             sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?,?)"
-            datos=(fecha,concepto,monto,instante)
+            datos=(fecha_formateada,concepto,monto,instante)
             self.cursor.execute(sql_carga,datos)
             self.conexion.commit()
             print ("---> Los registros fueron guardados con éxito.")
