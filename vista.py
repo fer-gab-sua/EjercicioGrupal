@@ -508,6 +508,7 @@ class VentanaPrincipal():
         if datos == []:
             exit
         else:
+            print(datos)
             for x in datos:
                 formatear_fecha = datetime.strptime(x[1],"%Y/%m/%d")
                 formato_fecha="%d/%m/%Y"
@@ -551,7 +552,10 @@ class VentanaPrincipal():
             
             seleccion = self.tabla.focus()
             item=self.tabla.item(seleccion)
-            self.txt_fecha.insert(0,item['values'][0])
+            fecha_especifica = item['values'][0]
+            self.fecha.set(fecha_especifica)
+            self.calendar.selection_set(fecha_especifica)
+
             self.combobox_concepto.set(item['values'][1])
             con_simbolo= item['values'][2]
             sin_simbolo= con_simbolo.replace('$',"")
@@ -564,6 +568,12 @@ class VentanaPrincipal():
         id_factura = item["text"]
 
         act_fecha = self.txt_fecha.get()
+        ###ACA ESTA EL PROBLEMA
+
+        formatear_fecha = datetime.strptime(self.txt_fecha.get(), '%d/%m/%Y')
+        formato_fecha="%Y/%m/%d"
+        act_fecha = formatear_fecha.strftime(formato_fecha)
+
         act_concepto = self.combobox_concepto.get()
         act_monto = self.txt_monto.get()
         
