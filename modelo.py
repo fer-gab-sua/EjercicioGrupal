@@ -372,8 +372,13 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.desconectar()
             return concatenar
         
-        def facturado_mes_actual(self):
-            pass
+        def facturado_mes_actual(self,mes):
+            self.conectar()
+            sql_facturado_este_mes =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?")
+            self.cursor.execute(sql_facturado_este_mes,(mes,))
+            self.conexion.commit()
+            facturado_este_mes=self.cursor.fetchall()
+            return facturado_este_mes
 
         def total_facturado(self,fecha_ini = "2023/01/01",fecha_fin = "2023/12/01"):
             pass
