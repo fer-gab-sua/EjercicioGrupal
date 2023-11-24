@@ -254,7 +254,7 @@ class VentanaPrincipal():
         ########################CATEGORÍAS:
         #TRAIGO LAS CATEGORIAS ACTIVAS DE LAS BASES Y LLENO LOS ENTRY
         resultado = {}
-        categorias = self.mibase.return_categorias()
+        categorias = self.mibase_categorias.traer_categorias()
         for dato in categorias:
             letra = dato[1]
             importe = dato[2]
