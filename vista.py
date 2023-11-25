@@ -54,8 +54,9 @@ class VentanaPrincipal():
         
         self.label_categoria = Label(self.ventana1)
         self.label_categoria.place(x=840,y=90)
-        self.label_categoria.config(bg="gray50",text="A",font=("Arial",50,"bold"),foreground="GREEN")
+        self.label_categoria.config(bg="gray50",text="",font=("Arial",50,"bold"),foreground="GREEN")
 
+        self.manejo_categorias()
 
         ################################WIDGETS###########################################
 
@@ -245,7 +246,9 @@ class VentanaPrincipal():
         menu_ayuda = Menu(menubar, tearoff=0)
         menu_ayuda.add_command(label="Acerca del programa",command="")
         menubar.add_cascade(label="Información",menu=menu_ayuda)
-        self.ventana1.config(menu=menubar)   
+        self.ventana1.config(menu=menubar)  
+
+        print (self.mibase_estadistica.total_facturado_periodo())
 
 
        
@@ -547,6 +550,7 @@ class VentanaPrincipal():
                 fecha_formateada = formatear_fecha.strftime(formato_fecha) 
                 self.tabla.insert("",0,text=x[0],values=(fecha_formateada,x[2],("$"+str(x[3])))) #inserto la consulta en la tabla y convierto en string la 3er columna, para poder agregar el
         self.actualizar_calculos()
+        self.manejo_categorias()
     
     def actualizar_fecha(self,event):
         fecha = self.calendar.get_date()
@@ -639,8 +643,9 @@ class VentanaPrincipal():
         self.etiqueta_facturado_este_mes_rdo.config(text=facturado_mes_actual)
     
     def manejo_categorias(self):
+         
          # Traigo todo los valores de las categorías:
-         (
+        (
             self.cat_A,
             self.cat_B,
             self.cat_C,
@@ -651,7 +656,60 @@ class VentanaPrincipal():
             self.cat_H
         )   = self.mibase_estadistica.devolver_categorias()
          
-    ## Modifico el Label categoría, según lo facturado
+         
+         
+         
+        facturado_este_periodo = self.mibase_estadistica.total_facturado_periodo() # Traigo el total facturado del periodo
+        print (".......................")
+        print (facturado_este_periodo[0])
+        
+        if facturado_este_periodo[0] == None:
+            self.label_categoria.config(font= ("arial",13,"bold"),text="NO HAY DATOS REGISTRADOS",fg="Yellow")
+            self.label_categoria.place(x=760,y=100)
+            return
+        else:
+            monto_facturado = float(facturado_este_periodo[0])
+        ####Modifico el label de la categoría        
+            if monto_facturado <= self.cat_A:
+                self.label_categoria.config(text="A",font= ("arial",50,"bold"),fg="Green")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_A and monto_facturado <= self.cat_B:
+                self.label_categoria.config(text="B",font= ("arial",50,"bold"),fg="Green")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_B and monto_facturado <= self.cat_C:
+                self.label_categoria.config(text="C",font= ("arial",50,"bold"),fg="Green")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_C and monto_facturado <= self.cat_D:
+                self.label_categoria.config(text="D",font= ("arial",50,"bold"),fg="Green")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_D and monto_facturado <= self.cat_E:
+                self.label_categoria.config(text="E",font= ("arial",50,"bold"),fg="Green")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_E and monto_facturado <= self.cat_F:
+                self.label_categoria.config(text="F",font= ("arial",50,"bold"),fg="Green")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_F and monto_facturado <= self.cat_G:
+                self.label_categoria.config(text="G",font= ("arial",50,"bold"),fg="Green")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_G and monto_facturado <= self.cat_H:
+                self.label_categoria.config(text="H",font= ("arial",50,"bold"),fg="Red")
+                self.label_categoria.place (x=840, y= 90)
+            elif monto_facturado > self.cat_H:
+                self.label_categoria.config(font= ("arial",13,"bold"),text="RESPONSABLE INSCRIPTO",fg="black")
+                self.label_categoria.place(x=770,y=100) 
+        
+
+            
+        
+        
+        
+
+             
+        
+
+        
+
+
 
 
     
