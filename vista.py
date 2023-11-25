@@ -660,16 +660,15 @@ class VentanaPrincipal():
          
          
         facturado_este_periodo = self.mibase_estadistica.total_facturado_periodo() # Traigo el total facturado del periodo
-        print (".......................")
-        print (facturado_este_periodo[0])
         
+        # Valido en el caso que no hay datos en la db
         if facturado_este_periodo[0] == None:
             self.label_categoria.config(font= ("arial",13,"bold"),text="NO HAY DATOS REGISTRADOS",fg="Yellow")
             self.label_categoria.place(x=760,y=100)
             return
         else:
             monto_facturado = float(facturado_este_periodo[0])
-        ####Modifico el label de la categoría        
+        #### En caso que haya datos: Modifico el label de la categoría        
             if monto_facturado <= self.cat_A:
                 self.label_categoria.config(text="A",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
