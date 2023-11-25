@@ -402,7 +402,82 @@ class Estadisticas(MiBaseDeDatosConnect):
         def falta_facturar_responsable_inscrito(self):
             pass
 
+        def devolver_categorias(self):
+            #CATEGORIA A
+            self.conectar()
+            sqlA = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='A';"
+            self.cursor.execute(sqlA)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaA=x[2]
+            
+            #CATEGORIA B
+            self.conectar()
+            sqlB = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='B';"
+            self.cursor.execute(sqlB)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaB=x[2]
 
+            #CATEGORIA C
+            self.conectar()
+            sqlC = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='C';"
+            self.cursor.execute(sqlC)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaC=x[2]
+
+            #CATEGORIA D
+            self.conectar()
+            sqlD = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='D';"
+            self.cursor.execute(sqlD)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaD=x[2]
+            
+            #CATEGORIA E
+            self.conectar()
+            sqlE = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='E';"
+            self.cursor.execute(sqlE)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaE=x[2]
+
+            #CATEGORIA F
+            self.conectar()
+            sqlF = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='F';"
+            self.cursor.execute(sqlF)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaF=x[2]
+
+            #CATEGORIA G
+            self.conectar()
+            sqlG = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='G';"
+            self.cursor.execute(sqlG)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaG=x[2]
+
+            #CATEGORIA H
+            self.conectar()
+            sqlH = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='H';"
+            self.cursor.execute(sqlH)
+            self.conexion.commit()
+            rows = self.cursor.fetchall()
+            for x in rows:
+                categoriaH=x[2]
+
+
+
+            return categoriaA,categoriaB,categoriaC,categoriaD,categoriaE,categoriaF,categoriaG,categoriaH
 
 
 

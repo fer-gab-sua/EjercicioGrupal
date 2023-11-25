@@ -47,15 +47,21 @@ class VentanaPrincipal():
         frame_categoria.config(width=230,height=130,bg="gray50")
         frame_categoria.place(x=750,y=50)
 
+        ###LABEL CATEGORIA
+        self.etiqueta_frame = Label(self.ventana1, text="CATEGORIA: ",font= ("arial",25,"bold"))
+        self.etiqueta_frame.place (x=780,y=50)
+        self.etiqueta_frame.config(bg="gray50",foreground="black")
+        
+        self.label_categoria = Label(self.ventana1)
+        self.label_categoria.place(x=840,y=90)
+        self.label_categoria.config(bg="gray50",text="A",font=("Arial",50,"bold"),foreground="GREEN")
+
+
         ################################WIDGETS###########################################
 
         # ETIQUETAS:
-        self.etiqueta_categoria = Label(self.ventana1, text="CATEGORIA: ",font= ("arial",15,"bold"))
-        self.etiqueta_categoria.place (x=795,y=50)
-        self.etiqueta_categoria.config(bg="gray50",foreground="black")
-        self.etiqueta_categoria_rdo_nulo = Label(self.ventana1, text="",foreground="green",anchor=CENTER)
-        self.etiqueta_categoria_rdo_nulo.place (x=760,y=90)
-        self.etiqueta_categoria_rdo_nulo.config(bg="gray50", font=("arial",14,"bold"))
+        
+        
 
         ############ MOSTRAR TOTALES: 
         self.etiqueta_total = Label(self.ventana1)
@@ -153,7 +159,7 @@ class VentanaPrincipal():
         self.calendar.bind("<<CalendarSelected>>", self.actualizar_fecha)
         self.calendar.place(x=60,y=85)
 
-    ######## Concepto
+        ######## Concepto
         self.etiqueta_concepto = Label(self.ventana1, text="Concepto: ",font= ("arial",13,"bold"))
         self.etiqueta_concepto.place (x=10,y=275)
         self.etiqueta_concepto.config(bg=self.fondo)
@@ -240,6 +246,14 @@ class VentanaPrincipal():
         menu_ayuda.add_command(label="Acerca del programa",command="")
         menubar.add_cascade(label="Información",menu=menu_ayuda)
         self.ventana1.config(menu=menubar)   
+
+
+       
+       
+
+        
+        
+        
 
   
 
@@ -623,7 +637,24 @@ class VentanaPrincipal():
         ## labels calculados:
         self.etiqueta_total_facturas.config(text=cantidad_facturas)
         self.etiqueta_facturado_este_mes_rdo.config(text=facturado_mes_actual)
-        
+    
+    def manejo_categorias(self):
+         # Traigo todo los valores de las categorías:
+         (
+            self.cat_A,
+            self.cat_B,
+            self.cat_C,
+            self.cat_D,
+            self.cat_E,
+            self.cat_F,
+            self.cat_G,
+            self.cat_H
+        )   = self.mibase_estadistica.devolver_categorias()
+         
+    ## Modifico el Label categoría, según lo facturado
+
+
+    
 
 if __name__== "__main__":
     root = Tk()
