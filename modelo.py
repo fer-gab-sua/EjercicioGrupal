@@ -393,7 +393,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             sql_facturado_este_mes =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?")
             self.cursor.execute(sql_facturado_este_mes,(mes,))
             self.conexion.commit()
-            facturado_este_mes=self.cursor.fetchall()
+            facturado_este_mes=self.cursor.fetchone()
             return facturado_este_mes
 
         def total_facturado_periodo(self,):
@@ -404,13 +404,24 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.cursor.execute(sql_facturado_este_periodo,(fecha,))
             self.conexion.commit()
             facturado_este_periodo=self.cursor.fetchone()
-            monto_facturado = facturado_este_periodo
+            self.monto_facturado = facturado_este_periodo
 
-            monto_facturado = (facturado_este_periodo)
-            return monto_facturado
+            self.monto_facturado = (facturado_este_periodo)
+            return self.monto_facturado
 
-        def falta_facturar_responsable_inscrito(self):
-            pass
+        def falta_facturar_responsable_inscripto(self):
+            falta_ri = self.categoriaH - self.monto_facturado[0]  
+            
+            if self.monto_facturado[0] == None:
+                falta_ri = "---------------"
+                return falta_ri
+            elif falta_ri < 0:
+                falta_ri = "Te pasaste"
+                return falta_ri
+            else:
+                return falta_ri
+            
+        
 
         def devolver_categorias(self):
             #CATEGORIA A
@@ -420,7 +431,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaA=x[2]
+                self.categoriaA=x[2]
             
             #CATEGORIA B
             self.conectar()
@@ -429,7 +440,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaB=x[2]
+                self.categoriaB=x[2]
 
             #CATEGORIA C
             self.conectar()
@@ -438,7 +449,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaC=x[2]
+                self.categoriaC=x[2]
 
             #CATEGORIA D
             self.conectar()
@@ -447,7 +458,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaD=x[2]
+                self.categoriaD=x[2]
             
             #CATEGORIA E
             self.conectar()
@@ -456,7 +467,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaE=x[2]
+                self.categoriaE=x[2]
 
             #CATEGORIA F
             self.conectar()
@@ -465,7 +476,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaF=x[2]
+                self.categoriaF=x[2]
 
             #CATEGORIA G
             self.conectar()
@@ -474,7 +485,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaG=x[2]
+                self.categoriaG=x[2]
 
             #CATEGORIA H
             self.conectar()
@@ -483,11 +494,18 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.conexion.commit()
             rows = self.cursor.fetchall()
             for x in rows:
-                categoriaH=x[2]
+                self.categoriaH=x[2]
 
 
 
-            return categoriaA,categoriaB,categoriaC,categoriaD,categoriaE,categoriaF,categoriaG,categoriaH
+            return self.categoriaA,\
+                    self.categoriaB,\
+                        self.categoriaC,\
+                            self.categoriaD,\
+                                self.categoriaE,\
+                                    self.categoriaF,\
+                                        self.categoriaG,\
+                                            self.categoriaH
 
 
 

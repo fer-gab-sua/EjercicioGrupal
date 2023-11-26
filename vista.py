@@ -112,7 +112,7 @@ class VentanaPrincipal():
         
         # PENDIENTE PARA PASAR A RESPONSABLE INSCRIPTO
         self.etiqueta_pendiente_pasar_ri = Label(self.ventana1,
-                                              text="FALTA PARA R.I: ",
+                                              text="FALTA PARA RESPONSABLE INSCRIPTO:",
                                               foreground="White",
                                               anchor=CENTER)
         self.etiqueta_pendiente_pasar_ri.place (x=680,y=310)
@@ -120,7 +120,7 @@ class VentanaPrincipal():
                                              font=("arial",12,"bold"))
         
         self.etiqueta_pendiente_pasar_ri_rdo = Label(self.ventana1,
-                                              text="$ 10.00000",
+                                              text="",
                                               foreground="red",
                                               anchor=CENTER)
         self.etiqueta_pendiente_pasar_ri_rdo.place (x=940,y=310)
@@ -551,6 +551,7 @@ class VentanaPrincipal():
                 self.tabla.insert("",0,text=x[0],values=(fecha_formateada,x[2],("$"+str(x[3])))) #inserto la consulta en la tabla y convierto en string la 3er columna, para poder agregar el
         self.actualizar_calculos()
         self.manejo_categorias()
+        self.falta_ri_aux()
     
     def actualizar_fecha(self,event):
         fecha = self.calendar.get_date()
@@ -640,7 +641,11 @@ class VentanaPrincipal():
         
         ## labels calculados:
         self.etiqueta_total_facturas.config(text=cantidad_facturas)
-        self.etiqueta_facturado_este_mes_rdo.config(text=facturado_mes_actual)
+        
+        if facturado_mes_actual[0] == None:
+            self.etiqueta_facturado_este_mes_rdo.config(text= "0")
+        else:
+            self.etiqueta_facturado_este_mes_rdo.config(text=f"$ {facturado_mes_actual[0]}")
     
     def manejo_categorias(self):
          
@@ -697,26 +702,15 @@ class VentanaPrincipal():
                 self.label_categoria.config(font= ("arial",13,"bold"),text="RESPONSABLE INSCRIPTO",fg="black")
                 self.label_categoria.place(x=770,y=100) 
         
+    def falta_ri_aux(self):
+        falta_ri = self.mibase_estadistica.falta_facturar_responsable_inscripto()
 
-            
+        self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"$ {falta_ri}")
         
-        
-        
-
-             
-        
-
-        
-
-
-
-
-    
 
 if __name__== "__main__":
     root = Tk()
     app = VentanaPrincipal(root)
-    
     #ventana = VentanaInformacionCategoria(root)
     root.mainloop()
 
