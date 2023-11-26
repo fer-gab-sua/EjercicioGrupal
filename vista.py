@@ -248,7 +248,7 @@ class VentanaPrincipal():
         menubar.add_cascade(label="Información",menu=menu_ayuda)
         self.ventana1.config(menu=menubar)  
 
-        print (self.mibase_estadistica.total_facturado_periodo())
+        
 
 
        
@@ -552,6 +552,8 @@ class VentanaPrincipal():
         self.actualizar_calculos()
         self.manejo_categorias()
         self.falta_ri_aux()
+        self.facturacion_anual_aux()
+        
     
     def actualizar_fecha(self,event):
         fecha = self.calendar.get_date()
@@ -632,7 +634,6 @@ class VentanaPrincipal():
         self.monto.set("")
         messagebox.showinfo ("AVISO", "Los datos se modificaron con éxito.")
 
-
     def actualizar_calculos(self):
         mes_actual = str(datetime.now().month)
 
@@ -706,7 +707,13 @@ class VentanaPrincipal():
         falta_ri = self.mibase_estadistica.falta_facturar_responsable_inscripto()
 
         self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"$ {falta_ri}")
+
+    def facturacion_anual_aux(self):
+    
+        facturacion_anual = self.mibase_estadistica.facturado_anual()
+        self.etiqueta_total_facturado_anual_rdo.config(text=f"$ {facturacion_anual[0]}")
         
+
 
 if __name__== "__main__":
     root = Tk()

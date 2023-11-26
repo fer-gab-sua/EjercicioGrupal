@@ -1,5 +1,7 @@
 import sqlite3
 import re
+import datetime
+
 
 
 class MiBaseDeDatosConnect():
@@ -421,7 +423,18 @@ class Estadisticas(MiBaseDeDatosConnect):
             else:
                 return falta_ri
             
-        
+        def facturado_anual(self):
+            año_actual = datetime.datetime.now().year
+            primer_dia_año = datetime.datetime(año_actual, 1, 1)
+           
+
+            self.conectar()
+            sql_facturado_este_anio =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE fac_date_fecha > ?")
+            self.cursor.execute(sql_facturado_este_anio,(primer_dia_año,))
+            self.conexion.commit()
+            facturacion_anual=self.cursor.fetchone()
+            return facturacion_anual
+
 
         def devolver_categorias(self):
             #CATEGORIA A
