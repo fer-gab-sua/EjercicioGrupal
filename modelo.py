@@ -412,17 +412,20 @@ class Estadisticas(MiBaseDeDatosConnect):
             return self.monto_facturado
 
         def falta_facturar_responsable_inscripto(self):
-            falta_ri = self.categoriaH - self.monto_facturado[0]  
-            
             if self.monto_facturado[0] == None:
-                falta_ri = "---------------"
-                return falta_ri
-            elif falta_ri < 0:
-                falta_ri = "Te pasaste"
-                return falta_ri
+                falta_ri = 0 
             else:
-                return falta_ri
-            
+                falta_ri = self.categoriaH - self.monto_facturado[0]  
+                
+                if self.monto_facturado[0] == None:
+                    falta_ri = "---------------"
+                    return falta_ri
+                elif falta_ri < 0:
+                    falta_ri = "Te pasaste"
+                    return falta_ri
+                else:
+                    return falta_ri
+                
         def facturado_anual(self):
             año_actual = datetime.datetime.now().year
             primer_dia_año = datetime.datetime(año_actual, 1, 1)
