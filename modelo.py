@@ -378,32 +378,35 @@ class ModeloConfig(MiBaseDeDatosConnect):
             self.desconectar()
 
 class Estadisticas(MiBaseDeDatosConnect):
-        def calculos_total_facturas(self,mes):
+        def calculos_total_facturas(self,):
+            self.fecha = "2023/1/1"
+
             self.conectar()
-            sql_total_facturas = ("SELECT COUNT(*) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?")
-            self.cursor.execute(sql_total_facturas,(mes,))
+            sql_total_facturas = ("SELECT COUNT(*) FROM Facturacion WHERE fac_date_fecha > ?")
+            self.cursor.execute(sql_total_facturas,(self.fecha,))
             self.conexion.commit()
             
-            total_facturas=self.cursor.fetchall()
+            total_facturas=self.cursor.fetchone()
         
-            concatenar = str(total_facturas[0][0]) # Aca exraigo solo al primer numero del fetchall y le saco la ,
+            concatenar = (total_facturas[0]) # Aca exraigo solo al primer numero del fetchall y le saco la ,
             self.desconectar()
             return concatenar
         
-        def facturado_mes_actual(self,mes):
+        def facturado_mes_actual(self,mes):#Modificar y traer el >= primer dia mes y < primer dia del mes siguiente
             self.conectar()
             sql_facturado_este_mes =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?")
             self.cursor.execute(sql_facturado_este_mes,(mes,))
             self.conexion.commit()
             facturado_este_mes=self.cursor.fetchone()
+            self.desconectar()
             return facturado_este_mes
 
         def total_facturado_periodo(self,):
-            fecha = "2023/1/1"
+            
             
             self.conectar()
             sql_facturado_este_periodo =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE fac_date_fecha > ?")
-            self.cursor.execute(sql_facturado_este_periodo,(fecha,))
+            self.cursor.execute(sql_facturado_este_periodo,(self.fecha,))
             self.conexion.commit()
             facturado_este_periodo=self.cursor.fetchone()
             self.monto_facturado = facturado_este_periodo
@@ -418,15 +421,16 @@ class Estadisticas(MiBaseDeDatosConnect):
                 falta_ri = self.categoriaH - self.monto_facturado[0]  
                 
                 if self.monto_facturado[0] == None:
-                    falta_ri = "---------------"
+                    falta_ri = "error"
                     return falta_ri
                 elif falta_ri < 0:
-                    falta_ri = "Te pasaste"
+                    falta_ri = "negativo"
                     return falta_ri
                 else:
                     return falta_ri
                 
         def facturado_anual(self):
+            ## Pasar a la vista
             año_actual = datetime.datetime.now().year
             primer_dia_año = datetime.datetime(año_actual, 1, 1)
            
@@ -438,7 +442,6 @@ class Estadisticas(MiBaseDeDatosConnect):
             facturacion_anual=self.cursor.fetchone()
             return facturacion_anual
 
-
         def devolver_categorias(self):
             #CATEGORIA A
             self.conectar()
@@ -448,6 +451,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             rows = self.cursor.fetchall()
             for x in rows:
                 self.categoriaA=x[2]
+            
             
             #CATEGORIA B
             self.conectar()

@@ -555,7 +555,6 @@ class VentanaPrincipal():
         self.falta_ri_aux()
         self.facturacion_anual_aux()
         
-    
     def actualizar_fecha(self,event):
         fecha = self.calendar.get_date()
         self.fecha.set(fecha)
@@ -638,7 +637,7 @@ class VentanaPrincipal():
     def actualizar_calculos(self):
         mes_actual = str(datetime.now().month)
 
-        cantidad_facturas = self.mibase_estadistica.calculos_total_facturas(mes_actual)
+        cantidad_facturas = self.mibase_estadistica.calculos_total_facturas()
         facturado_mes_actual = self.mibase_estadistica.facturado_mes_actual(mes_actual)
         
         ## labels calculados:
@@ -650,7 +649,27 @@ class VentanaPrincipal():
             self.etiqueta_facturado_este_mes_rdo.config(text=f"$ {facturado_mes_actual[0]}")
     
     def manejo_categorias(self):
+        """
+        resultado = {}
+        categorias = self.mibase_categorias.traer_categorias()
+        for dato in categorias:
+            letra = dato[1]
+            importe = dato[2]
+            resultado[letra] = importe
+
+        self.cat_A = float((resultado['A']))
+        self.cat_B= float((resultado['B']))
+        self.cat_C= float((resultado['C']))
+        self.cat_D = float((resultado['D']))
+        self.cat_E = float((resultado['E']))
+        self.cat_F = float((resultado['F']))
+        self.cat_G = float((resultado['G']))
+        self.cat_H = float((resultado['H'])) """
+
+        
          
+            
+        
          # Traigo todo los valores de las categorías:
         (
             self.cat_A,
@@ -662,16 +681,25 @@ class VentanaPrincipal():
             self.cat_G,
             self.cat_H
         )   = self.mibase_estadistica.devolver_categorias()
-         
+            
          
          
          
         facturado_este_periodo = self.mibase_estadistica.total_facturado_periodo() # Traigo el total facturado del periodo
+       
         
         # Valido en el caso que no hay datos en la db
         if facturado_este_periodo[0] == None:
             self.label_categoria.config(font= ("arial",13,"bold"),text="NO HAY DATOS REGISTRADOS",fg="Yellow")
             self.label_categoria.place(x=760,y=100)
+            self.etiqueta_pendiente_pasar_categoria.config(text="-")
+            self.etiqueta_pendiente_pasar_categoria_rdo.config(text="-")
+            self.etiqueta_pendiente_pasar_ri.config(text="-")
+            self.etiqueta_pendiente_pasar_ri_rdo.config(text="-")
+            self.etiqueta_total_facturado_anual.config(text="-")
+            self.etiqueta_total_facturado_anual_rdo.config (text = "-")
+            #Cambia las etiquetas que queden todas vacias en los cálculos.
+            
             return
         else:
             monto_facturado = float(facturado_este_periodo[0])
@@ -682,6 +710,8 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A B: ")
                 falta_para_pasar = self.cat_B - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
 
             elif monto_facturado > self.cat_A and monto_facturado <= self.cat_B:
@@ -690,6 +720,8 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A C: ")
                 falta_para_pasar = self.cat_C - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
             elif monto_facturado > self.cat_B and monto_facturado <= self.cat_C:
                 self.label_categoria.config(text="C",font= ("arial",50,"bold"),fg="Green")
@@ -697,6 +729,8 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A D: ")
                 falta_para_pasar = self.cat_D - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
             elif monto_facturado > self.cat_C and monto_facturado <= self.cat_D:
                 self.label_categoria.config(text="D",font= ("arial",50,"bold"),fg="Green")
@@ -704,6 +738,8 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A E: ")
                 falta_para_pasar = self.cat_E - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
             elif monto_facturado > self.cat_D and monto_facturado <= self.cat_E:
                 self.label_categoria.config(text="E",font= ("arial",50,"bold"),fg="Green")
@@ -711,6 +747,8 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A F: ")
                 falta_para_pasar = self.cat_F - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
             elif monto_facturado > self.cat_E and monto_facturado <= self.cat_F:
                 self.label_categoria.config(text="F",font= ("arial",50,"bold"),fg="Green")
@@ -718,6 +756,8 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A G: ")
                 falta_para_pasar = self.cat_G - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
             elif monto_facturado > self.cat_F and monto_facturado <= self.cat_G:
                 self.label_categoria.config(text="G",font= ("arial",50,"bold"),fg="Green")
@@ -725,24 +765,47 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A H: ")
                 falta_para_pasar = self.cat_H - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
             elif monto_facturado > self.cat_G and monto_facturado <= self.cat_H:
                 self.label_categoria.config(text="H",font= ("arial",50,"bold"),fg="Red")
                 self.label_categoria.place (x=840, y= 90)
                 self.etiqueta_pendiente_pasar_categoria.config(text="--")
+                self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
+            
             elif monto_facturado > self.cat_H:
                 self.label_categoria.config(font= ("arial",13,"bold"),text="RESPONSABLE INSCRIPTO",fg="black")
-                self.label_categoria.place(x=770,y=100) 
+                self.label_categoria.place(x=770,y=100)
+                self.etiqueta_pendiente_pasar_categoria.config(text="- ")
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text="-")
+                
+                self.etiqueta_pendiente_pasar_ri.config(text="-")
+                self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
+
         
     def falta_ri_aux(self):
         falta_ri = self.mibase_estadistica.falta_facturar_responsable_inscripto()
-
-        self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"$ {falta_ri}")
+        print("////////////////")
+        print (type(falta_ri))
+        print (falta_ri)
+        
+        if falta_ri is None:
+            self.etiqueta_pendiente_pasar_ri_rdo.config(text="-")
+        elif falta_ri =="negativo":
+            self.etiqueta_pendiente_pasar_ri_rdo.config(text="-")
+        else:
+            self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"$ {falta_ri}")
 
     def facturacion_anual_aux(self):
     
         facturacion_anual = self.mibase_estadistica.facturado_anual()
-        self.etiqueta_total_facturado_anual_rdo.config(text=f"$ {facturacion_anual[0]}")
+        
+        if facturacion_anual[0] is None:
+            self.etiqueta_total_facturado_anual_rdo.config (text="-")
+        else:
+            self.etiqueta_total_facturado_anual_rdo.config(text=f"$ {facturacion_anual[0]}")
         
 
 
