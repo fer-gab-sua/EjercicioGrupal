@@ -56,7 +56,7 @@ class VentanaPrincipal():
         self.label_categoria.place(x=840,y=90)
         self.label_categoria.config(bg="gray50",text="",font=("Arial",50,"bold"),foreground="GREEN")
 
-        self.manejo_categorias()
+        
 
         ################################WIDGETS###########################################
 
@@ -103,7 +103,7 @@ class VentanaPrincipal():
                                              font=("arial",12,"bold"))
         
         self.etiqueta_pendiente_pasar_categoria_rdo = Label(self.ventana1,
-                                              text="$ 100....",
+                                              text="",
                                               foreground="red",
                                               anchor=CENTER)
         self.etiqueta_pendiente_pasar_categoria_rdo.place (x=940,y=280)
@@ -145,6 +145,7 @@ class VentanaPrincipal():
                                               font=("arial",12,"bold"))
         
         self.actualizar_calculos()
+        self.manejo_categorias()
         
         ########FECHA
         self.fecha = StringVar()
@@ -678,27 +679,57 @@ class VentanaPrincipal():
             if monto_facturado <= self.cat_A:
                 self.label_categoria.config(text="A",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A B: ")
+                falta_para_pasar = self.cat_B - monto_facturado
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+
+
             elif monto_facturado > self.cat_A and monto_facturado <= self.cat_B:
                 self.label_categoria.config(text="B",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A C: ")
+                falta_para_pasar = self.cat_C - monto_facturado
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+
             elif monto_facturado > self.cat_B and monto_facturado <= self.cat_C:
                 self.label_categoria.config(text="C",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A D: ")
+                falta_para_pasar = self.cat_D - monto_facturado
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+
             elif monto_facturado > self.cat_C and monto_facturado <= self.cat_D:
                 self.label_categoria.config(text="D",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A E: ")
+                falta_para_pasar = self.cat_E - monto_facturado
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+
             elif monto_facturado > self.cat_D and monto_facturado <= self.cat_E:
                 self.label_categoria.config(text="E",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A F: ")
+                falta_para_pasar = self.cat_F - monto_facturado
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+
             elif monto_facturado > self.cat_E and monto_facturado <= self.cat_F:
                 self.label_categoria.config(text="F",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A G: ")
+                falta_para_pasar = self.cat_G - monto_facturado
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+
             elif monto_facturado > self.cat_F and monto_facturado <= self.cat_G:
                 self.label_categoria.config(text="G",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A H: ")
+                falta_para_pasar = self.cat_H - monto_facturado
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
+
             elif monto_facturado > self.cat_G and monto_facturado <= self.cat_H:
                 self.label_categoria.config(text="H",font= ("arial",50,"bold"),fg="Red")
                 self.label_categoria.place (x=840, y= 90)
+                self.etiqueta_pendiente_pasar_categoria.config(text="--")
             elif monto_facturado > self.cat_H:
                 self.label_categoria.config(font= ("arial",13,"bold"),text="RESPONSABLE INSCRIPTO",fg="black")
                 self.label_categoria.place(x=770,y=100) 
