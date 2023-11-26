@@ -1,0 +1,58 @@
+    tengo que agregar en la linea 479 self.lista_concepto += ["Eliminar Concepto"] y tambien las rallitas, despues lo paso todo a una fucion de llenado porque asi se repite 3 veces el codigo
+    
+    
+
+    tengo que borrar todo esto:
+    # Mostrar la ventana emergente con un ComboBox
+            seleccion = simpledialog.askstring("Mensaje", mensaje, parent=self.ventana1)
+            if seleccion:
+                self.mibase_config.borra_concepto(seleccion)
+        
+            self.lista_concepto = []
+            datos = self.mibase_config.return_conceptos()
+            self.lista_concepto = [tupla[1] for tupla in datos]
+            #Agrego a la lista el "Agregar Nuevo"
+            self.lista_concepto += ["Agregar Nuevo"]
+            self.lista_concepto += ["Eliminar Concepto"]
+            self.combobox_concepto['values'] = self.lista_concepto
+
+    y agregar todo lo siguiente al final:
+    
+    def pantalla_auxiliar_concepto(self):
+        self.eli_concepto = Toplevel()
+        self.eli_concepto.title("Eliminar concepto")
+        self.eli_concepto.geometry("300x300")
+        self.eli_concepto.config(bg=self.fondo)
+
+        self.concepto_ab = StringVar()
+
+        label_concepto_ab = Label(self.eli_concepto,text="Selecciones concepto a eliminar:",justify="center",font=("arial",11,"bold"),foreground="RED", background=self.fondo)
+        label_concepto_ab.place(x=10, y=20)
+
+        self.lista_conceptos_ab = Listbox(self.eli_concepto, selectmode="SINGLE")
+        self.lista_conceptos_ab.place(x=10, y = 50)
+
+
+                
+        datos = self.mibase_config.return_conceptos()
+        for tupla in datos:
+            self.lista_conceptos_ab.insert("end", tupla[1])
+        
+        self.btn_borrar = Button(self.eli_concepto, text = "Borrar",command=lambda: self.aux_borrar_concepto())
+        self.btn_borrar.place(x=140,y=250)
+
+    def aux_borrar_concepto(self):
+        indices_seleccionados = self.lista_conceptos_ab.curselection()
+        if indices_seleccionados:
+        # Obtener el elemento real utilizando el índice
+            elemento_seleccionado = self.lista_conceptos_ab.get(indices_seleccionados[0])
+            respuesta = messagebox.askquestion("Consulta",f"Estas seguro que vas a borrar el registro? {elemento_seleccionado}")
+            if respuesta =="yes":
+                self.mibase_config.borra_concepto(elemento_seleccionado)
+                self.lista_concepto = []
+                datos = self.mibase_config.return_conceptos()
+                self.lista_concepto = [tupla[1] for tupla in datos]
+                #Agrego a la lista el "Agregar Nuevo"
+                self.lista_concepto += ["Agregar Nuevo"]
+                self.lista_concepto += ["Eliminar Concepto"]
+                self.combobox_concepto['values'] = self.lista_concepto
