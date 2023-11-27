@@ -1,3 +1,5 @@
+# v2.6
+
 from tkinter import *
 from tkinter.ttk import Combobox,Treeview
 import tkinter as tk
@@ -9,6 +11,7 @@ from tkinter import simpledialog, messagebox
 from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Crud, ModeloConfig , Validador,Estadisticas
 #from modeloP import MiBaseDeDatosNw
 from datetime import datetime
+
 
 
 class VentanaPrincipal():
@@ -799,8 +802,13 @@ class VentanaPrincipal():
             self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"$ {falta_ri}")
 
     def facturacion_anual_aux(self):
+
+        año_actual = datetime.now().year
+        primer_dia_año = datetime(año_actual, 1, 1)
+
+        
     
-        facturacion_anual = self.mibase_estadistica.facturado_anual()
+        facturacion_anual = self.mibase_estadistica.facturado_anual(primer_dia_año)
         
         if facturacion_anual[0] is None:
             self.etiqueta_total_facturado_anual_rdo.config (text="-")

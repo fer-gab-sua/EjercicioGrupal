@@ -1,6 +1,7 @@
+#v2.6
 import sqlite3
 import re
-import datetime
+
 
 
 
@@ -429,10 +430,9 @@ class Estadisticas(MiBaseDeDatosConnect):
                 else:
                     return falta_ri
                 
-        def facturado_anual(self):
+        def facturado_anual(self,primer_dia_año):
             ## Pasar a la vista
-            año_actual = datetime.datetime.now().year
-            primer_dia_año = datetime.datetime(año_actual, 1, 1)
+            
            
 
             self.conectar()
