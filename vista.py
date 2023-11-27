@@ -11,7 +11,6 @@ from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Cru
 from datetime import datetime
 
 
-
 class VentanaPrincipal():
 
     def __init__(self,ventana1) -> None:
@@ -784,10 +783,13 @@ class VentanaPrincipal():
                 
                 self.etiqueta_pendiente_pasar_ri.config(text="-")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
- 
+
+        
     def falta_ri_aux(self):
         falta_ri = self.mibase_estadistica.falta_facturar_responsable_inscripto()
-     
+        print("////////////////")
+        print (type(falta_ri))
+        print (falta_ri)
         
         if falta_ri is None:
             self.etiqueta_pendiente_pasar_ri_rdo.config(text="-")
@@ -797,13 +799,7 @@ class VentanaPrincipal():
             self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"$ {falta_ri}")
 
     def facturacion_anual_aux(self):
-        año_actual = datetime.now().year
-        primer_dia_año = datetime(año_actual, 1, 1)
-        primer_dia_año = primer_dia_año.strftime('%Y/%m/%d')
-        primer_dia_año=str(primer_dia_año)
-        
-        self.mibase_estadistica.facturado_anual(primer_dia_año)
-
+    
         facturacion_anual = self.mibase_estadistica.facturado_anual()
         
         if facturacion_anual[0] is None:
