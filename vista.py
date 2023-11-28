@@ -1,4 +1,4 @@
-# v2.6
+# v2.6.1
 
 from tkinter import *
 from tkinter.ttk import Combobox,Treeview
@@ -171,16 +171,10 @@ class VentanaPrincipal():
     
         self.concepto = StringVar()
 
-        #cargo la lista llamando al modelo 
-        self.lista_concepto = []
-        datos = self.mibase_config.return_conceptos()
-        self.lista_concepto = [tupla[1] for tupla in datos]
-        #Agrego a la lista el "Agregar Nuevo"
-        self.lista_concepto += ["--"*5]
-        self.lista_concepto += ["Agregar Nuevo"]
-        self.lista_concepto += ["Eliminar Concepto"]
+        #llamo al metodo para llenar la lista de conceptos.
         
-        
+        self.carga_lista()
+                
         self.combobox_concepto = Combobox(self.ventana1,values=self.lista_concepto,state="readonly",width=19,justify="center",textvariable=self.concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
         self.combobox_concepto.place (x=100,y=275) 
 
@@ -251,19 +245,6 @@ class VentanaPrincipal():
         menu_ayuda.add_command(label="Acerca del programa",command="")
         menubar.add_cascade(label="Información",menu=menu_ayuda)
         self.ventana1.config(menu=menubar)  
-
-        
-
-
-       
-       
-
-        
-        
-        
-
-  
-
 
     def ventana_informacion_categoria(self):
         
@@ -396,6 +377,45 @@ class VentanaPrincipal():
         self.txt_H.place(x=135, y=262)
         self.txt_H.config(bg=self.fondo)
 
+    def pantalla_auxiliar_concepto(self):
+        self.eli_concepto = Toplevel()
+        self.eli_concepto.title("Eliminar concepto")
+        self.eli_concepto.geometry("300x300")
+        self.eli_concepto.config(bg=self.fondo)
+
+        self.concepto_ab = StringVar()
+
+        label_concepto_ab = Label(self.eli_concepto,text="Selecciones concepto a eliminar:",justify="center",font=("arial",11,"bold"),foreground="RED", background=self.fondo)
+        label_concepto_ab.place(x=10, y=20)
+
+        self.lista_conceptos_ab = Listbox(self.eli_concepto, selectmode="SINGLE")
+        self.lista_conceptos_ab.place(x=10, y = 50)
+
+
+                
+        datos = self.mibase_config.return_conceptos()
+        for tupla in datos:
+            self.lista_conceptos_ab.insert("end", tupla[1])
+        
+        self.btn_borrar = Button(self.eli_concepto, text = "Borrar",command=lambda: self.aux_borrar_concepto())
+        self.btn_borrar.place(x=140,y=250)
+
+    def aux_borrar_concepto(self):
+        indices_seleccionados = self.lista_conceptos_ab.curselection()
+        if indices_seleccionados:
+        # Obtener el elemento real utilizando el índice
+            elemento_seleccionado = self.lista_conceptos_ab.get(indices_seleccionados[0])
+            respuesta = messagebox.askquestion("Consulta",f"Estas seguro que vas a borrar el registro? {elemento_seleccionado}")
+            if respuesta =="yes":
+                self.mibase_config.borra_concepto(elemento_seleccionado)
+                self.lista_concepto = []
+                datos = self.mibase_config.return_conceptos()
+                self.lista_concepto = [tupla[1] for tupla in datos]
+                #Agrego a la lista el "Agregar Nuevo"
+                self.lista_concepto += ["Agregar Nuevo"]
+                self.lista_concepto += ["Eliminar Concepto"]
+                self.combobox_concepto['values'] = self.lista_concepto
+
     def modificar_categorias_aux(self):
         self.txt_A.config(state="normal")
         self.txt_B.config(state="normal")
@@ -474,30 +494,11 @@ class VentanaPrincipal():
 
             if seleccion:
                 self.mibase_config.agrega_concepto(seleccion)
-        
-            self.lista_concepto = []
-            datos = self.mibase_config.return_conceptos()
-            self.lista_concepto = [tupla[1] for tupla in datos]
-            #Agrego a la lista el "Agregar Nuevo"
-            self.lista_concepto += ["Agregar Nuevo"]
-            self.combobox_concepto['values'] = self.lista_concepto
+                self.carga_lista()
+
         elif concepto_elegido == "Eliminar Concepto":
-            # configuro el mensaje
-            mensaje = "Ingrese el Concepto a eliminar:"
-
-            # Mostrar la ventana emergente con un ComboBox
-            seleccion = simpledialog.askstring("Mensaje", mensaje, parent=self.ventana1)
-
-            if seleccion:
-                self.mibase_config.borra_concepto(seleccion)
-        
-            self.lista_concepto = []
-            datos = self.mibase_config.return_conceptos()
-            self.lista_concepto = [tupla[1] for tupla in datos]
-            #Agrego a la lista el "Agregar Nuevo"
-            self.lista_concepto += ["Agregar Nuevo"]
-            self.lista_concepto += ["Eliminar Concepto"]
-            self.combobox_concepto['values'] = self.lista_concepto
+            self.pantalla_auxiliar_concepto()
+            self.carga_lista()
 
     def auxiliar_carga(self):
     ### VALIDACIONES DE LOS 3 campos de entrada Fecha, concepto y monto
@@ -524,7 +525,6 @@ class VentanaPrincipal():
             return
         
         else:
-            print(self.txt_fecha.get())
             formatear_fecha = datetime.strptime(self.txt_fecha.get(), '%d/%m/%Y')
             formato_fecha="%Y/%m/%d"
             fecha_formateada = formatear_fecha.strftime(formato_fecha)
@@ -547,7 +547,6 @@ class VentanaPrincipal():
         if datos == []:
             exit
         else:
-            print(datos)
             for x in datos:
                 formatear_fecha = datetime.strptime(x[1],"%Y/%m/%d")
                 formato_fecha="%d/%m/%Y"
@@ -787,7 +786,6 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_ri.config(text="-")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
-        
     def falta_ri_aux(self):
         falta_ri = self.mibase_estadistica.falta_facturar_responsable_inscripto()
         print("////////////////")
@@ -815,7 +813,14 @@ class VentanaPrincipal():
         else:
             self.etiqueta_total_facturado_anual_rdo.config(text=f"$ {facturacion_anual[0]}")
         
-
+    def carga_lista(self):
+        self.lista_concepto = []
+        datos = self.mibase_config.return_conceptos()
+        self.lista_concepto = [tupla[1] for tupla in datos]
+        #Agrego a la lista el "Agregar Nuevo"
+        self.lista_concepto += ["--"*5]
+        self.lista_concepto += ["Agregar Nuevo"]
+        self.lista_concepto += ["Eliminar Concepto"]
 
 if __name__== "__main__":
     root = Tk()

@@ -1,4 +1,4 @@
-#v2.6
+#v2.6.1
 import sqlite3
 import re
 
@@ -390,6 +390,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             total_facturas=self.cursor.fetchone()
         
             concatenar = (total_facturas[0]) # Aca exraigo solo al primer numero del fetchall y le saco la ,
+            print("---> Select calculo total ejecutado correctamente()")
             self.desconectar()
             return concatenar
         
@@ -399,7 +400,9 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.cursor.execute(sql_facturado_este_mes,(mes,))
             self.conexion.commit()
             facturado_este_mes=self.cursor.fetchone()
+            print("---> Select facturo mes actual ejecutado correctamente()")
             self.desconectar()
+            
             return facturado_este_mes
 
         def total_facturado_periodo(self,):
@@ -413,6 +416,8 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.monto_facturado = facturado_este_periodo
 
             self.monto_facturado = (facturado_este_periodo)
+            print("---> Select total facturado por periodo ejecutado correctamente()")
+            self.desconectar()
             return self.monto_facturado
 
         def falta_facturar_responsable_inscripto(self):
@@ -440,9 +445,12 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.cursor.execute(sql_facturado_este_anio,(primer_dia_año,))
             self.conexion.commit()
             facturacion_anual=self.cursor.fetchone()
+            print("---> Select facturado anual ejecutado correctamente()")
+            self.desconectar()
             return facturacion_anual
 
         def devolver_categorias(self):
+            print("Bloque de select para devolver categoria")
             #CATEGORIA A
             self.conectar()
             sqlA = "SELECT * FROM categoria_monotributo where cat_txt_descripcion='A';"
@@ -515,8 +523,9 @@ class Estadisticas(MiBaseDeDatosConnect):
             rows = self.cursor.fetchall()
             for x in rows:
                 self.categoriaH=x[2]
-
-
+            self.desconectar()  
+            print("fin bloque categorias")
+            
 
             return self.categoriaA,\
                     self.categoriaB,\
