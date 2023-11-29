@@ -59,7 +59,12 @@ class VentanaPrincipal():
         self.label_categoria.place(x=840,y=90)
         self.label_categoria.config(bg="gray50",text="",font=("Arial",50,"bold"),foreground="GREEN")
 
-        
+        ### LABEL AÑO FISCAL
+        fecha_actual = datetime.now()
+
+        anio_actual = fecha_actual.year
+        self.label_anio_fiscal = Label(self.ventana1 , text=anio_actual,font= ("arial",25,"bold"),background=self.fondo)
+        self.label_anio_fiscal.place(x=840 , y=0)
 
         ################################WIDGETS###########################################
 
@@ -244,6 +249,9 @@ class VentanaPrincipal():
         menu_ayuda = Menu(menubar, tearoff=0)
         menu_ayuda.add_command(label="Acerca del programa",command="")
         menubar.add_cascade(label="Información",menu=menu_ayuda)
+
+        menubar.add_cascade(label="Año fiscas", command=lambda: self.cambio_anio_fiscal())
+
         self.ventana1.config(menu=menubar)  
 
     def ventana_informacion_categoria(self):
@@ -490,7 +498,7 @@ class VentanaPrincipal():
             mensaje = "Ingrese un nuevo Concepto:"
 
             # Mostrar la ventana emergente con un ComboBox
-            seleccion = simpledialog.askstring("Mensaje", mensaje, parent=self.ventana1)
+            seleccion = simpledialog.askstring("Conceptos", mensaje, parent=self.ventana1)
 
             if seleccion:
                 self.mibase_config.agrega_concepto(seleccion)
@@ -821,6 +829,16 @@ class VentanaPrincipal():
         self.lista_concepto += ["--"*5]
         self.lista_concepto += ["Agregar Nuevo"]
         self.lista_concepto += ["Eliminar Concepto"]
+
+    def cambio_anio_fiscal(self):
+        # configuro el mensaje
+        mensaje = "Ingrese el año fiscal"
+
+        # Mostrar la ventana emergente con un ComboBox
+        seleccion = simpledialog.askstring("Año Fiscal", mensaje, parent=self.ventana1)
+
+        if seleccion:
+            self.label_anio_fiscal.config(text=seleccion)
 
 if __name__== "__main__":
     root = Tk()
