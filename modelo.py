@@ -562,6 +562,14 @@ class Validador():
         if valido_fecha == "":
             return "ERROR"
 
+    def valida_entero(self, texto):
+        # Valida un número entero de exactamente 4 dígitos (como un año)
+        patron = r"^\d{4}$"
+        cadena = texto
+        if re.match(patron, cadena):
+            return "OK"
+        else:
+            return "ERROR"
 
 
 #ESTO ES PARA PRUEBAS

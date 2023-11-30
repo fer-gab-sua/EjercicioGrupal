@@ -838,7 +838,13 @@ class VentanaPrincipal():
         seleccion = simpledialog.askstring("Año Fiscal", mensaje, parent=self.ventana1)
 
         if seleccion:
+            
+            if self.validador.valida_entero(seleccion) == "ERROR":
+                messagebox.showinfo ("AVISO","Tenes que ingresar un año valido.")
+                self.combobox_concepto.focus()
+                return
             self.label_anio_fiscal.config(text=seleccion)
+
 
 if __name__== "__main__":
     root = Tk()
