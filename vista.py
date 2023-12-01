@@ -62,7 +62,7 @@ class VentanaPrincipal():
         ### LABEL AÑO FISCAL
         fecha_actual = datetime.now()
 
-        self.anio_fiscal = fecha_actual.year
+        self.anio_fiscal = int(fecha_actual.year)
         self.label_anio_fiscal = Label(self.ventana1 , text=self.anio_fiscal,font= ("arial",25,"bold"),background=self.fondo)
         self.label_anio_fiscal.place(x=840 , y=0)
 
@@ -550,7 +550,7 @@ class VentanaPrincipal():
             self.tabla.delete(R)
         
         #datos = self.mibaseN.actualizar_treeview()
-        datos = self.mibase_vista.actualizar_treeview()
+        datos = self.mibase_vista.actualizar_treeview(str(self.anio_fiscal))
         if datos == []:
             exit
         else:
@@ -844,6 +844,7 @@ class VentanaPrincipal():
                 return
             self.anio_fiscal = seleccion
             self.label_anio_fiscal.config(text=self.anio_fiscal)
+            self.actualizar_treeview()
 
 
 

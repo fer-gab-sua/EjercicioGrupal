@@ -192,17 +192,18 @@ class ModeloCategorias(MiBaseDeDatosConnect):
 
 class ModeloParaVista(MiBaseDeDatosConnect):
 #metodos de retorno para funcionamiento de pantalla
-    def actualizar_treeview(self):
+    def actualizar_treeview(self,anio):
         self.conectar()
+        print("voy a filtrar por ---->",anio)
         try:
-            sql_treeview = """SELECT* 
-                            FROM facturacion 
-                            ORDER BY strftime('%Y-%m-%d', fac_date_fecha) ASC"""
-            self.cursor.execute(sql_treeview)
+            sql_treeview = """SELECT * 
+                        FROM facturacion 
+                        WHERE substr(fac_date_fecha, 1, 4) = ?
+                        ORDER BY fac_date_fecha ASC"""
+            self.cursor.execute(sql_treeview, (anio,))
             datos = self.cursor.fetchall()
             print("---> Datos traidos para el treeview generados correctamente metodo:actualizar_treeview")
             print(datos)
-
             return datos
         except sqlite3.Error as error:
             print(f"Error a cargar_datos: {error}")
