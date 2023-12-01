@@ -62,8 +62,8 @@ class VentanaPrincipal():
         ### LABEL AÑO FISCAL
         fecha_actual = datetime.now()
 
-        anio_actual = fecha_actual.year
-        self.label_anio_fiscal = Label(self.ventana1 , text=anio_actual,font= ("arial",25,"bold"),background=self.fondo)
+        self.anio_fiscal = fecha_actual.year
+        self.label_anio_fiscal = Label(self.ventana1 , text=self.anio_fiscal,font= ("arial",25,"bold"),background=self.fondo)
         self.label_anio_fiscal.place(x=840 , y=0)
 
         ################################WIDGETS###########################################
@@ -244,14 +244,13 @@ class VentanaPrincipal():
         menu_archivo.add_separator()
         menu_archivo.add_command(label="Cambiar estilo", command=lambda:self.cambio_color())
         menu_archivo.add_separator()
+        menu_archivo.add_command(label="Cambiar Año",command=lambda:self.cambio_anio_fiscal())
+        menu_archivo.add_separator()
         menu_archivo.add_command(label="Salir", command=lambda:self.salir())
         menubar.add_cascade (label="Archivo",menu=menu_archivo)
         menu_ayuda = Menu(menubar, tearoff=0)
         menu_ayuda.add_command(label="Acerca del programa",command="")
         menubar.add_cascade(label="Información",menu=menu_ayuda)
-
-        menubar.add_cascade(label="Año fiscas", command=lambda: self.cambio_anio_fiscal())
-
         self.ventana1.config(menu=menubar)  
 
     def ventana_informacion_categoria(self):
@@ -843,7 +842,9 @@ class VentanaPrincipal():
                 messagebox.showinfo ("AVISO","Tenes que ingresar un año valido.")
                 self.combobox_concepto.focus()
                 return
-            self.label_anio_fiscal.config(text=seleccion)
+            self.anio_fiscal = seleccion
+            self.label_anio_fiscal.config(text=self.anio_fiscal)
+
 
 
 if __name__== "__main__":
