@@ -380,12 +380,15 @@ class ModeloConfig(MiBaseDeDatosConnect):
             self.desconectar()
 
 class Estadisticas(MiBaseDeDatosConnect):
-        def calculos_total_facturas(self,):
-            self.fecha = "2023/1/1"
+        def calculos_total_facturas(self,anio_fiscal):
+            print("EL AÑO FISCAL ES:",anio_fiscal)
+            
+            self.fecha_ini = (str(anio_fiscal)+"/1/1")
+            self.fecha_fin = (str(anio_fiscal)+"12/31")
 
             self.conectar()
-            sql_total_facturas = ("SELECT COUNT(*) FROM Facturacion WHERE fac_date_fecha > ?")
-            self.cursor.execute(sql_total_facturas,(self.fecha,))
+            sql_total_facturas = ("SELECT COUNT(*) FROM Facturacion WHERE fac_date_fecha > ? and fac_date_fecha < ?")
+            self.cursor.execute(sql_total_facturas,(self.fecha_ini, self.fecha_fin))
             self.conexion.commit()
             
             total_facturas=self.cursor.fetchone()
@@ -396,6 +399,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             return concatenar
         
         def facturado_mes_actual(self,mes):#Modificar y traer el >= primer dia mes y < primer dia del mes siguiente
+            
             self.conectar()
             sql_facturado_este_mes =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?")
             self.cursor.execute(sql_facturado_este_mes,(mes,))
@@ -410,8 +414,8 @@ class Estadisticas(MiBaseDeDatosConnect):
             
             
             self.conectar()
-            sql_facturado_este_periodo =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE fac_date_fecha > ?")
-            self.cursor.execute(sql_facturado_este_periodo,(self.fecha,))
+            sql_facturado_este_periodo =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE fac_date_fecha > ? and fac_date_fecha < ?")
+            self.cursor.execute(sql_facturado_este_periodo,(self.fecha_ini,self.fecha_fin))
             self.conexion.commit()
             facturado_este_periodo=self.cursor.fetchone()
             self.monto_facturado = facturado_este_periodo

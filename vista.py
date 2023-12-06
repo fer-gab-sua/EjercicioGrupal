@@ -38,7 +38,7 @@ class VentanaPrincipal():
 
         self.ventana1 = ventana1
         self.ventana1.title ("FACTURACIÓN")
-        self.ventana1.geometry("1050x600")
+        self.ventana1.geometry("1150x600")
 
         #Funcion que trae la configuracion del color 
         self.fondo = self.mibase_config.return_config('color_fondo')
@@ -47,7 +47,7 @@ class VentanaPrincipal():
 
         ### FRAME CATEGORÍA:
         frame_categoria = Frame(self.ventana1)
-        frame_categoria.config(width=230,height=130,bg="gray50")
+        frame_categoria.config(width=260,height=130,bg="gray50")
         frame_categoria.place(x=750,y=50)
 
         ###LABEL CATEGORIA
@@ -645,8 +645,8 @@ class VentanaPrincipal():
 
     def actualizar_calculos(self):
         mes_actual = str(datetime.now().month)
-
-        cantidad_facturas = self.mibase_estadistica.calculos_total_facturas()
+        
+        cantidad_facturas = self.mibase_estadistica.calculos_total_facturas(self.anio_fiscal)
         facturado_mes_actual = self.mibase_estadistica.facturado_mes_actual(mes_actual)
         
         ## labels calculados:
