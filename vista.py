@@ -246,11 +246,10 @@ class VentanaPrincipal():
         menu_archivo.add_separator()
         menu_archivo.add_command(label="Cambiar Año",command=lambda:self.cambio_anio_fiscal())
         menu_archivo.add_separator()
+        menu_archivo.add_command(label="Acerca del programa",command=self.acerca_del_programa())
+        menu_archivo.add_separator()
         menu_archivo.add_command(label="Salir", command=lambda:self.salir())
         menubar.add_cascade (label="Archivo",menu=menu_archivo)
-        menu_ayuda = Menu(menubar, tearoff=0)
-        menu_ayuda.add_command(label="Acerca del programa",command=self.acerca_del_programa())
-        menubar.add_cascade(label="Información",menu=menu_ayuda)
         self.ventana1.config(menu=menubar)  
 
     def ventana_informacion_categoria(self):
@@ -846,7 +845,7 @@ class VentanaPrincipal():
             self.label_anio_fiscal.config(text=self.anio_fiscal)
             self.actualizar_treeview()
 
-    def acerca_del_programa():
+    def acerca_del_programa(self):
         messagebox.showinfo("INFORMACIÓN","Esta aplicación fue desarrollada por Fernando Suarez y Damián Colomb como entrega final \
                             del curso python intermedio del centro de E-Learning de la Univesidad Tecnológica Nacional.")
 
