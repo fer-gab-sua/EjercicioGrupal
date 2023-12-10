@@ -249,7 +249,7 @@ class VentanaPrincipal():
         menu_archivo.add_command(label="Salir", command=lambda:self.salir())
         menubar.add_cascade (label="Archivo",menu=menu_archivo)
         menu_ayuda = Menu(menubar, tearoff=0)
-        menu_ayuda.add_command(label="Acerca del programa",command="")
+        menu_ayuda.add_command(label="Acerca del programa",command=self.acerca_del_programa())
         menubar.add_cascade(label="Información",menu=menu_ayuda)
         self.ventana1.config(menu=menubar)  
 
@@ -699,7 +699,7 @@ class VentanaPrincipal():
         
         # Valido en el caso que no hay datos en la db
         if facturado_este_periodo[0] == None:
-            self.label_categoria.config(font= ("arial",13,"bold"),text="NO HAY DATOS REGISTRADOS",fg="Yellow")
+            self.label_categoria.config(font= ("arial",12,"bold"),text="NO HAY DATOS REGISTRADOS",fg="Yellow")
             self.label_categoria.place(x=760,y=100)
             self.etiqueta_pendiente_pasar_categoria.config(text="-")
             self.etiqueta_pendiente_pasar_categoria_rdo.config(text="-")
@@ -846,12 +846,14 @@ class VentanaPrincipal():
             self.label_anio_fiscal.config(text=self.anio_fiscal)
             self.actualizar_treeview()
 
-
+    def acerca_del_programa():
+        messagebox.showinfo("INFORMACIÓN","Esta aplicación fue desarrollada por Fernando Suarez y Damián Colomb como entrega final \
+                            del curso python intermedio del centro de E-Learning de la Univesidad Tecnológica Nacional.")
 
 if __name__== "__main__":
     root = Tk()
     app = VentanaPrincipal(root)
-    #ventana = VentanaInformacionCategoria(root)
+    
     root.mainloop()
 
 
