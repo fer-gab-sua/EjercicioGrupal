@@ -219,7 +219,7 @@ class VentanaPrincipal():
         
 
         self.btn_ver_graficos = Button(self.ventana1, text="VISUALIZAR\n DATOS",command="")
-        self.btn_ver_graficos.place(x=420,y=450)
+        #self.btn_ver_graficos.place(x=420,y=450) 
         
 
         self.btn_borrar = Button(self.ventana1, text="  BORRAR  ",command= self.aux_borrar_factura)
