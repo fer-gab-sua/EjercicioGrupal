@@ -1,6 +1,8 @@
 #v2.6.1
 import sqlite3
 import re
+import pandas as pd
+from tkinter import filedialog
 
 
 
@@ -540,7 +542,13 @@ class Estadisticas(MiBaseDeDatosConnect):
                                     self.categoriaF,\
                                         self.categoriaG,\
                                             self.categoriaH
-
+        def exportar(self):
+            self.conectar()
+            sql= "SELECT * FROM Facturacion"
+            exportar = pd.read_sql_query(sql)
+            ruta = filedialog.asksaveasfilename(defaultextension=' .xlsx')
+            exportar.to_excel(ruta,index=False)
+            self.desconectar()
 
 
 

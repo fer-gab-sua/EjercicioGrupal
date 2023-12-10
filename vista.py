@@ -726,7 +726,7 @@ class VentanaPrincipal():
                 self.label_categoria.config(text="B",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A C: ")
-                falta_para_pasar = self.cat_C - monto_facturado
+                falta_para_pasar = self.cat_B - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
                 self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
@@ -735,7 +735,7 @@ class VentanaPrincipal():
                 self.label_categoria.config(text="C",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A D: ")
-                falta_para_pasar = self.cat_D - monto_facturado
+                falta_para_pasar = self.cat_C - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
                 self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
@@ -744,7 +744,7 @@ class VentanaPrincipal():
                 self.label_categoria.config(text="D",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A E: ")
-                falta_para_pasar = self.cat_E - monto_facturado
+                falta_para_pasar = self.cat_D - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
                 self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
@@ -753,7 +753,7 @@ class VentanaPrincipal():
                 self.label_categoria.config(text="E",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A F: ")
-                falta_para_pasar = self.cat_F - monto_facturado
+                falta_para_pasar = self.cat_E - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
                 self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
@@ -762,7 +762,7 @@ class VentanaPrincipal():
                 self.label_categoria.config(text="F",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A G: ")
-                falta_para_pasar = self.cat_G - monto_facturado
+                falta_para_pasar = self.cat_F - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
                 self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
@@ -771,7 +771,7 @@ class VentanaPrincipal():
                 self.label_categoria.config(text="G",font= ("arial",50,"bold"),fg="Green")
                 self.label_categoria.place (x=840, y= 90)
                 self.etiqueta_pendiente_pasar_categoria.config(text="FALTA PARA PASAR A H: ")
-                falta_para_pasar = self.cat_H - monto_facturado
+                falta_para_pasar = self.cat_G - monto_facturado
                 self.etiqueta_pendiente_pasar_categoria_rdo.config(text=f"$ {round(falta_para_pasar,2)}")
                 self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
@@ -782,6 +782,9 @@ class VentanaPrincipal():
                 self.etiqueta_pendiente_pasar_categoria.config(text="--")
                 self.etiqueta_pendiente_pasar_ri.config(text="FALTA PARA RESPONSABLE INSCRIPTO: ")
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
+                falta_para_pasar = self.cat_H - monto_facturado
+                self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"${round(falta_para_pasar)}")
+                self.etiqueta_pendiente_pasar_categoria_rdo.config(text="--")
             
             elif monto_facturado > self.cat_H:
                 self.label_categoria.config(font= ("arial",13,"bold"),text="RESPONSABLE INSCRIPTO",fg="black")
@@ -848,6 +851,7 @@ class VentanaPrincipal():
     def acerca_del_programa(self):
         messagebox.showinfo("INFORMACIÓN","Esta aplicación fue desarrollada por Fernando Suarez y Damián Colomb como entrega final \
                             del curso python intermedio del centro de E-Learning de la Univesidad Tecnológica Nacional.")
+    
 
 if __name__== "__main__":
     root = Tk()
