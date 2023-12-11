@@ -8,11 +8,13 @@ from tkinter import filedialog
 
 
 class MiBaseDeDatosConnect():
+    """Clase para gestionar la conexión y manipulación de la base de datos.
+    """
     def __init__(self, nombre_base_de_datos = "facturacion.db"):
-        """Creacion de la base datos y sus conexiones 
+        """Inicializa la conexión y crea las tablas si no existen.
 
         Args:
-            nombre_base_de_datos (str, optional): _description_. Defaults to "facturacion.db".
+            nombre_base_de_datos (str, optional): Nombre de la base de datos. por defectp: "facturacion.db".
         """        
         self.nombre_base_de_datos = nombre_base_de_datos
         self.conexion = None
@@ -20,6 +22,8 @@ class MiBaseDeDatosConnect():
         self.crear_tablas()
 
     def conectar(self):
+        """Establece una conexión con la base de datos.
+        """
         try:
             self.conexion = sqlite3.connect(self.nombre_base_de_datos)
             self.conexion.isolation_level = None  # Desactiva el autocommit
@@ -29,6 +33,8 @@ class MiBaseDeDatosConnect():
             print(f"Error al conectar a la base de datos: {error}")
 
     def desconectar(self):
+        """Cierra la conexión con la base de datos.
+        """
         if self.cursor:
             self.cursor.close()
         if self.conexion:
@@ -37,6 +43,8 @@ class MiBaseDeDatosConnect():
             print("\n")
 
     def crear_tablas(self):
+        """Crea las tablas necesarias si no existen.
+        """
         self.conectar()
         try:
             #CREO TABLA - FACTURACION
@@ -149,8 +157,14 @@ class MiBaseDeDatosConnect():
             self.desconectar()
 
 class ModeloCategorias(MiBaseDeDatosConnect):
-#metodos de retorno y grabacion de categorias
+    """Clase para gestionar categorías en la base de datos.
+    """
     def traer_categorias(self):
+        """Retorna las categorías de monotributo.
+
+        Returns:
+            list: Lista de categorías.
+        """
         self.conectar()
         try:
             sql = """
@@ -170,6 +184,11 @@ class ModeloCategorias(MiBaseDeDatosConnect):
             self.desconectar()
 
     def cambiar_categorias(self,bloque):
+        """Agrega categorías a la base de datos.
+
+        Args:
+            bloque (list): Lista de categorías a agregar.
+        """
         self.conectar()
         try:
             for cat in bloque:
@@ -193,8 +212,17 @@ class ModeloCategorias(MiBaseDeDatosConnect):
 
 
 class ModeloParaVista(MiBaseDeDatosConnect):
-#metodos de retorno para funcionamiento de pantalla
+    """Clase para obtener datos para la interfaz de usuario.
+    """
     def actualizar_treeview(self,anio):
+        """Actualiza el treeview con datos de facturación para el año dado.
+
+        Args:
+            anio (int): Año de interés.
+
+        Returns:
+            list: Datos para el treeview.
+        """
         self.conectar()
         print("voy a filtrar por ---->",anio)
         try:
@@ -214,6 +242,11 @@ class ModeloParaVista(MiBaseDeDatosConnect):
             self.desconectar()
 
     def sumar_facturacion(self):
+        """Calcula la suma total de facturación.
+
+        Returns:
+            float: Suma total de facturación.
+        """
         self.conectar()
         try:
             sql = """SELECT SUM (fac_bol_monto)
@@ -230,8 +263,17 @@ class ModeloParaVista(MiBaseDeDatosConnect):
             self.desconectar()      
 
 class Crud(MiBaseDeDatosConnect):
-###ABM DE FACTURAS
+    """Clase para realizar operaciones CRUD en la base de datos.
+    """
     def cargar_datos(self,fecha,concepto,monto,instante):
+        """Carga nuevos datos de facturación en la base de datos.
+
+        Args:
+            fecha (str): Fecha de la factura.
+            concepto (str): Concepto de la factura.
+            monto (float): Monto de la factura.
+            instante (str): Fecha y hora de la operación.
+        """
         self.conectar()
         try:
             sql_carga = "INSERT INTO facturacion VALUES (null,?,?,?,?)"
@@ -246,6 +288,11 @@ class Crud(MiBaseDeDatosConnect):
             self.desconectar()
 
     def borrar_datos(self,borrar):
+        """Elimina un registro de facturación de la base de datos.
+
+        Args:
+            borrar (int): ID del registro a eliminar.
+        """
         self.conectar()
         try:
             sql = "DELETE FROM facturacion WHERE fac_int_id = ?;" 
@@ -260,6 +307,14 @@ class Crud(MiBaseDeDatosConnect):
             self.desconectar()
 
     def actualizar_datos(self,fecha,concepto,monto,id):
+        """Actualiza un registro de facturación en la base de datos.
+
+        Args:
+            fecha (str): Nueva fecha de la factura.
+            concepto (str): Nuevo concepto de la factura.
+            monto (float): Nuevo monto de la factura.
+            id (int): ID del registro a actualizar.
+        """
         self.conectar()
         try:
             sql_update = "UPDATE Facturacion set fac_date_fecha = ?,\
@@ -277,16 +332,17 @@ class Crud(MiBaseDeDatosConnect):
             self.desconectar()
 
 class ModeloConfig(MiBaseDeDatosConnect):
-#metodos de retorno y grabacion de configuraciones
+    """Clase para gestionar configuraciones en la base de datos.
+    """
     def return_config(self,parametro):
-        """CONSULA EN LA BASE DE DATOS, DEPENDIENDO DEL PARAMETRO EN LA TABLA CONFIGURACION
+        """Consulta la configuración en la base de datos.
 
         Args:
-            parametro (STR): 'color_fondo','link_afip'
+            parametro (str): 'color_fondo' o 'link_afip'.
 
         Returns:
-            str: config_txt_valor 
-        """            
+            str: Valor de la configuración.
+        """          
         self.conectar()
         try:
             sql = """
@@ -306,12 +362,12 @@ class ModeloConfig(MiBaseDeDatosConnect):
             self.desconectar()
 
     def grabar_config(self,config_txt_tipo, cinfig_txt_valor):
-        """GRABA UNA NUEVA CONFIGURACION
+        """Graba una nueva configuración en la base de datos.
 
         Args:
-            config_txt_tipo (STR): 'color_fondo','link_afip'
-            cinfig_txt_valor (STR): nuevo_valor
-        """            
+            config_txt_tipo (str): 'color_fondo' o 'link_afip'.
+            config_txt_valor (str): Nuevo valor de la configuración.
+        """       
         self.conectar()
         try:
             sql = """
@@ -330,6 +386,11 @@ class ModeloConfig(MiBaseDeDatosConnect):
 
 #metodos de retorno y grabacion de conceptos
     def return_conceptos(self):
+        """Retorna los conceptos para agregar a la lista
+
+        Returns:
+            list: Lista de conceptos
+        """
         self.conectar()
         try:
             sql = """
@@ -348,6 +409,11 @@ class ModeloConfig(MiBaseDeDatosConnect):
             self.desconectar()
 
     def agrega_concepto(self,concepto):
+        """Agrega un nuevo concepto a la base de datos.
+
+        Args:
+            concepto (str): Nuevo concepto a agregar.
+        """
         self.conectar()
         try:
             sql = """
@@ -366,6 +432,11 @@ class ModeloConfig(MiBaseDeDatosConnect):
             self.desconectar()
 
     def borra_concepto(self,concepto):
+        """Elimina un concepto de la base de datos.
+
+        Args:
+            concepto (str): Concepto a eliminar.
+        """
         self.conectar()
         try:
             sql = """
@@ -382,7 +453,17 @@ class ModeloConfig(MiBaseDeDatosConnect):
             self.desconectar()
 
 class Estadisticas(MiBaseDeDatosConnect):
+        """Clase para realizar cálculos y estadísticas en la base de datos.
+        """
         def calculos_total_facturas(self,anio_fiscal):
+            """Calcula el total de facturas para un año fiscal.
+
+            Args:
+                anio_fiscal (int): Año fiscal de interés.
+
+            Returns:
+                int: Total de facturas.
+            """
             print("EL AÑO FISCAL ES:",anio_fiscal)
             
             self.fecha_ini = (str(anio_fiscal)+"/1/1")
@@ -400,7 +481,16 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.desconectar()
             return concatenar
         
-        def facturado_mes_actual(self,mes):#Modificar y traer el >= primer dia mes y < primer dia del mes siguiente
+        def facturado_mes_actual(self,mes):
+
+            """Calcula el monto facturado en el mes actual.
+
+            Args:
+                mes (str): Mes de interés (formato 'MM').
+
+            Returns:
+                float: Monto facturado en el mes actual.
+            """
             
             self.conectar()
             sql_facturado_este_mes =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?")
@@ -413,8 +503,11 @@ class Estadisticas(MiBaseDeDatosConnect):
             return facturado_este_mes
 
         def total_facturado_periodo(self,):
-            
-            
+            """Calcula el total facturado en el período actual.
+
+            Returns:
+                float: Monto total facturado en el período actual.
+            """
             self.conectar()
             sql_facturado_este_periodo =("SELECT SUM(fac_bol_monto) FROM Facturacion WHERE fac_date_fecha > ? and fac_date_fecha < ?")
             self.cursor.execute(sql_facturado_este_periodo,(self.fecha_ini,self.fecha_fin))
@@ -428,6 +521,11 @@ class Estadisticas(MiBaseDeDatosConnect):
             return self.monto_facturado
 
         def falta_facturar_responsable_inscripto(self):
+            """Calcula la cantidad que falta facturar para alcanzar la categoría H.
+
+            Returns:
+                int/str: Cantidad faltante o mensaje de error.
+            """
             if self.monto_facturado[0] == None:
                 falta_ri = 0 
             else:
@@ -443,6 +541,14 @@ class Estadisticas(MiBaseDeDatosConnect):
                     return falta_ri
                 
         def facturado_anual(self,primer_dia_año):
+            """Calcula el monto total facturado en el año.
+
+            Args:
+                primer_dia_anio (str): Primer día del año (formato 'YYYY/MM/DD').
+
+            Returns:
+                float: Monto total facturado en el año.
+            """
             ## Pasar a la vista
             
            
@@ -457,6 +563,11 @@ class Estadisticas(MiBaseDeDatosConnect):
             return facturacion_anual
 
         def devolver_categorias(self):
+            """Devuelve los montos asociados a cada categoría.
+
+            Returns:
+                tuple: Montos de las categorías A-H.
+            """
             print("Bloque de select para devolver categoria")
             #CATEGORIA A
             self.conectar()
@@ -544,6 +655,8 @@ class Estadisticas(MiBaseDeDatosConnect):
                                             self.categoriaH
         
         def exportar(self):
+            """Exporta los datos de facturación a un archivo Excel.
+            """
             self.conectar()
             sql= "SELECT * FROM Facturacion"
             exportar = pd.read_sql_query(sql,self.conexion)
@@ -555,14 +668,31 @@ class Estadisticas(MiBaseDeDatosConnect):
 
 
 class Validador():
-    
+    """Clase con métodos para validar datos ingresados.
+    """
     def valida_concepto (self,valido_concepto):
+        """Valida que el concepto ingresado sea válido.
+
+        Args:
+            valido_concepto (str): Concepto a validar.
+
+        Returns:
+            str: "OK" si es válido, "ERROR" si no es válido.
+        """
         if valido_concepto == "" or valido_concepto == "Agregar Nuevo" or valido_concepto == ("--"*5) or valido_concepto =="Eliminar Concepto":
             print("error al validar concepto")
             return "ERROR"
         
         
     def valida_monto(self,texto):
+        """Valida que el formato del monto sea válido.
+
+        Args:
+            texto (str): Monto a validar.
+
+        Returns:
+            str: "OK" si es válido, "ERROR" si no es válido.
+        """
         patron = r"^\d+(\.\d+)?$" #Valida numeros enteros y decimales.
         cadena =  texto
         if re.match (patron,cadena):
@@ -573,11 +703,27 @@ class Validador():
 
     
     def valida_fecha(self,valido_fecha):
+        """Valida que la fecha ingresada sea válida.
+
+        Args:
+            valido_fecha (str): Fecha a validar.
+
+        Returns:
+            str: "OK" si es válida, "ERROR" si no es válida.
+        """
         if valido_fecha == "":
             return "ERROR"
 
     def valida_entero(self, texto):
-        # Valida un número entero de exactamente 4 dígitos (como un año)
+        """Valida que el formato del número entero sea válido.
+
+        Args:
+            texto (str): Número entero a validar.
+
+        Returns:
+            str: "OK" si es válido, "ERROR" si no es válido.
+        """
+
         patron = r"^\d{4}$"
         cadena = texto
         if re.match(patron, cadena):
