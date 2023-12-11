@@ -1,10 +1,16 @@
-#v2.6.1
+"""MODELO CREADO PARA INTERACTUAR CON LA VISTA GRABANDO LOS DATOS Y RETORNANDOLOS EN UNA BASE SQLITE3
+"""
+
 import sqlite3
 import re
 import pandas as pd
 from tkinter import filedialog
 
-
+__author__ = "Fernando Suarez, Damian Colomb"
+__mainteinter__ = "Fernando Suarez, Damian Colomb"
+__email__ = "fer.gab.sua@gmail.com , tucorreo"
+__copyrigth__ = "Copyright 2023"
+__version__ = "0.1"
 
 
 class MiBaseDeDatosConnect():
