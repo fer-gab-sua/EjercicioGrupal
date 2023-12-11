@@ -240,13 +240,13 @@ class VentanaPrincipal():
 
         menubar = Menu(self.ventana1)
         menu_archivo = Menu(menubar,tearoff=0)
-        menu_archivo.add_command(label="Exportar",command="")
+        menu_archivo.add_command(label="Exportar",command=lambda:self.mibase_estadistica.exportar())
         menu_archivo.add_separator()
         menu_archivo.add_command(label="Cambiar estilo", command=lambda:self.cambio_color())
         menu_archivo.add_separator()
         menu_archivo.add_command(label="Cambiar Año",command=lambda:self.cambio_anio_fiscal())
         menu_archivo.add_separator()
-        menu_archivo.add_command(label="Acerca del programa",command=self.acerca_del_programa())
+        menu_archivo.add_command(label="Acerca del programa",command=self.acerca_del_programa)
         menu_archivo.add_separator()
         menu_archivo.add_command(label="Salir", command=lambda:self.salir())
         menubar.add_cascade (label="Archivo",menu=menu_archivo)
@@ -482,7 +482,17 @@ class VentanaPrincipal():
         self.etiqueta_monto.config(bg=eleccion_color)
         self.etiqueta_total.config(bg=eleccion_color)
         self.etiqueta_total_facturas.config(bg=eleccion_color)
-        self.fondo= eleccion_color
+        self.etiqueta_facturado_este_mes.config(bg=eleccion_color)
+        self.etiqueta_facturado_este_mes_rdo.config(bg=eleccion_color)
+        self.etiqueta_pendiente_pasar_categoria.config(bg=eleccion_color)
+        self.etiqueta_pendiente_pasar_categoria_rdo.config(bg=eleccion_color)
+        self.fondo = eleccion_color
+        self.etiqueta_pendiente_pasar_ri.config(bg=eleccion_color)
+        self.etiqueta_pendiente_pasar_ri_rdo.config(bg=eleccion_color)
+        self.etiqueta_total_facturado_anual.config(bg=eleccion_color)
+        self.etiqueta_total_facturado_anual_rdo.config(bg=eleccion_color)
+        self.label_anio_fiscal.config(bg=eleccion_color)
+
 
     def ir_a_afip(self):
         web = self.mibase_config.return_config('link_afip')
@@ -797,9 +807,6 @@ class VentanaPrincipal():
 
     def falta_ri_aux(self):
         falta_ri = self.mibase_estadistica.falta_facturar_responsable_inscripto()
-        print("////////////////")
-        print (type(falta_ri))
-        print (falta_ri)
         
         if falta_ri is None:
             self.etiqueta_pendiente_pasar_ri_rdo.config(text="-")

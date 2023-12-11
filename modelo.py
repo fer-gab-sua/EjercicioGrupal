@@ -542,11 +542,12 @@ class Estadisticas(MiBaseDeDatosConnect):
                                     self.categoriaF,\
                                         self.categoriaG,\
                                             self.categoriaH
+        
         def exportar(self):
             self.conectar()
             sql= "SELECT * FROM Facturacion"
-            exportar = pd.read_sql_query(sql)
-            ruta = filedialog.asksaveasfilename(defaultextension=' .xlsx')
+            exportar = pd.read_sql_query(sql,self.conexion)
+            ruta = filedialog.asksaveasfilename(defaultextension='.xlsx')
             exportar.to_excel(ruta,index=False)
             self.desconectar()
 
@@ -588,9 +589,9 @@ class Validador():
 #ESTO ES PARA PRUEBAS
 if __name__ == "__main__":
     # Uso de la clase Factura
-    mibase = MiBaseDeDatosConnect()
-    mibase.carga_datos_iniciales()
-    print(mibase.actualizar_treeview())
+    estadistiacas = Estadisticas()
+    estadistiacas.exportar()
+    
     #print("si le pido a la funcion link_afip, me devuelve:" , mibase.return_config('link_afip'))
     #print("si le pido a la funcion color_fondo, me devuelve:" , mibase.return_config('color_fondo'))
 
