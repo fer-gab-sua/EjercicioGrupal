@@ -178,10 +178,12 @@ class VentanaPrincipal():
 
         #llamo al metodo para llenar la lista de conceptos.
         
-        self.carga_lista()
+        self.lista_concepto = []
                 
         self.combobox_concepto = Combobox(self.ventana1,values=self.lista_concepto,state="readonly",width=19,justify="center",textvariable=self.concepto) # Readonly, lo que hace es que no se pueda escribir en el combobox.
         self.combobox_concepto.place (x=100,y=275) 
+        self.carga_lista()
+
 
         #agrego la funcionalidad de agregar a la base de datos un nuevo registro
         self.combobox_concepto.bind("<<ComboboxSelected>>", lambda event: self.ab_concepto(self.concepto)) 
@@ -414,13 +416,8 @@ class VentanaPrincipal():
             respuesta = messagebox.askquestion("Consulta",f"Estas seguro que vas a borrar el registro? {elemento_seleccionado}")
             if respuesta =="yes":
                 self.mibase_config.borra_concepto(elemento_seleccionado)
-                self.lista_concepto = []
-                datos = self.mibase_config.return_conceptos()
-                self.lista_concepto = [tupla[1] for tupla in datos]
-                #Agrego a la lista el "Agregar Nuevo"
-                self.lista_concepto += ["Agregar Nuevo"]
-                self.lista_concepto += ["Eliminar Concepto"]
-                self.combobox_concepto['values'] = self.lista_concepto
+                self.carga_lista()
+
 
     def modificar_categorias_aux(self):
         self.txt_A.config(state="normal")
@@ -510,11 +507,12 @@ class VentanaPrincipal():
 
             if seleccion:
                 self.mibase_config.agrega_concepto(seleccion)
-                self.carga_lista()
+                
 
         elif concepto_elegido == "Eliminar Concepto":
             self.pantalla_auxiliar_concepto()
-            self.carga_lista()
+            
+        self.carga_lista()
 
     def auxiliar_carga(self):
     ### VALIDACIONES DE LOS 3 campos de entrada Fecha, concepto y monto
@@ -830,13 +828,16 @@ class VentanaPrincipal():
             self.etiqueta_total_facturado_anual_rdo.config(text=f"$ {facturacion_anual[0]}")
         
     def carga_lista(self):
+        print("estoy llamando a carga lista")
         self.lista_concepto = []
         datos = self.mibase_config.return_conceptos()
         self.lista_concepto = [tupla[1] for tupla in datos]
-        #Agrego a la lista el "Agregar Nuevo"
         self.lista_concepto += ["--"*5]
         self.lista_concepto += ["Agregar Nuevo"]
         self.lista_concepto += ["Eliminar Concepto"]
+
+
+        self.combobox_concepto['values'] = self.lista_concepto
 
     def cambio_anio_fiscal(self):
         # configuro el mensaje
