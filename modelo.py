@@ -8,7 +8,7 @@ from tkinter import filedialog
 
 __author__ = "Fernando Suarez, Damian Colomb"
 __mainteinter__ = "Fernando Suarez, Damian Colomb"
-__email__ = "fer.gab.sua@gmail.com , tucorreo"
+__email__ = "fer.gab.sua@gmail.com , colomb.damian@gmail.com"
 __copyrigth__ = "Copyright 2023"
 __version__ = "0.1"
 

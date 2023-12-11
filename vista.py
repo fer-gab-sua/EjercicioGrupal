@@ -1,4 +1,6 @@
 # v2.6.1
+"""VISTA ENCARGADA DE MOSTRAR TODA LA INFORMACION CON EL USUARIO
+"""
 
 from tkinter import *
 from tkinter.ttk import Combobox,Treeview
@@ -12,11 +14,23 @@ from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Cru
 #from modeloP import MiBaseDeDatosNw
 from datetime import datetime
 
+__author__ = "Fernando Suarez, Damian Colomb"
+__mainteinter__ = "Fernando Suarez, Damian Colomb"
+__email__ = "fer.gab.sua@gmail.com , colomb.damian@gmail.com"
+__copyrigth__ = "Copyright 2023"
+__version__ = "0.1"
 
 
 class VentanaPrincipal():
 
+
     def __init__(self,ventana1) -> None:
+        """
+        Clase principal que define la interfaz gráfica y funcionalidades de la aplicación.
+
+        Args:
+            ventana_raiz (Tk): Ventana principal de la aplicación.
+        """
         #inicio Objetos de base y validador
         self.validador = Validador()
         #Base de datos general
@@ -255,7 +269,8 @@ class VentanaPrincipal():
         self.ventana1.config(menu=menubar)  
 
     def ventana_informacion_categoria(self):
-        
+        """Ventana Auxiliar de categorias
+        """
         self.inf_categoria = Toplevel()
         self.inf_categoria.title("Información para categorizar")
         self.inf_categoria.geometry("600x600")
@@ -386,6 +401,9 @@ class VentanaPrincipal():
         self.txt_H.config(bg=self.fondo)
 
     def pantalla_auxiliar_concepto(self):
+        """
+        Crea y muestra una ventana secundaria para eliminar un concepto.
+        """
         self.eli_concepto = Toplevel()
         self.eli_concepto.title("Eliminar concepto")
         self.eli_concepto.geometry("300x300")
@@ -409,6 +427,9 @@ class VentanaPrincipal():
         self.btn_borrar.place(x=140,y=250)
 
     def aux_borrar_concepto(self):
+        """
+        Maneja la eliminación de un concepto seleccionado.
+        """
         indices_seleccionados = self.lista_conceptos_ab.curselection()
         if indices_seleccionados:
         # Obtener el elemento real utilizando el índice
@@ -420,6 +441,9 @@ class VentanaPrincipal():
 
 
     def modificar_categorias_aux(self):
+        """
+        Habilita la modificación de categorías.
+        """
         self.txt_A.config(state="normal")
         self.txt_B.config(state="normal")
         self.txt_C.config(state="normal")
@@ -431,7 +455,9 @@ class VentanaPrincipal():
         self.btn_modificar_datos.config(text="GUARDAR DATOS",command=lambda:self.guardar_categorias_aux())
 
     def guardar_categorias_aux(self):
-
+        """
+        Guarda las categorías modificadas.
+        """
         fecha_corte = self.txt_fecha_categoria.get()
         a = ["A",self.var_A.get(),fecha_corte]
         b = ["B",self.var_B.get(),fecha_corte]
@@ -467,9 +493,15 @@ class VentanaPrincipal():
             self.txt_H.config(state="disabled")
 
     def salir(self):
+        """
+        Cierra la aplicación.
+        """
         self.ventana1.quit()
 
     def cambio_color(self):
+        """
+        Cambia el color de fondo de la interfaz.
+        """
         color = askcolor(color="#00ff00")
         eleccion_color = color[1]
         self.mibase_config.grabar_config('color_fondo',eleccion_color)
@@ -492,10 +524,19 @@ class VentanaPrincipal():
 
 
     def ir_a_afip(self):
+        """
+        Abre el navegador con el enlace a la AFIP.
+        """
         web = self.mibase_config.return_config('link_afip')
         webbrowser.open(web)
 
     def ab_concepto(self,concepto_elegido):
+        """
+        Maneja la lógica al elegir una opción en el menú de conceptos.
+
+        Args:
+            concepto_elegido (StringVar): Variable que almacena la opción seleccionada en el menú.
+        """
         concepto_elegido = concepto_elegido.get()
         if concepto_elegido == "Agregar Nuevo":
 
@@ -515,7 +556,9 @@ class VentanaPrincipal():
         self.carga_lista()
 
     def auxiliar_carga(self):
-    ### VALIDACIONES DE LOS 3 campos de entrada Fecha, concepto y monto
+        """
+        Realiza validaciones y carga los datos de una factura.
+        """
         valido_monto = self.txt_monto.get()
         
         
@@ -552,6 +595,9 @@ class VentanaPrincipal():
         self.actualizar_treeview()
 
     def actualizar_treeview(self):
+        """
+        Actualiza la vista de tabla con los datos de la base de datos.
+        """
         actualizacion = self.tabla.get_children() 
         for R in actualizacion: 
             self.tabla.delete(R)
@@ -572,10 +618,21 @@ class VentanaPrincipal():
         self.facturacion_anual_aux()
         
     def actualizar_fecha(self,event):
+        """
+        Actualiza la fecha en la interfaz gráfica con la fecha seleccionada en el calendario.
+
+        Parámetros:
+        - event: El evento que desencadena la actualización de la fecha.
+        """
         fecha = self.calendar.get_date()
         self.fecha.set(fecha)
 
     def aux_borrar_factura(self):
+        """
+        Borra la factura seleccionada en la tabla después de confirmar la acción.
+
+        No tiene parámetros.
+        """
         seleccion= self.tabla.focus() 
         if seleccion ==(""):
             messagebox.showwarning("AVISO","Tenes que seleccionar el registro que queres borrar.")
@@ -590,8 +647,12 @@ class VentanaPrincipal():
             else:
                 exit      
     
-    def auxiliar_modificar_factura(self):#VER TEMA VALIDACIONES CUANDO SE MODIFICA
+    def auxiliar_modificar_factura(self):
+        """
+        Configura la interfaz gráfica para permitir la modificación de la factura seleccionada.
+        Deshabilita varios botones y muestra el botón para guardar las modificaciones.
 
+        """ 
         
         seleccion= self.tabla.focus() 
         if seleccion ==(""):
@@ -618,12 +679,17 @@ class VentanaPrincipal():
             self.txt_monto.focus()
 
     def auxiliar_guardar_modificacion(self,):  
+        """
+        Guarda las modificaciones realizadas en una factura seleccionada y actualiza la interfaz gráfica.
+        Habilita los botones previamente deshabilitados.
+
+        """
         seleccion = self.tabla.focus()
         item=self.tabla.item(seleccion) 
         id_factura = item["text"]
 
         act_fecha = self.txt_fecha.get()
-        ###ACA ESTA EL PROBLEMA
+
 
         formatear_fecha = datetime.strptime(self.txt_fecha.get(), '%d/%m/%Y')
         formato_fecha="%Y/%m/%d"
@@ -651,6 +717,11 @@ class VentanaPrincipal():
         messagebox.showinfo ("AVISO", "Los datos se modificaron con éxito.")
 
     def actualizar_calculos(self):
+        """
+        Actualiza los cálculos y las etiquetas relacionadas con las estadísticas de facturación.
+        Utiliza métodos de la clase 'mibase_estadistica'.
+
+        """
         mes_actual = str(datetime.now().month)
         
         cantidad_facturas = self.mibase_estadistica.calculos_total_facturas(self.anio_fiscal)
@@ -666,27 +737,11 @@ class VentanaPrincipal():
     
     def manejo_categorias(self):
         """
-        resultado = {}
-        categorias = self.mibase_categorias.traer_categorias()
-        for dato in categorias:
-            letra = dato[1]
-            importe = dato[2]
-            resultado[letra] = importe
+        Maneja las categorías y actualiza la etiqueta 'label_categoria' con la categoría correspondiente.
+        También actualiza otras etiquetas relacionadas con las categorías.
 
-        self.cat_A = float((resultado['A']))
-        self.cat_B= float((resultado['B']))
-        self.cat_C= float((resultado['C']))
-        self.cat_D = float((resultado['D']))
-        self.cat_E = float((resultado['E']))
-        self.cat_F = float((resultado['F']))
-        self.cat_G = float((resultado['G']))
-        self.cat_H = float((resultado['H'])) """
-
-        
-         
-            
-        
-         # Traigo todo los valores de las categorías:
+        """
+   
         (
             self.cat_A,
             self.cat_B,
@@ -804,6 +859,10 @@ class VentanaPrincipal():
                 self.etiqueta_total_facturado_anual.config(text="FACTURADO ESTE AÑO: ")
 
     def falta_ri_aux(self):
+        """
+        Muestra la falta a facturar para un responsable inscripto en la etiqueta correspondiente.
+
+        """
         falta_ri = self.mibase_estadistica.falta_facturar_responsable_inscripto()
         
         if falta_ri is None:
@@ -814,6 +873,10 @@ class VentanaPrincipal():
             self.etiqueta_pendiente_pasar_ri_rdo.config(text=f"$ {falta_ri}")
 
     def facturacion_anual_aux(self):
+        """
+        Muestra el total facturado en el año actual en la etiqueta correspondiente.
+
+        """
 
         año_actual = datetime.now().year
         primer_dia_año = datetime(año_actual, 1, 1)
@@ -828,7 +891,11 @@ class VentanaPrincipal():
             self.etiqueta_total_facturado_anual_rdo.config(text=f"$ {facturacion_anual[0]}")
         
     def carga_lista(self):
-        print("estoy llamando a carga lista")
+        """
+        Carga la lista de conceptos en la interfaz gráfica.
+    
+        """
+
         self.lista_concepto = []
         datos = self.mibase_config.return_conceptos()
         self.lista_concepto = [tupla[1] for tupla in datos]
@@ -840,6 +907,10 @@ class VentanaPrincipal():
         self.combobox_concepto['values'] = self.lista_concepto
 
     def cambio_anio_fiscal(self):
+        """
+        Cambia el año fiscal y actualiza la interfaz gráfica.
+
+        """
         # configuro el mensaje
         mensaje = "Ingrese el año fiscal"
 
@@ -857,6 +928,10 @@ class VentanaPrincipal():
             self.actualizar_treeview()
 
     def acerca_del_programa(self):
+        """
+        Muestra información sobre la aplicación y sus desarrolladores.
+    
+        """
         messagebox.showinfo("INFORMACIÓN","Esta aplicación fue desarrollada por Fernando Suarez y Damián Colomb como entrega final \
                             del curso python intermedio del centro de E-Learning de la Univesidad Tecnológica Nacional.")
     
