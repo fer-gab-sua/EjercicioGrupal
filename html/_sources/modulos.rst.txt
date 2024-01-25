@@ -1,0 +1,43 @@
+Modulos necesarios
+==================
+
+
+Para la ejecución del archivo es necesario tener descargadas las librerías: 
+
+1. Tkinter
+
+   https://docs.python.org/es/3/library/tkinter.html
+
+
+2. Tkinter.ttk
+
+   https://docs.python.org/es/3.9/library/tkinter.ttk.html
+
+3. Tkinter.colorchooser
+
+   https://docs.python.org/es/3/library/tkinter.colorchooser.html
+
+4. Tk Calendar
+
+   https://pypi.org/project/tkcalendar/
+
+
+5. re
+
+   https://docs.python.org/es/3/library/re.html
+
+6. sqlite3
+
+   https://www.sqlite.org/docs.html
+
+7. webbrowser
+
+   https://docs.python.org/3/library/webbrowser.html
+
+8. datetime
+
+   https://docs.python.org/3/library/datetime.html
+
+9. pandas
+
+   https://pandas.pydata.org/docs/

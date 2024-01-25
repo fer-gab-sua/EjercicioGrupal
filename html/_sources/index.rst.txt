@@ -1,0 +1,26 @@
+.. Control_de_facturacion documentation master file, created by
+   sphinx-quickstart on Mon Dec 11 00:41:11 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Bienvenido a la Documentacion de Control de Facturacion!
+=========================================================
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Contents:
+
+   manual
+   modulos
+   controlador
+   modelo
+   vista
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

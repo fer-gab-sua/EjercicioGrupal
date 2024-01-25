@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manual de Usuario &mdash; documentación de Control_de_facturacion - 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=6fcc102b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Modulos necesarios" href="modulos.html" />
+    <link rel="prev" title="Bienvenido a la Documentacion de Control de Facturacion!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Control_de_facturacion
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Manual de Usuario</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduccion">Introduccion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Manual de usuario</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cargar-datos">Cargar datos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#borrar-datos">Borrar datos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cambiar-estilo">Cambiar estilo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modificar-datos">Modificar Datos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exportar-datos-a-una-planilla-de-excel">Exportar datos a una planilla de Excel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visualizar-informacion-del-programa">Visualizar información del programa</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visualizar-datos">Visualizar datos</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modulos.html">Modulos necesarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controlador.html">controlador module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modelo.html">modelo module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vista.html">vista module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Control_de_facturacion</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Manual de Usuario</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/manual.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="manual-de-usuario">
+<h1>Manual de Usuario<a class="headerlink" href="#manual-de-usuario" title="Link to this heading"></a></h1>
+<section id="introduccion">
+<h2>Introduccion<a class="headerlink" href="#introduccion" title="Link to this heading"></a></h2>
+<p>La aplicación Control de facturación está desarrollada para realizar un control de facturación para monotributistas argentinos. Fue desarrollada en el lenguaje Python usando la interfaz gráfica Tkinter, como trabajo final para el curso  Python intermedio del centro de E-Learning de la UTN.BA en el año 2023.</p>
+</section>
+<section id="id1">
+<h2>Manual de usuario<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>La aplicación consta de dos ventanas, el menú principal, donde se realizan todas las
+funciones principales y la ventana datos de categorización, donde se modifican los datos para
+calcular las categorías del monotributo.
+Las funciones que podrá controlar el usuario son cargar datos, borrar datos, cambiar el
+estilo, modificar datos de categorización, exportar los datos a una planilla de Excel y visualizar
+la información del programa.</p>
+<section id="cargar-datos">
+<h3>Cargar datos<a class="headerlink" href="#cargar-datos" title="Link to this heading"></a></h3>
+<p>Para cargar datos el usuario debe ingresar los datos del monto que se facturo (1), la fecha de
+facturación (2) y el concepto de la facturación (3), como se muestra a continuación en la figura 1.</p>
+<img alt="Figura1" class="align-center" src="_images/figura1.jpg" />
+<p>El monto que se ingresa en la caja de texto solo puede ser de valor numérico, mientras que el
+valor del concepto solo puede corresponder a una opción la lista desplegable. El usuario puede
+crear los conceptos con los cuales factura, a su vez puede eliminarlos. La fecha se elije desde el
+calendario. (figura 2).</p>
+<img alt="Figura2" class="align-center" src="_images/figura2.jpg" />
+<p>Luego de ingresar los datos, se hace clic en el botón cargar. En caso de no haber ningún error,
+los datos ingresados serán guardados en la base de datos, se mostrarán en la tabla del menú
+principal y se actualizarán los datos y categorías correspondiente al monotributo (figura 4).</p>
+<img alt="Figura3" class="align-center" src="_images/figura4.jpg" />
+<p>A medida que se cargan los datos, la categoría se actualiza automáticamente y va variando
+según los montos facturados en el periodo designado. En el caso que la facturación esté
+llegando al límite del monotributo, se actualizará la categoría a la última (H) y cambiara de
+color verde a rojo, para que el usuario no se pase de categoría a responsable inscripto (figura 5).</p>
+<img alt="Figura3" class="align-center" src="_images/figura5.jpg" />
+</section>
+<section id="borrar-datos">
+<h3>Borrar datos<a class="headerlink" href="#borrar-datos" title="Link to this heading"></a></h3>
+<p>Para borra algún registro de la base de datos, se debe hacer clic en la tabla, sobre el registro
+que se desea borrar y a continuación aparecerá un mensaje preguntando si esta seguro que se
+desea borrar el registro. En el caso de que se haga clic en SI, el registro se borra de la base de
+datos, en el caso que se haga clic en NO, se cancela la función borrar. Si el usuario no hace clic
+en ningún registro de la tabla y acciona el botón borrar, aparece un mensaje avisando que se
+debe seleccionar el registro que se va a borrar (figura 6, flechas verdes)</p>
+<img alt="Figura3" class="align-center" src="_images/figura6.jpg" />
+</section>
+<section id="cambiar-estilo">
+<h3>Cambiar estilo<a class="headerlink" href="#cambiar-estilo" title="Link to this heading"></a></h3>
+<p>En caso de que el color de fondo, no sea de agrado del usuario, existe la posibilidad de cambiar
+el estilo. Para ello se debe hacer clic en el menú y a continuación presionar cambiar estilo. Esto
+abrirá un panel de colores para que se decida qué color se desea visualizar. (figura 7). El color se
+guardará en la base de datos para las próximas aperturas de la aplicación.</p>
+<img alt="Figura3" class="align-center" src="_images/figura7.jpg" />
+</section>
+<section id="modificar-datos">
+<h3>Modificar Datos<a class="headerlink" href="#modificar-datos" title="Link to this heading"></a></h3>
+<p>Para modificar algún dato registrado se debe presiona sobre el mismo en la tabla y hacer clic
+sobre el botón modificar. Se actualizaran los datos en los widgets de entrada (Flechas rojas).
+Allí se podrán modificar los datos y aparecerá un botón (flecha verde) para guardar los
+cambios (figura 8)</p>
+<img alt="Figura3" class="align-center" src="_images/figura8.jpg" />
+</section>
+<section id="exportar-datos-a-una-planilla-de-excel">
+<h3>Exportar datos a una planilla de Excel<a class="headerlink" href="#exportar-datos-a-una-planilla-de-excel" title="Link to this heading"></a></h3>
+<p>Es posible exportar los datos de la facturación a un archivo de Excel (.xls) para ellos se debe
+hacer clic en archivo y luego exportar. Se abrirá una ventana con el directorio donde se desea
+guardar el archivo.xls. Luego de realizado se avisará mediante un mensaje que la exportación
+ha sido exitosa.</p>
+<img alt="Figura3" class="align-center" src="_images/figura8-2.jpg" />
+</section>
+<section id="visualizar-informacion-del-programa">
+<h3>Visualizar información del programa<a class="headerlink" href="#visualizar-informacion-del-programa" title="Link to this heading"></a></h3>
+<p>Si se hace clic en el menú información, se desplegará la opción de hacer clic sobre acerca del
+programa. Si se presiona, aparecerá un mensaje con datos acerca de la creación de la aplicación,
+su autor y un agradecimiento. (figura 9)</p>
+<img alt="Figura3" class="align-center" src="_images/figura9.jpg" />
+</section>
+<section id="visualizar-datos">
+<h3>Visualizar datos<a class="headerlink" href="#visualizar-datos" title="Link to this heading"></a></h3>
+<p>Los datos que se muestra en la tabla corresponden al año que se visualiza por encima de la
+categoría en la esquina superior derecha de la pantalla. Para visualizar los datos de otros años se
+debe presionar la opción cambiar año en archivo (figura 10)</p>
+<img alt="Figura3" class="align-center" src="_images/figura10.jpg" />
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="index.html" class="btn btn-neutral float-left" title="Bienvenido a la Documentacion de Control de Facturacion!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="modulos.html" class="btn btn-neutral float-right" title="Modulos necesarios" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Suarez Fernando - Colomb Damian.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

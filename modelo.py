@@ -5,12 +5,14 @@ import sqlite3
 import re
 import pandas as pd
 from tkinter import filedialog
-
+from decoradores import log
 __author__ = "Fernando Suarez, Damian Colomb"
 __mainteinter__ = "Fernando Suarez, Damian Colomb"
 __email__ = "fer.gab.sua@gmail.com , colomb.damian@gmail.com"
 __copyrigth__ = "Copyright 2023"
 __version__ = "0.1"
+
+
 
 
 class MiBaseDeDatosConnect():
@@ -27,6 +29,9 @@ class MiBaseDeDatosConnect():
         self.cursor = None
         self.crear_tablas()
 
+        #estp es una prueba
+        self._observer = []
+
     def conectar(self):
         """Establece una conexión con la base de datos.
         """
@@ -34,7 +39,6 @@ class MiBaseDeDatosConnect():
             self.conexion = sqlite3.connect(self.nombre_base_de_datos)
             self.conexion.isolation_level = None  # Desactiva el autocommit
             self.cursor = self.conexion.cursor()
-            print("-> Conexión abierta")
         except sqlite3.Error as error:
             print(f"Error al conectar a la base de datos: {error}")
 
@@ -45,8 +49,6 @@ class MiBaseDeDatosConnect():
             self.cursor.close()
         if self.conexion:
             self.conexion.close()
-            print("-> Conexión cerrada")
-            print("\n")
 
     def crear_tablas(self):
         """Crea las tablas necesarias si no existen.
@@ -181,7 +183,7 @@ class ModeloCategorias(MiBaseDeDatosConnect):
             data = ("01/01/2023",)
             self.cursor.execute(sql)
             retorno = (self.cursor.fetchall())
-            print("---> Categorias retornados con exito metodo:trae_categorias()")
+            print("---> Categorias retornados con exito metodo:trae_categorias")
             return retorno
         except sqlite3.Error as error:
             print(f"Error a retornar categorias: {error}")
@@ -198,9 +200,6 @@ class ModeloCategorias(MiBaseDeDatosConnect):
         self.conectar()
         try:
             for cat in bloque:
-                print(cat[0])
-                print(cat[1])
-                print(cat[2])
                 sql = """INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_fecha)
                 SELECT ?, ?, ?
                 """
@@ -208,7 +207,7 @@ class ModeloCategorias(MiBaseDeDatosConnect):
                 #   """
                 data = (cat[0],(cat[1]),(cat[2]))
                 self.cursor.execute(sql,data)
-                print("---> Categorias agregadas con exito metodo:cambiar_categorias()")
+                print("---> Categorias agregadas con exito metodo:cambiar_categorias")
 
         except sqlite3.Error as error:
             print(f"Error a retornar categorias: {error}")
@@ -230,7 +229,6 @@ class ModeloParaVista(MiBaseDeDatosConnect):
             list: Datos para el treeview.
         """
         self.conectar()
-        print("voy a filtrar por ---->",anio)
         try:
             sql_treeview = """SELECT * 
                         FROM facturacion 
@@ -239,7 +237,6 @@ class ModeloParaVista(MiBaseDeDatosConnect):
             self.cursor.execute(sql_treeview, (anio,))
             datos = self.cursor.fetchall()
             print("---> Datos traidos para el treeview generados correctamente metodo:actualizar_treeview")
-            print(datos)
             return datos
         except sqlite3.Error as error:
             print(f"Error a cargar_datos: {error}")
@@ -268,9 +265,26 @@ class ModeloParaVista(MiBaseDeDatosConnect):
         finally:
             self.desconectar()      
 
+
+
+
+
 class Crud(MiBaseDeDatosConnect):
     """Clase para realizar operaciones CRUD en la base de datos.
     """
+
+    def registrar_observador(self,observador):
+        self._observer.append(observador)
+        print("CARGUE EL OBSERVADOR")
+
+    def notificar_observador(self,datos):
+        for observador in self._observer:
+            observador.update(datos)
+            print("NOTIFIQUE EL OBSERVADOR")
+
+
+
+    @log
     def cargar_datos(self,fecha,concepto,monto,instante):
         """Carga nuevos datos de facturación en la base de datos.
 
@@ -286,13 +300,20 @@ class Crud(MiBaseDeDatosConnect):
             datos=(fecha,concepto,monto,instante)
             self.cursor.execute(sql_carga,datos)
             self.conexion.commit()
-            print ("---> Los registros fueron guardados con éxito.")
+
+
+            self.notificar_observador(datos)
+            
+            
+            
+            return  ("---> Los registros fueron guardados con éxito.")
         except sqlite3.Error as error:
             print(f"Error a cargar_datos: {error}")
             self.conexion.rollback()
         finally:
             self.desconectar()
 
+    @log
     def borrar_datos(self,borrar):
         """Elimina un registro de facturación de la base de datos.
 
@@ -305,13 +326,14 @@ class Crud(MiBaseDeDatosConnect):
             borrar_datos = borrar
             self.cursor.execute(sql,borrar_datos) 
             self.conexion.commit()
-            print (f"---> El registro {borrar} se borró con éxito.")
+            return (f"---> El registro {borrar} se borró con éxito.")
         except sqlite3.Error as error:
             print(f"Error a borrar registro id {borrar}: {error}")
             self.conexion.rollback()
         finally:
             self.desconectar()
 
+    @log
     def actualizar_datos(self,fecha,concepto,monto,id):
         """Actualiza un registro de facturación en la base de datos.
 
@@ -330,7 +352,7 @@ class Crud(MiBaseDeDatosConnect):
             datos = (fecha,concepto,monto,id)
             self.cursor.execute(sql_update,datos)
             self.conexion.commit()
-            print(f"---> Registro {id}, con fecha {fecha} actualizado correctamente")
+            return (f"---> Registro {id}, con fecha {fecha} actualizado correctamente") 
         except sqlite3.Error as error:
             print(f"Error a cargar_datos: {error}")
             self.conexion.rollback()
@@ -359,7 +381,7 @@ class ModeloConfig(MiBaseDeDatosConnect):
             data = (parametro,)
             self.cursor.execute(sql, data)
             retorno = (self.cursor.fetchall()[0][0])
-            print("---> Configuracion retornada con exito metodo: return_config()")
+            print("---> Configuracion retornada con exito metodo: return_config")
             return retorno
         except sqlite3.Error as error:
             print(f"Error a retornar {parametro}: {error}")
@@ -406,7 +428,7 @@ class ModeloConfig(MiBaseDeDatosConnect):
                 """ 
             self.cursor.execute(sql)
             retorno = (self.cursor.fetchall())
-            print("---> Conceptos retornados con exito metodo:return_conceptos()")
+            print("---> Conceptos retornados con exito metodo:return_conceptos")
             return retorno
         except sqlite3.Error as error:
             print(f"Error a retornar conceptos: {error}")
@@ -430,7 +452,7 @@ class ModeloConfig(MiBaseDeDatosConnect):
             data = (concepto,"activo",concepto)
             self.cursor.execute(sql,data)
             self.conexion.commit()
-            print("---> Conceptos agregados con exito metodo:agrega_conceptos()")
+            print("---> Conceptos agregados con exito metodo:agrega_conceptos")
         except sqlite3.Error as error:
                     print(f"Error a grabar {concepto}: {error}")
                     self.conexion.rollback()
@@ -451,7 +473,7 @@ class ModeloConfig(MiBaseDeDatosConnect):
             data = (concepto,)
             self.cursor.execute(sql,data)
             self.conexion.commit()
-            print("---> Concepto eliminado con exito metodo:borra_conceptos()")
+            print("---> Concepto eliminado con exito metodo:borra_conceptos")
         except sqlite3.Error as error:
                     print(f"Error a eliminar {concepto}: {error}")
                     self.conexion.rollback()
@@ -470,7 +492,6 @@ class Estadisticas(MiBaseDeDatosConnect):
             Returns:
                 int: Total de facturas.
             """
-            print("EL AÑO FISCAL ES:",anio_fiscal)
             
             self.fecha_ini = (str(anio_fiscal)+"/1/1")
             self.fecha_fin = (str(anio_fiscal)+"12/31")
@@ -483,7 +504,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             total_facturas=self.cursor.fetchone()
         
             concatenar = (total_facturas[0]) # Aca exraigo solo al primer numero del fetchall y le saco la ,
-            print("---> Select calculo total ejecutado correctamente()")
+            print("---> Select calculo total ejecutado correctamente")
             self.desconectar()
             return concatenar
         
@@ -503,7 +524,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.cursor.execute(sql_facturado_este_mes,(mes,))
             self.conexion.commit()
             facturado_este_mes=self.cursor.fetchone()
-            print("---> Select facturo mes actual ejecutado correctamente()")
+            print("---> Select facturo mes actual ejecutado correctamente")
             self.desconectar()
             
             return facturado_este_mes
@@ -522,7 +543,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.monto_facturado = facturado_este_periodo
 
             self.monto_facturado = (facturado_este_periodo)
-            print("---> Select total facturado por periodo ejecutado correctamente()")
+            print("---> Select total facturado por periodo ejecutado correctamente")
             self.desconectar()
             return self.monto_facturado
 
@@ -564,7 +585,7 @@ class Estadisticas(MiBaseDeDatosConnect):
             self.cursor.execute(sql_facturado_este_anio,(primer_dia_año,))
             self.conexion.commit()
             facturacion_anual=self.cursor.fetchone()
-            print("---> Select facturado anual ejecutado correctamente()")
+            print("---> Select facturado anual ejecutado correctamente")
             self.desconectar()
             return facturacion_anual
 

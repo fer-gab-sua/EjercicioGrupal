@@ -11,6 +11,10 @@ import webbrowser
 from tkinter import simpledialog, messagebox
 #import re
 from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Crud, ModeloConfig , Validador,Estadisticas
+from observador import ObservadorTarea
+
+
+
 #from modeloP import MiBaseDeDatosNw
 from datetime import datetime
 
@@ -40,6 +44,8 @@ class VentanaPrincipal():
         self.mibase_config = ModeloConfig()
         #base de datos Crud
         self.mibase_crud = Crud()
+        self.observador_tarea = ObservadorTarea()
+        self.mibase_crud.registrar_observador(self.observador_tarea)
         #base de datos Cateogorias
         self.mibase_categorias = ModeloCategorias()
         #base para las vistas
@@ -99,72 +105,72 @@ class VentanaPrincipal():
         
         #FACTURADO MES ACTUAL:
         self.etiqueta_facturado_este_mes = Label(self.ventana1,
-                                              text="FACTURADO ESTE MES: ",
-                                              foreground="White",
-                                              anchor=CENTER)
+                                            text="FACTURADO ESTE MES: ",
+                                            foreground="White",
+                                            anchor=CENTER)
         self.etiqueta_facturado_este_mes.place (x=680,y=250)
         self.etiqueta_facturado_este_mes.config(bg=self.fondo,
-                                             font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         self.etiqueta_facturado_este_mes_rdo = Label(self.ventana1,
-                                              text="",
-                                              foreground="red",
-                                              anchor=CENTER)
+                                            text="",
+                                            foreground="red",
+                                            anchor=CENTER)
         self.etiqueta_facturado_este_mes_rdo.place (x=940,y=250)
         self.etiqueta_facturado_este_mes_rdo.config(bg=self.fondo,
-                                             font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         
         #PENDIENTE PARA PASAR DE CATEGORÍA:
         self.etiqueta_pendiente_pasar_categoria = Label(self.ventana1,
-                                              text="FALTA PARA PASAR A: ",
-                                              foreground="White",
-                                              anchor=CENTER)
+                                            text="FALTA PARA PASAR A: ",
+                                            foreground="White",
+                                            anchor=CENTER)
         self.etiqueta_pendiente_pasar_categoria.place (x=680,y=280)
         self.etiqueta_pendiente_pasar_categoria.config(bg=self.fondo,
-                                             font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         self.etiqueta_pendiente_pasar_categoria_rdo = Label(self.ventana1,
-                                              text="",
-                                              foreground="red",
-                                              anchor=CENTER)
+                                            text="",
+                                            foreground="red",
+                                            anchor=CENTER)
         self.etiqueta_pendiente_pasar_categoria_rdo.place (x=940,y=280)
         self.etiqueta_pendiente_pasar_categoria_rdo.config(bg=self.fondo,
-                                             font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         # PENDIENTE PARA PASAR A RESPONSABLE INSCRIPTO
         self.etiqueta_pendiente_pasar_ri = Label(self.ventana1,
-                                              text="FALTA PARA RESPONSABLE INSCRIPTO:",
-                                              foreground="White",
-                                              anchor=CENTER)
+                                            text="FALTA PARA RESPONSABLE INSCRIPTO:",
+                                            foreground="White",
+                                            anchor=CENTER)
         self.etiqueta_pendiente_pasar_ri.place (x=680,y=310)
         self.etiqueta_pendiente_pasar_ri.config(bg=self.fondo,
-                                             font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         self.etiqueta_pendiente_pasar_ri_rdo = Label(self.ventana1,
-                                              text="",
-                                              foreground="red",
-                                              anchor=CENTER)
+                                            text="",
+                                            foreground="red",
+                                            anchor=CENTER)
         self.etiqueta_pendiente_pasar_ri_rdo.place (x=940,y=310)
         self.etiqueta_pendiente_pasar_ri_rdo.config(bg=self.fondo,
-                                             font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         # TOTAL FACTURADO ESTE AŃO:
         self.etiqueta_total_facturado_anual = Label(self.ventana1,
-                                              text="TOTAL FACTURADO ESTE AÑO: ",
-                                              foreground="White",
-                                              anchor=CENTER)
+                                            text="TOTAL FACTURADO ESTE AÑO: ",
+                                            foreground="White",
+                                            anchor=CENTER)
         self.etiqueta_total_facturado_anual.place (x=680,y=340)
         self.etiqueta_total_facturado_anual.config(bg=self.fondo,
-                                             font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         self.etiqueta_total_facturado_anual_rdo = Label(self.ventana1,
-                                              text="$ 5000000",
-                                              foreground="red",
-                                              anchor=CENTER)
+                                            text="$ 5000000",
+                                            foreground="red",
+                                            anchor=CENTER)
         self.etiqueta_total_facturado_anual_rdo.place (x=940,y=340)
         self.etiqueta_total_facturado_anual_rdo.config  (bg=self.fondo,
-                                              font=("arial",12,"bold"))
+                                            font=("arial",12,"bold"))
         
         self.actualizar_calculos()
         self.manejo_categorias()
@@ -440,8 +446,6 @@ class VentanaPrincipal():
                 self.carga_lista()
                 self.eli_concepto.destroy()
                 
-
-
     def modificar_categorias_aux(self):
         """
         Habilita la modificación de categorías.

@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>modelo &mdash; documentación de Control_de_facturacion - 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=6fcc102b"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Control_de_facturacion
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../manual.html">Manual de Usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modulos.html">Modulos necesarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controlador.html">controlador module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modelo.html">modelo module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vista.html">vista module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Control_de_facturacion</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">modelo</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para modelo</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;MODELO CREADO PARA INTERACTUAR CON LA VISTA GRABANDO LOS DATOS Y RETORNANDOLOS EN UNA BASE SQLITE3</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">filedialog</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Fernando Suarez, Damian Colomb&quot;</span>
+<span class="n">__mainteinter__</span> <span class="o">=</span> <span class="s2">&quot;Fernando Suarez, Damian Colomb&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;fer.gab.sua@gmail.com , colomb.damian@gmail.com&quot;</span>
+<span class="n">__copyrigth__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2023&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1&quot;</span>
+
+
+<div class="viewcode-block" id="MiBaseDeDatosConnect">
+<a class="viewcode-back" href="../modelo.html#modelo.MiBaseDeDatosConnect">[documentos]</a>
+<span class="k">class</span> <span class="nc">MiBaseDeDatosConnect</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clase para gestionar la conexión y manipulación de la base de datos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre_base_de_datos</span> <span class="o">=</span> <span class="s2">&quot;facturacion.db&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inicializa la conexión y crea las tablas si no existen.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nombre_base_de_datos (str, optional): Nombre de la base de datos. por defectp: &quot;facturacion.db&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">nombre_base_de_datos</span> <span class="o">=</span> <span class="n">nombre_base_de_datos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crear_tablas</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MiBaseDeDatosConnect.conectar">
+<a class="viewcode-back" href="../modelo.html#modelo.MiBaseDeDatosConnect.conectar">[documentos]</a>
+    <span class="k">def</span> <span class="nf">conectar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Establece una conexión con la base de datos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nombre_base_de_datos</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">isolation_level</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Desactiva el autocommit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&gt; Conexión abierta&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error al conectar a la base de datos: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MiBaseDeDatosConnect.desconectar">
+<a class="viewcode-back" href="../modelo.html#modelo.MiBaseDeDatosConnect.desconectar">[documentos]</a>
+    <span class="k">def</span> <span class="nf">desconectar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Cierra la conexión con la base de datos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&gt; Conexión cerrada&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MiBaseDeDatosConnect.crear_tablas">
+<a class="viewcode-back" href="../modelo.html#modelo.MiBaseDeDatosConnect.crear_tablas">[documentos]</a>
+    <span class="k">def</span> <span class="nf">crear_tablas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Crea las tablas necesarias si no existen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#CREO TABLA - FACTURACION</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS facturacion (</span>
+<span class="s2">                            fac_int_id INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s2">                            fac_date_fecha DATE,</span>
+<span class="s2">                            fac_txt_concepto TEXT,</span>
+<span class="s2">                            fac_bol_monto REAL,</span>
+<span class="s2">                            instante DATETIME DEFAULT CURRENT_TIMESTAMP</span>
+<span class="s2">                            )</span>
+<span class="s2">                            &quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="c1">#CREO EL TRIGGER PARA FACTURACION</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TRIGGER IF NOT EXISTS actualizar_instante</span>
+<span class="s2">                            AFTER INSERT ON facturacion</span>
+<span class="s2">                            FOR EACH ROW</span>
+<span class="s2">                            BEGIN</span>
+<span class="s2">                                UPDATE facturacion SET instante = DATETIME(&#39;now&#39;, &#39;localtime&#39;) WHERE fac_int_id = NEW.fac_int_id;</span>
+<span class="s2">                            END;</span>
+<span class="s2">                            &quot;&quot;&quot;</span><span class="p">)</span>
+
+            <span class="c1">#CREO TABLA  -  CONCEPTOS</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS conceptos (</span>
+<span class="s2">                                con_int_idconcepto INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s2">                                con_txt_descripcion TEXT,</span>
+<span class="s2">                                con_txt_estado  TEXT</span>
+<span class="s2">                                )</span>
+<span class="s2">                                &quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="c1">#CREO TABLA  -  CATEGORIA_MONOTRIBUTO</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS categoria_monotributo(</span>
+<span class="s2">                                cat_int_idcategoria INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s2">                                cat_txt_descripcion TEXT,</span>
+<span class="s2">                                cat_bol_montotope REAL,</span>
+<span class="s2">                                cat_txt_fecha DATE</span>
+<span class="s2">                                )</span>
+<span class="s2">                                &quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="c1">#CREO TABLA  -  CONFIG_APP</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS config_app(</span>
+<span class="s2">                                config_int_id INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s2">                                config_txt_tipo TEXT,</span>
+<span class="s2">                                config_txt_valor TEXT</span>
+<span class="s2">                                )</span>
+<span class="s2">                                &quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Bases validadas/creadas &lt;---&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error en la actualización de datos: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MiBaseDeDatosConnect.carga_datos_iniciales">
+<a class="viewcode-back" href="../modelo.html#modelo.MiBaseDeDatosConnect.carga_datos_iniciales">[documentos]</a>
+    <span class="k">def</span> <span class="nf">carga_datos_iniciales</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;ingresa los datos iniciales de categoria de monotributo, configuracion inicial.</span>
+<span class="sd">        &quot;&quot;&quot;</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_fecha)</span>
+<span class="s2">                SELECT ?, ?, ?</span>
+<span class="s2">                WHERE NOT EXISTS (SELECT 1 FROM categoria_monotributo WHERE cat_txt_descripcion = ?)</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="mf">1414762.58</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="mf">2103025.45</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="mf">2944235.6</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="mf">3656604.33</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="mf">4305799.15</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span><span class="mf">5382248.94</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;G&#39;</span><span class="p">,</span><span class="mf">6458698.71</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;H&#39;</span><span class="p">,</span><span class="mf">7996484.12</span><span class="p">,</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="c1">#ACA ESTOY CARGANDO EN UNA BASE config el tipo color_fondo y el valor #004080</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            INSERT INTO config_app (config_txt_tipo , config_txt_valor) </span>
+<span class="s2">            SELECT ?,?</span>
+<span class="s2">            WHERE NOT EXISTS (SELECT 1 FROM config_app WHERE config_txt_tipo = &#39;color_fondo&#39;)</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;color_fondo&#39;</span><span class="p">,</span><span class="s1">&#39;#004080&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+            <span class="c1">#ACA ESTOY CARGANDO EN UNA BASE config el tipo &#39;link_afip&#39; y el valor &#39;https://www.afip.gob.ar/monotributo/categorias.asp&#39;</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            INSERT INTO config_app (config_txt_tipo , config_txt_valor) </span>
+<span class="s2">            SELECT ?,?</span>
+<span class="s2">            WHERE NOT EXISTS (SELECT 1 FROM config_app WHERE config_txt_tipo = &#39;link_afip&#39;)</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;link_afip&#39;</span><span class="p">,</span><span class="s1">&#39;https://www.afip.gob.ar/monotributo/categorias.asp&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Datos iniciados cargados/validados con exito&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error en la carga inicial: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+</div>
+
+
+<div class="viewcode-block" id="ModeloCategorias">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloCategorias">[documentos]</a>
+<span class="k">class</span> <span class="nc">ModeloCategorias</span><span class="p">(</span><span class="n">MiBaseDeDatosConnect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clase para gestionar categorías en la base de datos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ModeloCategorias.traer_categorias">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloCategorias.traer_categorias">[documentos]</a>
+    <span class="k">def</span> <span class="nf">traer_categorias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retorna las categorías de monotributo.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Lista de categorías.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                SELECT *</span>
+<span class="s2">                FROM categoria_monotributo</span>
+<span class="s2">                WHERE cat_txt_fecha = &quot;01/01/2023&quot;</span>
+<span class="s2">                &quot;&quot;&quot;</span> 
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;01/01/2023&quot;</span><span class="p">,)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+            <span class="n">retorno</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Categorias retornados con exito metodo:trae_categorias()&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">retorno</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a retornar categorias: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModeloCategorias.cambiar_categorias">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloCategorias.cambiar_categorias">[documentos]</a>
+    <span class="k">def</span> <span class="nf">cambiar_categorias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bloque</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Agrega categorías a la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bloque (list): Lista de categorías a agregar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">bloque</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">cat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">cat</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">cat</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;INSERT OR IGNORE INTO categoria_monotributo (cat_txt_descripcion, cat_bol_montotope, cat_txt_fecha)</span>
+<span class="s2">                SELECT ?, ?, ?</span>
+<span class="s2">                &quot;&quot;&quot;</span>
+                <span class="c1">#WHERE NOT EXISTS (SELECT 1 FROM categoria_monotributo WHERE cat_txt_estado = &quot;activo&quot;)</span>
+                <span class="c1">#   &quot;&quot;&quot;</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">cat</span><span class="p">[</span><span class="mi">0</span><span class="p">],(</span><span class="n">cat</span><span class="p">[</span><span class="mi">1</span><span class="p">]),(</span><span class="n">cat</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Categorias agregadas con exito metodo:cambiar_categorias()&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a retornar categorias: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ModeloParaVista">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloParaVista">[documentos]</a>
+<span class="k">class</span> <span class="nc">ModeloParaVista</span><span class="p">(</span><span class="n">MiBaseDeDatosConnect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clase para obtener datos para la interfaz de usuario.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ModeloParaVista.actualizar_treeview">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloParaVista.actualizar_treeview">[documentos]</a>
+    <span class="k">def</span> <span class="nf">actualizar_treeview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">anio</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Actualiza el treeview con datos de facturación para el año dado.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            anio (int): Año de interés.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Datos para el treeview.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;voy a filtrar por ----&gt;&quot;</span><span class="p">,</span><span class="n">anio</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql_treeview</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT * </span>
+<span class="s2">                        FROM facturacion </span>
+<span class="s2">                        WHERE substr(fac_date_fecha, 1, 4) = ?</span>
+<span class="s2">                        ORDER BY fac_date_fecha ASC&quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_treeview</span><span class="p">,</span> <span class="p">(</span><span class="n">anio</span><span class="p">,))</span>
+            <span class="n">datos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Datos traidos para el treeview generados correctamente metodo:actualizar_treeview&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">datos</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">datos</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a cargar_datos: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModeloParaVista.sumar_facturacion">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloParaVista.sumar_facturacion">[documentos]</a>
+    <span class="k">def</span> <span class="nf">sumar_facturacion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calcula la suma total de facturación.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Suma total de facturación.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT SUM (fac_bol_monto)</span>
+<span class="s2">                            FROM facturacion </span>
+<span class="s2">                            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+            <span class="n">datos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Suma generada con exito&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">datos</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error en sumar facturas: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span>      </div>
+</div>
+
+
+<div class="viewcode-block" id="Crud">
+<a class="viewcode-back" href="../modelo.html#modelo.Crud">[documentos]</a>
+<span class="k">class</span> <span class="nc">Crud</span><span class="p">(</span><span class="n">MiBaseDeDatosConnect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clase para realizar operaciones CRUD en la base de datos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Crud.cargar_datos">
+<a class="viewcode-back" href="../modelo.html#modelo.Crud.cargar_datos">[documentos]</a>
+    <span class="k">def</span> <span class="nf">cargar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fecha</span><span class="p">,</span><span class="n">concepto</span><span class="p">,</span><span class="n">monto</span><span class="p">,</span><span class="n">instante</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Carga nuevos datos de facturación en la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fecha (str): Fecha de la factura.</span>
+<span class="sd">            concepto (str): Concepto de la factura.</span>
+<span class="sd">            monto (float): Monto de la factura.</span>
+<span class="sd">            instante (str): Fecha y hora de la operación.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql_carga</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO facturacion VALUES (null,?,?,?,?)&quot;</span>
+            <span class="n">datos</span><span class="o">=</span><span class="p">(</span><span class="n">fecha</span><span class="p">,</span><span class="n">concepto</span><span class="p">,</span><span class="n">monto</span><span class="p">,</span><span class="n">instante</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_carga</span><span class="p">,</span><span class="n">datos</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;---&gt; Los registros fueron guardados con éxito.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a cargar_datos: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Crud.borrar_datos">
+<a class="viewcode-back" href="../modelo.html#modelo.Crud.borrar_datos">[documentos]</a>
+    <span class="k">def</span> <span class="nf">borrar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">borrar</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Elimina un registro de facturación de la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            borrar (int): ID del registro a eliminar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM facturacion WHERE fac_int_id = ?;&quot;</span> 
+            <span class="n">borrar_datos</span> <span class="o">=</span> <span class="n">borrar</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="n">borrar_datos</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;---&gt; El registro </span><span class="si">{</span><span class="n">borrar</span><span class="si">}</span><span class="s2"> se borró con éxito.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a borrar registro id </span><span class="si">{</span><span class="n">borrar</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Crud.actualizar_datos">
+<a class="viewcode-back" href="../modelo.html#modelo.Crud.actualizar_datos">[documentos]</a>
+    <span class="k">def</span> <span class="nf">actualizar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fecha</span><span class="p">,</span><span class="n">concepto</span><span class="p">,</span><span class="n">monto</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Actualiza un registro de facturación en la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fecha (str): Nueva fecha de la factura.</span>
+<span class="sd">            concepto (str): Nuevo concepto de la factura.</span>
+<span class="sd">            monto (float): Nuevo monto de la factura.</span>
+<span class="sd">            id (int): ID del registro a actualizar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql_update</span> <span class="o">=</span> <span class="s2">&quot;UPDATE Facturacion set fac_date_fecha = ?,</span><span class="se">\</span>
+<span class="s2">                                                    fac_txt_concepto = ?,</span><span class="se">\</span>
+<span class="s2">                                                        fac_bol_monto =? </span><span class="se">\</span>
+<span class="s2">                                                        WHERE fac_int_id = ? &quot;</span>
+            <span class="n">datos</span> <span class="o">=</span> <span class="p">(</span><span class="n">fecha</span><span class="p">,</span><span class="n">concepto</span><span class="p">,</span><span class="n">monto</span><span class="p">,</span><span class="nb">id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_update</span><span class="p">,</span><span class="n">datos</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;---&gt; Registro </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">, con fecha </span><span class="si">{</span><span class="n">fecha</span><span class="si">}</span><span class="s2"> actualizado correctamente&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a cargar_datos: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+</div>
+
+
+<div class="viewcode-block" id="ModeloConfig">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloConfig">[documentos]</a>
+<span class="k">class</span> <span class="nc">ModeloConfig</span><span class="p">(</span><span class="n">MiBaseDeDatosConnect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clase para gestionar configuraciones en la base de datos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ModeloConfig.return_config">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloConfig.return_config">[documentos]</a>
+    <span class="k">def</span> <span class="nf">return_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parametro</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Consulta la configuración en la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parametro (str): &#39;color_fondo&#39; o &#39;link_afip&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Valor de la configuración.</span>
+<span class="sd">        &quot;&quot;&quot;</span>          
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                SELECT config_txt_valor </span>
+<span class="s2">                FROM config_app </span>
+<span class="s2">                WHERE config_txt_tipo = ?</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">parametro</span><span class="p">,)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="n">retorno</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Configuracion retornada con exito metodo: return_config()&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">retorno</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a retornar </span><span class="si">{</span><span class="n">parametro</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModeloConfig.grabar_config">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloConfig.grabar_config">[documentos]</a>
+    <span class="k">def</span> <span class="nf">grabar_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">config_txt_tipo</span><span class="p">,</span> <span class="n">cinfig_txt_valor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Graba una nueva configuración en la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            config_txt_tipo (str): &#39;color_fondo&#39; o &#39;link_afip&#39;.</span>
+<span class="sd">            config_txt_valor (str): Nuevo valor de la configuración.</span>
+<span class="sd">        &quot;&quot;&quot;</span>       
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                UPDATE config_app</span>
+<span class="s2">                SET config_txt_valor = ?</span>
+<span class="s2">                WHERE config_txt_tipo = ?</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">cinfig_txt_valor</span><span class="p">,</span><span class="n">config_txt_tipo</span><span class="p">,)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;---&gt; Configuracion </span><span class="si">{</span><span class="n">config_txt_tipo</span><span class="si">}</span><span class="s2"> grabada exitosamente&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a retornar </span><span class="si">{</span><span class="n">cinfig_txt_valor</span><span class="p">,</span><span class="n">config_txt_tipo</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<span class="c1">#metodos de retorno y grabacion de conceptos</span>
+<div class="viewcode-block" id="ModeloConfig.return_conceptos">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloConfig.return_conceptos">[documentos]</a>
+    <span class="k">def</span> <span class="nf">return_conceptos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retorna los conceptos para agregar a la lista</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Lista de conceptos</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                SELECT *</span>
+<span class="s2">                FROM conceptos</span>
+<span class="s2">                WHERE con_txt_estado = &#39;activo&#39;</span>
+<span class="s2">                &quot;&quot;&quot;</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+            <span class="n">retorno</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Conceptos retornados con exito metodo:return_conceptos()&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">retorno</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a retornar conceptos: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModeloConfig.agrega_concepto">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloConfig.agrega_concepto">[documentos]</a>
+    <span class="k">def</span> <span class="nf">agrega_concepto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">concepto</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Agrega un nuevo concepto a la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            concepto (str): Nuevo concepto a agregar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                INSERT INTO conceptos (con_txt_descripcion , con_txt_estado) </span>
+<span class="s2">                SELECT ?,?</span>
+<span class="s2">                WHERE NOT EXISTS (SELECT 1 FROM conceptos WHERE con_txt_descripcion = ?)</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">concepto</span><span class="p">,</span><span class="s2">&quot;activo&quot;</span><span class="p">,</span><span class="n">concepto</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Conceptos agregados con exito metodo:agrega_conceptos()&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a grabar </span><span class="si">{</span><span class="n">concepto</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModeloConfig.borra_concepto">
+<a class="viewcode-back" href="../modelo.html#modelo.ModeloConfig.borra_concepto">[documentos]</a>
+    <span class="k">def</span> <span class="nf">borra_concepto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">concepto</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Elimina un concepto de la base de datos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            concepto (str): Concepto a eliminar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                DELETE FROM conceptos WHERE con_txt_descripcion = ?</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">concepto</span><span class="p">,)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Concepto eliminado con exito metodo:borra_conceptos()&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error a eliminar </span><span class="si">{</span><span class="n">concepto</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+</div>
+
+
+<div class="viewcode-block" id="Estadisticas">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas">[documentos]</a>
+<span class="k">class</span> <span class="nc">Estadisticas</span><span class="p">(</span><span class="n">MiBaseDeDatosConnect</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clase para realizar cálculos y estadísticas en la base de datos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Estadisticas.calculos_total_facturas">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas.calculos_total_facturas">[documentos]</a>
+        <span class="k">def</span> <span class="nf">calculos_total_facturas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">anio_fiscal</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Calcula el total de facturas para un año fiscal.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                anio_fiscal (int): Año fiscal de interés.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                int: Total de facturas.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EL AÑO FISCAL ES:&quot;</span><span class="p">,</span><span class="n">anio_fiscal</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">fecha_ini</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">anio_fiscal</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/1/1&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fecha_fin</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">anio_fiscal</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;12/31&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sql_total_facturas</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM Facturacion WHERE fac_date_fecha &gt; ? and fac_date_fecha &lt; ?&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_total_facturas</span><span class="p">,(</span><span class="bp">self</span><span class="o">.</span><span class="n">fecha_ini</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fecha_fin</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            
+            <span class="n">total_facturas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        
+            <span class="n">concatenar</span> <span class="o">=</span> <span class="p">(</span><span class="n">total_facturas</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># Aca exraigo solo al primer numero del fetchall y le saco la ,</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Select calculo total ejecutado correctamente()&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">concatenar</span></div>
+
+        
+<div class="viewcode-block" id="Estadisticas.facturado_mes_actual">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas.facturado_mes_actual">[documentos]</a>
+        <span class="k">def</span> <span class="nf">facturado_mes_actual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mes</span><span class="p">):</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Calcula el monto facturado en el mes actual.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                mes (str): Mes de interés (formato &#39;MM&#39;).</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                float: Monto facturado en el mes actual.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sql_facturado_este_mes</span> <span class="o">=</span><span class="p">(</span><span class="s2">&quot;SELECT SUM(fac_bol_monto) FROM Facturacion WHERE substr(fac_date_fecha, 6, 2) = ?&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_facturado_este_mes</span><span class="p">,(</span><span class="n">mes</span><span class="p">,))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">facturado_este_mes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Select facturo mes actual ejecutado correctamente()&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span>
+            
+            <span class="k">return</span> <span class="n">facturado_este_mes</span></div>
+
+
+<div class="viewcode-block" id="Estadisticas.total_facturado_periodo">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas.total_facturado_periodo">[documentos]</a>
+        <span class="k">def</span> <span class="nf">total_facturado_periodo</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Calcula el total facturado en el período actual.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                float: Monto total facturado en el período actual.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sql_facturado_este_periodo</span> <span class="o">=</span><span class="p">(</span><span class="s2">&quot;SELECT SUM(fac_bol_monto) FROM Facturacion WHERE fac_date_fecha &gt; ? and fac_date_fecha &lt; ?&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_facturado_este_periodo</span><span class="p">,(</span><span class="bp">self</span><span class="o">.</span><span class="n">fecha_ini</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fecha_fin</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">facturado_este_periodo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monto_facturado</span> <span class="o">=</span> <span class="n">facturado_este_periodo</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">monto_facturado</span> <span class="o">=</span> <span class="p">(</span><span class="n">facturado_este_periodo</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Select total facturado por periodo ejecutado correctamente()&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">monto_facturado</span></div>
+
+
+<div class="viewcode-block" id="Estadisticas.falta_facturar_responsable_inscripto">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas.falta_facturar_responsable_inscripto">[documentos]</a>
+        <span class="k">def</span> <span class="nf">falta_facturar_responsable_inscripto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Calcula la cantidad que falta facturar para alcanzar la categoría H.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                int/str: Cantidad faltante o mensaje de error.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monto_facturado</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">falta_ri</span> <span class="o">=</span> <span class="mi">0</span> 
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">falta_ri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">categoriaH</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">monto_facturado</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monto_facturado</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">falta_ri</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span>
+                    <span class="k">return</span> <span class="n">falta_ri</span>
+                <span class="k">elif</span> <span class="n">falta_ri</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">falta_ri</span> <span class="o">=</span> <span class="s2">&quot;negativo&quot;</span>
+                    <span class="k">return</span> <span class="n">falta_ri</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">falta_ri</span></div>
+
+                
+<div class="viewcode-block" id="Estadisticas.facturado_anual">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas.facturado_anual">[documentos]</a>
+        <span class="k">def</span> <span class="nf">facturado_anual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">primer_dia_año</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Calcula el monto total facturado en el año.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                primer_dia_anio (str): Primer día del año (formato &#39;YYYY/MM/DD&#39;).</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                float: Monto total facturado en el año.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1">## Pasar a la vista</span>
+            
+           
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sql_facturado_este_anio</span> <span class="o">=</span><span class="p">(</span><span class="s2">&quot;SELECT SUM(fac_bol_monto) FROM Facturacion WHERE fac_date_fecha &gt; ?&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_facturado_este_anio</span><span class="p">,(</span><span class="n">primer_dia_año</span><span class="p">,))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">facturacion_anual</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&gt; Select facturado anual ejecutado correctamente()&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">facturacion_anual</span></div>
+
+
+<div class="viewcode-block" id="Estadisticas.devolver_categorias">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas.devolver_categorias">[documentos]</a>
+        <span class="k">def</span> <span class="nf">devolver_categorias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Devuelve los montos asociados a cada categoría.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                tuple: Montos de las categorías A-H.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Bloque de select para devolver categoria&quot;</span><span class="p">)</span>
+            <span class="c1">#CATEGORIA A</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlA</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;A&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlA</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaA</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            
+            
+            <span class="c1">#CATEGORIA B</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlB</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;B&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlB</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaB</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="c1">#CATEGORIA C</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlC</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;C&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlC</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaC</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="c1">#CATEGORIA D</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlD</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;D&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlD</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaD</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            
+            <span class="c1">#CATEGORIA E</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlE</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;E&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlE</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaE</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="c1">#CATEGORIA F</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlF</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;F&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlF</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaF</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="c1">#CATEGORIA G</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlG</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;G&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlG</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaG</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="c1">#CATEGORIA H</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sqlH</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM categoria_monotributo where cat_txt_descripcion=&#39;H&#39;;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlH</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaH</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span>  
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fin bloque categorias&quot;</span><span class="p">)</span>
+            
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">categoriaA</span><span class="p">,</span>\
+                    <span class="bp">self</span><span class="o">.</span><span class="n">categoriaB</span><span class="p">,</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">categoriaC</span><span class="p">,</span>\
+                            <span class="bp">self</span><span class="o">.</span><span class="n">categoriaD</span><span class="p">,</span>\
+                                <span class="bp">self</span><span class="o">.</span><span class="n">categoriaE</span><span class="p">,</span>\
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">categoriaF</span><span class="p">,</span>\
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">categoriaG</span><span class="p">,</span>\
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">categoriaH</span></div>
+
+        
+<div class="viewcode-block" id="Estadisticas.exportar">
+<a class="viewcode-back" href="../modelo.html#modelo.Estadisticas.exportar">[documentos]</a>
+        <span class="k">def</span> <span class="nf">exportar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Exporta los datos de facturación a un archivo Excel.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">sql</span><span class="o">=</span> <span class="s2">&quot;SELECT * FROM Facturacion&quot;</span>
+            <span class="n">exportar</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">conexion</span><span class="p">)</span>
+            <span class="n">ruta</span> <span class="o">=</span> <span class="n">filedialog</span><span class="o">.</span><span class="n">asksaveasfilename</span><span class="p">(</span><span class="n">defaultextension</span><span class="o">=</span><span class="s1">&#39;.xlsx&#39;</span><span class="p">)</span>
+            <span class="n">exportar</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">ruta</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desconectar</span><span class="p">()</span></div>
+</div>
+
+
+
+
+
+<div class="viewcode-block" id="Validador">
+<a class="viewcode-back" href="../modelo.html#modelo.Validador">[documentos]</a>
+<span class="k">class</span> <span class="nc">Validador</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clase con métodos para validar datos ingresados.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Validador.valida_concepto">
+<a class="viewcode-back" href="../modelo.html#modelo.Validador.valida_concepto">[documentos]</a>
+    <span class="k">def</span> <span class="nf">valida_concepto</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">valido_concepto</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Valida que el concepto ingresado sea válido.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            valido_concepto (str): Concepto a validar.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: &quot;OK&quot; si es válido, &quot;ERROR&quot; si no es válido.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">valido_concepto</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">valido_concepto</span> <span class="o">==</span> <span class="s2">&quot;Agregar Nuevo&quot;</span> <span class="ow">or</span> <span class="n">valido_concepto</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span> <span class="ow">or</span> <span class="n">valido_concepto</span> <span class="o">==</span><span class="s2">&quot;Eliminar Concepto&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error al validar concepto&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;ERROR&quot;</span></div>
+
+        
+        
+<div class="viewcode-block" id="Validador.valida_monto">
+<a class="viewcode-back" href="../modelo.html#modelo.Validador.valida_monto">[documentos]</a>
+    <span class="k">def</span> <span class="nf">valida_monto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">texto</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Valida que el formato del monto sea válido.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            texto (str): Monto a validar.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: &quot;OK&quot; si es válido, &quot;ERROR&quot; si no es válido.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">patron</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^\d+(\.\d+)?$&quot;</span> <span class="c1">#Valida numeros enteros y decimales.</span>
+        <span class="n">cadena</span> <span class="o">=</span>  <span class="n">texto</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span> <span class="p">(</span><span class="n">patron</span><span class="p">,</span><span class="n">cadena</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;OK&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ERROR&quot;</span></div>
+
+    
+
+    
+<div class="viewcode-block" id="Validador.valida_fecha">
+<a class="viewcode-back" href="../modelo.html#modelo.Validador.valida_fecha">[documentos]</a>
+    <span class="k">def</span> <span class="nf">valida_fecha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">valido_fecha</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Valida que la fecha ingresada sea válida.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            valido_fecha (str): Fecha a validar.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: &quot;OK&quot; si es válida, &quot;ERROR&quot; si no es válida.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">valido_fecha</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ERROR&quot;</span></div>
+
+
+<div class="viewcode-block" id="Validador.valida_entero">
+<a class="viewcode-back" href="../modelo.html#modelo.Validador.valida_entero">[documentos]</a>
+    <span class="k">def</span> <span class="nf">valida_entero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texto</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Valida que el formato del número entero sea válido.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            texto (str): Número entero a validar.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: &quot;OK&quot; si es válido, &quot;ERROR&quot; si no es válido.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">patron</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^\d</span><span class="si">{4}</span><span class="s2">$&quot;</span>
+        <span class="n">cadena</span> <span class="o">=</span> <span class="n">texto</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">patron</span><span class="p">,</span> <span class="n">cadena</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;OK&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ERROR&quot;</span></div>
+</div>
+
+
+
+<span class="c1">#ESTO ES PARA PRUEBAS</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Uso de la clase Factura</span>
+    <span class="n">estadistiacas</span> <span class="o">=</span> <span class="n">Estadisticas</span><span class="p">()</span>
+    <span class="n">estadistiacas</span><span class="o">.</span><span class="n">exportar</span><span class="p">()</span>
+    
+    <span class="c1">#print(&quot;si le pido a la funcion link_afip, me devuelve:&quot; , mibase.return_config(&#39;link_afip&#39;))</span>
+    <span class="c1">#print(&quot;si le pido a la funcion color_fondo, me devuelve:&quot; , mibase.return_config(&#39;color_fondo&#39;))</span>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Suarez Fernando - Colomb Damian.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

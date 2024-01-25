@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>modelo module &mdash; documentación de Control_de_facturacion - 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=6fcc102b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="vista module" href="vista.html" />
+    <link rel="prev" title="controlador module" href="controlador.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Control_de_facturacion
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="manual.html">Manual de Usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modulos.html">Modulos necesarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controlador.html">controlador module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">modelo module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.Crud"><code class="docutils literal notranslate"><span class="pre">Crud</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Crud.actualizar_datos"><code class="docutils literal notranslate"><span class="pre">Crud.actualizar_datos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Crud.borrar_datos"><code class="docutils literal notranslate"><span class="pre">Crud.borrar_datos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Crud.cargar_datos"><code class="docutils literal notranslate"><span class="pre">Crud.cargar_datos()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.Estadisticas"><code class="docutils literal notranslate"><span class="pre">Estadisticas</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Estadisticas.calculos_total_facturas"><code class="docutils literal notranslate"><span class="pre">Estadisticas.calculos_total_facturas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Estadisticas.devolver_categorias"><code class="docutils literal notranslate"><span class="pre">Estadisticas.devolver_categorias()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Estadisticas.exportar"><code class="docutils literal notranslate"><span class="pre">Estadisticas.exportar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Estadisticas.facturado_anual"><code class="docutils literal notranslate"><span class="pre">Estadisticas.facturado_anual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Estadisticas.facturado_mes_actual"><code class="docutils literal notranslate"><span class="pre">Estadisticas.facturado_mes_actual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Estadisticas.falta_facturar_responsable_inscripto"><code class="docutils literal notranslate"><span class="pre">Estadisticas.falta_facturar_responsable_inscripto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Estadisticas.total_facturado_periodo"><code class="docutils literal notranslate"><span class="pre">Estadisticas.total_facturado_periodo()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.MiBaseDeDatosConnect"><code class="docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.MiBaseDeDatosConnect.carga_datos_iniciales"><code class="docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect.carga_datos_iniciales()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.MiBaseDeDatosConnect.conectar"><code class="docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect.conectar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.MiBaseDeDatosConnect.crear_tablas"><code class="docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect.crear_tablas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.MiBaseDeDatosConnect.desconectar"><code class="docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect.desconectar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.ModeloCategorias"><code class="docutils literal notranslate"><span class="pre">ModeloCategorias</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloCategorias.cambiar_categorias"><code class="docutils literal notranslate"><span class="pre">ModeloCategorias.cambiar_categorias()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloCategorias.traer_categorias"><code class="docutils literal notranslate"><span class="pre">ModeloCategorias.traer_categorias()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.ModeloConfig"><code class="docutils literal notranslate"><span class="pre">ModeloConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloConfig.agrega_concepto"><code class="docutils literal notranslate"><span class="pre">ModeloConfig.agrega_concepto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloConfig.borra_concepto"><code class="docutils literal notranslate"><span class="pre">ModeloConfig.borra_concepto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloConfig.grabar_config"><code class="docutils literal notranslate"><span class="pre">ModeloConfig.grabar_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloConfig.return_conceptos"><code class="docutils literal notranslate"><span class="pre">ModeloConfig.return_conceptos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloConfig.return_config"><code class="docutils literal notranslate"><span class="pre">ModeloConfig.return_config()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.ModeloParaVista"><code class="docutils literal notranslate"><span class="pre">ModeloParaVista</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloParaVista.actualizar_treeview"><code class="docutils literal notranslate"><span class="pre">ModeloParaVista.actualizar_treeview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.ModeloParaVista.sumar_facturacion"><code class="docutils literal notranslate"><span class="pre">ModeloParaVista.sumar_facturacion()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.Validador"><code class="docutils literal notranslate"><span class="pre">Validador</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Validador.valida_concepto"><code class="docutils literal notranslate"><span class="pre">Validador.valida_concepto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Validador.valida_entero"><code class="docutils literal notranslate"><span class="pre">Validador.valida_entero()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Validador.valida_fecha"><code class="docutils literal notranslate"><span class="pre">Validador.valida_fecha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modelo.Validador.valida_monto"><code class="docutils literal notranslate"><span class="pre">Validador.valida_monto()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vista.html">vista module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Control_de_facturacion</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">modelo module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modelo.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-modelo">
+<span id="modelo-module"></span><h1>modelo module<a class="headerlink" href="#module-modelo" title="Link to this heading"></a></h1>
+<p>MODELO CREADO PARA INTERACTUAR CON LA VISTA GRABANDO LOS DATOS Y RETORNANDOLOS EN UNA BASE SQLITE3</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="modelo.Crud">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">Crud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre_base_de_datos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'facturacion.db'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#modelo.MiBaseDeDatosConnect" title="modelo.MiBaseDeDatosConnect"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect</span></code></a></p>
+<p>Clase para realizar operaciones CRUD en la base de datos.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Crud.actualizar_datos">
+<span class="sig-name descname"><span class="pre">actualizar_datos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fecha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.actualizar_datos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.actualizar_datos" title="Link to this definition"></a></dt>
+<dd><p>Actualiza un registro de facturación en la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fecha (str): Nueva fecha de la factura.
+concepto (str): Nuevo concepto de la factura.
+monto (float): Nuevo monto de la factura.
+id (int): ID del registro a actualizar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Crud.borrar_datos">
+<span class="sig-name descname"><span class="pre">borrar_datos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">borrar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.borrar_datos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.borrar_datos" title="Link to this definition"></a></dt>
+<dd><p>Elimina un registro de facturación de la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>borrar (int): ID del registro a eliminar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Crud.cargar_datos">
+<span class="sig-name descname"><span class="pre">cargar_datos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fecha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concepto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instante</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.cargar_datos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.cargar_datos" title="Link to this definition"></a></dt>
+<dd><p>Carga nuevos datos de facturación en la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fecha (str): Fecha de la factura.
+concepto (str): Concepto de la factura.
+monto (float): Monto de la factura.
+instante (str): Fecha y hora de la operación.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modelo.Estadisticas">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">Estadisticas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre_base_de_datos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'facturacion.db'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#modelo.MiBaseDeDatosConnect" title="modelo.MiBaseDeDatosConnect"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect</span></code></a></p>
+<p>Clase para realizar cálculos y estadísticas en la base de datos.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Estadisticas.calculos_total_facturas">
+<span class="sig-name descname"><span class="pre">calculos_total_facturas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anio_fiscal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas.calculos_total_facturas"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas.calculos_total_facturas" title="Link to this definition"></a></dt>
+<dd><p>Calcula el total de facturas para un año fiscal.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>anio_fiscal (int): Año fiscal de interés.</p>
+</dd>
+<dt>Returns:</dt><dd><p>int: Total de facturas.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Estadisticas.devolver_categorias">
+<span class="sig-name descname"><span class="pre">devolver_categorias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas.devolver_categorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas.devolver_categorias" title="Link to this definition"></a></dt>
+<dd><p>Devuelve los montos asociados a cada categoría.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple: Montos de las categorías A-H.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Estadisticas.exportar">
+<span class="sig-name descname"><span class="pre">exportar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas.exportar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas.exportar" title="Link to this definition"></a></dt>
+<dd><p>Exporta los datos de facturación a un archivo Excel.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Estadisticas.facturado_anual">
+<span class="sig-name descname"><span class="pre">facturado_anual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">primer_dia_año</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas.facturado_anual"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas.facturado_anual" title="Link to this definition"></a></dt>
+<dd><p>Calcula el monto total facturado en el año.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>primer_dia_anio (str): Primer día del año (formato “YYYY/MM/DD”).</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: Monto total facturado en el año.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Estadisticas.facturado_mes_actual">
+<span class="sig-name descname"><span class="pre">facturado_mes_actual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas.facturado_mes_actual"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas.facturado_mes_actual" title="Link to this definition"></a></dt>
+<dd><p>Calcula el monto facturado en el mes actual.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mes (str): Mes de interés (formato “MM”).</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: Monto facturado en el mes actual.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Estadisticas.falta_facturar_responsable_inscripto">
+<span class="sig-name descname"><span class="pre">falta_facturar_responsable_inscripto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas.falta_facturar_responsable_inscripto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas.falta_facturar_responsable_inscripto" title="Link to this definition"></a></dt>
+<dd><p>Calcula la cantidad que falta facturar para alcanzar la categoría H.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>int/str: Cantidad faltante o mensaje de error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Estadisticas.total_facturado_periodo">
+<span class="sig-name descname"><span class="pre">total_facturado_periodo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Estadisticas.total_facturado_periodo"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Estadisticas.total_facturado_periodo" title="Link to this definition"></a></dt>
+<dd><p>Calcula el total facturado en el período actual.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>float: Monto total facturado en el período actual.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modelo.MiBaseDeDatosConnect">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">MiBaseDeDatosConnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre_base_de_datos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'facturacion.db'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#MiBaseDeDatosConnect"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.MiBaseDeDatosConnect" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Clase para gestionar la conexión y manipulación de la base de datos.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.MiBaseDeDatosConnect.carga_datos_iniciales">
+<span class="sig-name descname"><span class="pre">carga_datos_iniciales</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#MiBaseDeDatosConnect.carga_datos_iniciales"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.MiBaseDeDatosConnect.carga_datos_iniciales" title="Link to this definition"></a></dt>
+<dd><p>ingresa los datos iniciales de categoria de monotributo, configuracion inicial.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.MiBaseDeDatosConnect.conectar">
+<span class="sig-name descname"><span class="pre">conectar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#MiBaseDeDatosConnect.conectar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.MiBaseDeDatosConnect.conectar" title="Link to this definition"></a></dt>
+<dd><p>Establece una conexión con la base de datos.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.MiBaseDeDatosConnect.crear_tablas">
+<span class="sig-name descname"><span class="pre">crear_tablas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#MiBaseDeDatosConnect.crear_tablas"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.MiBaseDeDatosConnect.crear_tablas" title="Link to this definition"></a></dt>
+<dd><p>Crea las tablas necesarias si no existen.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.MiBaseDeDatosConnect.desconectar">
+<span class="sig-name descname"><span class="pre">desconectar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#MiBaseDeDatosConnect.desconectar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.MiBaseDeDatosConnect.desconectar" title="Link to this definition"></a></dt>
+<dd><p>Cierra la conexión con la base de datos.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modelo.ModeloCategorias">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">ModeloCategorias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre_base_de_datos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'facturacion.db'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloCategorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloCategorias" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#modelo.MiBaseDeDatosConnect" title="modelo.MiBaseDeDatosConnect"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect</span></code></a></p>
+<p>Clase para gestionar categorías en la base de datos.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloCategorias.cambiar_categorias">
+<span class="sig-name descname"><span class="pre">cambiar_categorias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bloque</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloCategorias.cambiar_categorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloCategorias.cambiar_categorias" title="Link to this definition"></a></dt>
+<dd><p>Agrega categorías a la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bloque (list): Lista de categorías a agregar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloCategorias.traer_categorias">
+<span class="sig-name descname"><span class="pre">traer_categorias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloCategorias.traer_categorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloCategorias.traer_categorias" title="Link to this definition"></a></dt>
+<dd><p>Retorna las categorías de monotributo.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list: Lista de categorías.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modelo.ModeloConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">ModeloConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre_base_de_datos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'facturacion.db'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloConfig"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#modelo.MiBaseDeDatosConnect" title="modelo.MiBaseDeDatosConnect"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect</span></code></a></p>
+<p>Clase para gestionar configuraciones en la base de datos.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloConfig.agrega_concepto">
+<span class="sig-name descname"><span class="pre">agrega_concepto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concepto</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloConfig.agrega_concepto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloConfig.agrega_concepto" title="Link to this definition"></a></dt>
+<dd><p>Agrega un nuevo concepto a la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>concepto (str): Nuevo concepto a agregar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloConfig.borra_concepto">
+<span class="sig-name descname"><span class="pre">borra_concepto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concepto</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloConfig.borra_concepto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloConfig.borra_concepto" title="Link to this definition"></a></dt>
+<dd><p>Elimina un concepto de la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>concepto (str): Concepto a eliminar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloConfig.grabar_config">
+<span class="sig-name descname"><span class="pre">grabar_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_txt_tipo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cinfig_txt_valor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloConfig.grabar_config"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloConfig.grabar_config" title="Link to this definition"></a></dt>
+<dd><p>Graba una nueva configuración en la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>config_txt_tipo (str): “color_fondo” o “link_afip”.
+config_txt_valor (str): Nuevo valor de la configuración.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloConfig.return_conceptos">
+<span class="sig-name descname"><span class="pre">return_conceptos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloConfig.return_conceptos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloConfig.return_conceptos" title="Link to this definition"></a></dt>
+<dd><p>Retorna los conceptos para agregar a la lista</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list: Lista de conceptos</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloConfig.return_config">
+<span class="sig-name descname"><span class="pre">return_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parametro</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloConfig.return_config"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloConfig.return_config" title="Link to this definition"></a></dt>
+<dd><p>Consulta la configuración en la base de datos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parametro (str): “color_fondo” o “link_afip”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: Valor de la configuración.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modelo.ModeloParaVista">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">ModeloParaVista</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre_base_de_datos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'facturacion.db'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloParaVista"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloParaVista" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#modelo.MiBaseDeDatosConnect" title="modelo.MiBaseDeDatosConnect"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiBaseDeDatosConnect</span></code></a></p>
+<p>Clase para obtener datos para la interfaz de usuario.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloParaVista.actualizar_treeview">
+<span class="sig-name descname"><span class="pre">actualizar_treeview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anio</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloParaVista.actualizar_treeview"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloParaVista.actualizar_treeview" title="Link to this definition"></a></dt>
+<dd><p>Actualiza el treeview con datos de facturación para el año dado.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>anio (int): Año de interés.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list: Datos para el treeview.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.ModeloParaVista.sumar_facturacion">
+<span class="sig-name descname"><span class="pre">sumar_facturacion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#ModeloParaVista.sumar_facturacion"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.ModeloParaVista.sumar_facturacion" title="Link to this definition"></a></dt>
+<dd><p>Calcula la suma total de facturación.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>float: Suma total de facturación.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modelo.Validador">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">Validador</span></span><a class="reference internal" href="_modules/modelo.html#Validador"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Validador" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Clase con métodos para validar datos ingresados.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Validador.valida_concepto">
+<span class="sig-name descname"><span class="pre">valida_concepto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valido_concepto</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Validador.valida_concepto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Validador.valida_concepto" title="Link to this definition"></a></dt>
+<dd><p>Valida que el concepto ingresado sea válido.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>valido_concepto (str): Concepto a validar.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: «OK» si es válido, «ERROR» si no es válido.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Validador.valida_entero">
+<span class="sig-name descname"><span class="pre">valida_entero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texto</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Validador.valida_entero"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Validador.valida_entero" title="Link to this definition"></a></dt>
+<dd><p>Valida que el formato del número entero sea válido.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>texto (str): Número entero a validar.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: «OK» si es válido, «ERROR» si no es válido.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Validador.valida_fecha">
+<span class="sig-name descname"><span class="pre">valida_fecha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valido_fecha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Validador.valida_fecha"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Validador.valida_fecha" title="Link to this definition"></a></dt>
+<dd><p>Valida que la fecha ingresada sea válida.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>valido_fecha (str): Fecha a validar.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: «OK» si es válida, «ERROR» si no es válida.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modelo.Validador.valida_monto">
+<span class="sig-name descname"><span class="pre">valida_monto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texto</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Validador.valida_monto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Validador.valida_monto" title="Link to this definition"></a></dt>
+<dd><p>Valida que el formato del monto sea válido.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>texto (str): Monto a validar.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: «OK» si es válido, «ERROR» si no es válido.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="controlador.html" class="btn btn-neutral float-left" title="controlador module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="vista.html" class="btn btn-neutral float-right" title="vista module" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Suarez Fernando - Colomb Damian.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

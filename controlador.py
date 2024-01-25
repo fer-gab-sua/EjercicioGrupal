@@ -2,7 +2,7 @@
 """
 
 from tkinter import Tk
-import vista
+from vista import VentanaPrincipal
 
 __author__ = "Fernando Suarez, Damian Colomb"
 __mainteinter__ = "Fernando Suarez, Damian Colomb"
@@ -12,5 +12,5 @@ __version__ = "0.1"
 
 if __name__ == "__main__":
     root_tk = Tk()
-    vista.vista_principal(root_tk)
+    VentanaPrincipal(root_tk)
     root_tk.mainloop()

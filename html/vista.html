@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vista module &mdash; documentación de Control_de_facturacion - 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=6fcc102b"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="prev" title="modelo module" href="modelo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Control_de_facturacion
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="manual.html">Manual de Usuario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modulos.html">Modulos necesarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controlador.html">controlador module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modelo.html">modelo module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">vista module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vista.VentanaPrincipal"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.ab_concepto"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.ab_concepto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.acerca_del_programa"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.acerca_del_programa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.actualizar_calculos"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.actualizar_calculos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.actualizar_fecha"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.actualizar_fecha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.actualizar_treeview"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.actualizar_treeview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.aux_borrar_concepto"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.aux_borrar_concepto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.aux_borrar_factura"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.aux_borrar_factura()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.auxiliar_carga"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.auxiliar_carga()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.auxiliar_guardar_modificacion"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.auxiliar_guardar_modificacion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.auxiliar_modificar_factura"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.auxiliar_modificar_factura()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.cambio_anio_fiscal"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.cambio_anio_fiscal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.cambio_color"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.cambio_color()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.carga_lista"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.carga_lista()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.facturacion_anual_aux"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.facturacion_anual_aux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.falta_ri_aux"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.falta_ri_aux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.guardar_categorias_aux"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.guardar_categorias_aux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.ir_a_afip"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.ir_a_afip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.manejo_categorias"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.manejo_categorias()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.modificar_categorias_aux"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.modificar_categorias_aux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.pantalla_auxiliar_concepto"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.pantalla_auxiliar_concepto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.salir"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.salir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.VentanaPrincipal.ventana_informacion_categoria"><code class="docutils literal notranslate"><span class="pre">VentanaPrincipal.ventana_informacion_categoria()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Control_de_facturacion</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">vista module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/vista.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-vista">
+<span id="vista-module"></span><h1>vista module<a class="headerlink" href="#module-vista" title="Link to this heading"></a></h1>
+<p>VISTA ENCARGADA DE MOSTRAR TODA LA INFORMACION CON EL USUARIO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vista.</span></span><span class="sig-name descname"><span class="pre">VentanaPrincipal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ventana1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.ab_concepto">
+<span class="sig-name descname"><span class="pre">ab_concepto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concepto_elegido</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.ab_concepto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.ab_concepto" title="Link to this definition"></a></dt>
+<dd><p>Maneja la lógica al elegir una opción en el menú de conceptos.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>concepto_elegido (StringVar): Variable que almacena la opción seleccionada en el menú.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.acerca_del_programa">
+<span class="sig-name descname"><span class="pre">acerca_del_programa</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.acerca_del_programa"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.acerca_del_programa" title="Link to this definition"></a></dt>
+<dd><p>Muestra información sobre la aplicación y sus desarrolladores.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.actualizar_calculos">
+<span class="sig-name descname"><span class="pre">actualizar_calculos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.actualizar_calculos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.actualizar_calculos" title="Link to this definition"></a></dt>
+<dd><p>Actualiza los cálculos y las etiquetas relacionadas con las estadísticas de facturación.
+Utiliza métodos de la clase “mibase_estadistica”.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.actualizar_fecha">
+<span class="sig-name descname"><span class="pre">actualizar_fecha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.actualizar_fecha"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.actualizar_fecha" title="Link to this definition"></a></dt>
+<dd><p>Actualiza la fecha en la interfaz gráfica con la fecha seleccionada en el calendario.</p>
+<p>Parámetros:
+- event: El evento que desencadena la actualización de la fecha.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.actualizar_treeview">
+<span class="sig-name descname"><span class="pre">actualizar_treeview</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.actualizar_treeview"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.actualizar_treeview" title="Link to this definition"></a></dt>
+<dd><p>Actualiza la vista de tabla con los datos de la base de datos.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.aux_borrar_concepto">
+<span class="sig-name descname"><span class="pre">aux_borrar_concepto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.aux_borrar_concepto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.aux_borrar_concepto" title="Link to this definition"></a></dt>
+<dd><p>Maneja la eliminación de un concepto seleccionado.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.aux_borrar_factura">
+<span class="sig-name descname"><span class="pre">aux_borrar_factura</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.aux_borrar_factura"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.aux_borrar_factura" title="Link to this definition"></a></dt>
+<dd><p>Borra la factura seleccionada en la tabla después de confirmar la acción.</p>
+<p>No tiene parámetros.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.auxiliar_carga">
+<span class="sig-name descname"><span class="pre">auxiliar_carga</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.auxiliar_carga"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.auxiliar_carga" title="Link to this definition"></a></dt>
+<dd><p>Realiza validaciones y carga los datos de una factura.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.auxiliar_guardar_modificacion">
+<span class="sig-name descname"><span class="pre">auxiliar_guardar_modificacion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.auxiliar_guardar_modificacion"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.auxiliar_guardar_modificacion" title="Link to this definition"></a></dt>
+<dd><p>Guarda las modificaciones realizadas en una factura seleccionada y actualiza la interfaz gráfica.
+Habilita los botones previamente deshabilitados.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.auxiliar_modificar_factura">
+<span class="sig-name descname"><span class="pre">auxiliar_modificar_factura</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.auxiliar_modificar_factura"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.auxiliar_modificar_factura" title="Link to this definition"></a></dt>
+<dd><p>Configura la interfaz gráfica para permitir la modificación de la factura seleccionada.
+Deshabilita varios botones y muestra el botón para guardar las modificaciones.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.cambio_anio_fiscal">
+<span class="sig-name descname"><span class="pre">cambio_anio_fiscal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.cambio_anio_fiscal"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.cambio_anio_fiscal" title="Link to this definition"></a></dt>
+<dd><p>Cambia el año fiscal y actualiza la interfaz gráfica.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.cambio_color">
+<span class="sig-name descname"><span class="pre">cambio_color</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.cambio_color"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.cambio_color" title="Link to this definition"></a></dt>
+<dd><p>Cambia el color de fondo de la interfaz.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.carga_lista">
+<span class="sig-name descname"><span class="pre">carga_lista</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.carga_lista"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.carga_lista" title="Link to this definition"></a></dt>
+<dd><p>Carga la lista de conceptos en la interfaz gráfica.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.facturacion_anual_aux">
+<span class="sig-name descname"><span class="pre">facturacion_anual_aux</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.facturacion_anual_aux"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.facturacion_anual_aux" title="Link to this definition"></a></dt>
+<dd><p>Muestra el total facturado en el año actual en la etiqueta correspondiente.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.falta_ri_aux">
+<span class="sig-name descname"><span class="pre">falta_ri_aux</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.falta_ri_aux"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.falta_ri_aux" title="Link to this definition"></a></dt>
+<dd><p>Muestra la falta a facturar para un responsable inscripto en la etiqueta correspondiente.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.guardar_categorias_aux">
+<span class="sig-name descname"><span class="pre">guardar_categorias_aux</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.guardar_categorias_aux"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.guardar_categorias_aux" title="Link to this definition"></a></dt>
+<dd><p>Guarda las categorías modificadas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.ir_a_afip">
+<span class="sig-name descname"><span class="pre">ir_a_afip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.ir_a_afip"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.ir_a_afip" title="Link to this definition"></a></dt>
+<dd><p>Abre el navegador con el enlace a la AFIP.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.manejo_categorias">
+<span class="sig-name descname"><span class="pre">manejo_categorias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.manejo_categorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.manejo_categorias" title="Link to this definition"></a></dt>
+<dd><p>Maneja las categorías y actualiza la etiqueta “label_categoria” con la categoría correspondiente.
+También actualiza otras etiquetas relacionadas con las categorías.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.modificar_categorias_aux">
+<span class="sig-name descname"><span class="pre">modificar_categorias_aux</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.modificar_categorias_aux"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.modificar_categorias_aux" title="Link to this definition"></a></dt>
+<dd><p>Habilita la modificación de categorías.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.pantalla_auxiliar_concepto">
+<span class="sig-name descname"><span class="pre">pantalla_auxiliar_concepto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.pantalla_auxiliar_concepto"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.pantalla_auxiliar_concepto" title="Link to this definition"></a></dt>
+<dd><p>Crea y muestra una ventana secundaria para eliminar un concepto.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.salir">
+<span class="sig-name descname"><span class="pre">salir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.salir"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.salir" title="Link to this definition"></a></dt>
+<dd><p>Cierra la aplicación.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.VentanaPrincipal.ventana_informacion_categoria">
+<span class="sig-name descname"><span class="pre">ventana_informacion_categoria</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#VentanaPrincipal.ventana_informacion_categoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.VentanaPrincipal.ventana_informacion_categoria" title="Link to this definition"></a></dt>
+<dd><p>Ventana Auxiliar de categorias</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="modelo.html" class="btn btn-neutral float-left" title="modelo module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Suarez Fernando - Colomb Damian.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+Archivo de Log creado el 2024-01-23 23:49:13.
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion borrar_datos - 2024-01-23 23:49:13
+    Argumentos Ingresados: ((174,),)
+    Resultado de la funcion borrar_datos: ---> El registro (174,) se borró con éxito.
+Finalizacion de la funcion borrar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion borrar_datos - 2024-01-23 23:49:15
+    Argumentos Ingresados: ((170,),)
+    Resultado de la funcion borrar_datos: ---> El registro (170,) se borró con éxito.
+Finalizacion de la funcion borrar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion borrar_datos - 2024-01-23 23:49:18
+    Argumentos Ingresados: ((168,),)
+    Resultado de la funcion borrar_datos: ---> El registro (168,) se borró con éxito.
+Finalizacion de la funcion borrar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion borrar_datos - 2024-01-23 23:49:20
+    Argumentos Ingresados: ((166,),)
+    Resultado de la funcion borrar_datos: ---> El registro (166,) se borró con éxito.
+Finalizacion de la funcion borrar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion borrar_datos - 2024-01-23 23:49:22
+    Argumentos Ingresados: ((167,),)
+    Resultado de la funcion borrar_datos: ---> El registro (167,) se borró con éxito.
+Finalizacion de la funcion borrar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-23 23:49:28
+    Argumentos Ingresados: ('2024/01/23', 'Ejemplo 1', '567', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-24 20:31:49
+    Argumentos Ingresados: ('2024/01/24', 'Ejemplo 1', '100', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-24 21:15:06
+    Argumentos Ingresados: ('2024/01/24', 'svx', '200', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-24 21:18:42
+    Argumentos Ingresados: ('2024/01/24', 'Ejemplo 1', '456', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-24 21:20:50
+    Argumentos Ingresados: ('2024/01/24', 'Ejemplo 1', '345', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
