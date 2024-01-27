@@ -1,14 +1,16 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
+import threading
 
 
 
 class ObservadorTarea():
     def update(self,datos):
         cuerpo = f"Se ingreso un nuevo Registro: \n Fecha: {datos[0]} \n Concepto: {datos[1]} \n Importe: {datos[2]}"
-        self.enviar_correo(cuerpo)
+        t = threading.Thread(target=self.enviar_correo, name="enviar_correo",args=(cuerpo,))
+        t.start()
+
 
     def enviar_correo(self,cuerpo):
         servidor_smtp = 'smtp.gmail.com'

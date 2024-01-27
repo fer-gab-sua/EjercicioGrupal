@@ -59,3 +59,27 @@ Inicio de la funcion cargar_datos - 2024-01-24 21:20:50
     Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
 Finalizacion de la funcion cargar_datos
 ----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-27 11:49:59
+    Argumentos Ingresados: ('2024/01/27', 'Ejemplo 1', '123', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-27 11:51:40
+    Argumentos Ingresados: ('2024/01/27', 'Ejemplo 1', '123', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-27 11:53:42
+    Argumentos Ingresados: ('2024/01/27', 'svx', '123', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-01-27 11:53:50
+    Argumentos Ingresados: ('2024/01/17', 'svx', '3324', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
