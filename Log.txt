@@ -83,3 +83,9 @@ Inicio de la funcion cargar_datos - 2024-01-27 11:53:50
     Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
 Finalizacion de la funcion cargar_datos
 ----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Inicio de la funcion cargar_datos - 2024-02-18 20:13:46
+    Argumentos Ingresados: ('2024/02/15', 'Ejemplo 1', '100', 'null')
+    Resultado de la funcion cargar_datos: ---> Los registros fueron guardados con éxito.
+Finalizacion de la funcion cargar_datos
+----------------------------------------------------------------------------------------------------
