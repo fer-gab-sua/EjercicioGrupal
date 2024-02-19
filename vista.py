@@ -540,51 +540,59 @@ class VentanaPrincipal():
         webbrowser.open(web)
 
     def clienteserver(self):
+        try:
+            clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            host = 'DESKTOP-PP1EQCP'
+            puerto = 5002
 
+            # Conectar al servidor
+            clientsocket.connect((host, puerto))
 
-        clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        host = 'DESKTOP-PP1EQCP'
-        puerto = 5002
+            # Recibir los datos del servidor
+            serialized_data = clientsocket.recv(4096)
+            datos_recibidos = pickle.loads(serialized_data)
 
-        # Conectar al servidor
-        clientsocket.connect((host, puerto))
+            # Imprimir los datos recibidos
+            print("Datos recibidos del servidor:")
+            print(datos_recibidos)
 
-        # Recibir los datos del servidor
-        serialized_data = clientsocket.recv(4096)
-        datos_recibidos = pickle.loads(serialized_data)
+            if datos_recibidos:
+                resultado = {}
+                for dato in datos_recibidos:
+                    letra = dato[1]
+                    importe = dato[2]
+                    resultado[letra] = importe
 
-        # Imprimir los datos recibidos
-        print("Datos recibidos del servidor:")
-        print(datos_recibidos)
+                self.txt_A.delete(0, tk.END)
+                self.txt_A.insert(0, resultado.get('A', ''))
+                self.txt_B.delete(0, tk.END)
+                self.txt_B.insert(0, resultado.get('B', ''))
+                self.txt_C.delete(0, tk.END)
+                self.txt_C.insert(0, resultado.get('C', ''))
+                self.txt_D.delete(0, tk.END)
+                self.txt_D.insert(0, resultado.get('D', ''))
+                self.txt_E.delete(0, tk.END)
+                self.txt_E.insert(0, resultado.get('E', ''))
+                self.txt_F.delete(0, tk.END)
+                self.txt_F.insert(0, resultado.get('F', ''))
+                self.txt_G.delete(0, tk.END)
+                self.txt_G.insert(0, resultado.get('G', ''))
+                self.txt_H.delete(0, tk.END)
+                self.txt_H.insert(0, resultado.get('H', ''))
 
-        self.modificar_categorias_aux()
-        resultado = {}
-        for dato in datos_recibidos:
-            letra = dato[1]
-            importe = dato[2]
-            resultado[letra] = importe
+                messagebox.showinfo("AVISO", "Datos actualizados correctamente.")
+                self.modificar_categorias_aux()
+                self.inf_categoria.focus_set()
+            else:
+                messagebox.showwarning("AVISO", "No se recibieron datos del servidor.")
+                self.inf_categoria.focus_set()
 
-        self.txt_A.delete(0, tk.END)
-        self.txt_A.insert(0,resultado['A'])
-        self.txt_B.delete(0, tk.END)
-        self.txt_B.insert(0,resultado['B'])
-        self.txt_C.delete(0, tk.END)
-        self.txt_C.insert(0,resultado['C'])
-        self.txt_D.delete(0, tk.END)
-        self.txt_D.insert(0,resultado['D'])
-        self.txt_E.delete(0, tk.END)
-        self.txt_E.insert(0,resultado['E'])
-        self.txt_F.delete(0, tk.END)
-        self.txt_F.insert(0,resultado['F'])
-        self.txt_G.delete(0, tk.END)
-        self.txt_G.insert(0,resultado['G'])
-        self.txt_H.delete(0, tk.END)
-        self.txt_H.insert(0,resultado['H'])
-
-        messagebox.showwarning ("AVISO","Datos actualizados correctamente, para guardar de click en GUARDAR DATOS.")
-        self.inf_categoria.focus_set()
-        # Cerrar la conexión con el servidor
-        clientsocket.close()
+            # Cerrar la conexión con el servidor
+            clientsocket.close()
+        except Exception as e:
+            messagebox.showerror("AVISO", f"Error al conectar al servidor: {str(e)}")
+            self.inf_categoria.focus_set()
+        
 
 
     def ab_concepto(self,concepto_elegido):
