@@ -12,7 +12,8 @@ from tkinter import simpledialog, messagebox
 #import re
 from modelo import MiBaseDeDatosConnect , ModeloCategorias, ModeloParaVista, Crud, ModeloConfig , Validador,Estadisticas
 from observador import ObservadorTarea
-
+import socket
+import pickle
 
 
 #from modeloP import MiBaseDeDatosNw
@@ -341,6 +342,8 @@ class VentanaPrincipal():
         btn_ir_afip = Button(self.inf_categoria,text="Ir a Afip",command=lambda:self.ir_a_afip())
         btn_ir_afip.place(x=190,y=340)
         
+        btn_ir_actualizar_via_servidor = Button(self.inf_categoria,text="Actualizar Via Server",command=lambda:self.clienteserver())
+        btn_ir_actualizar_via_servidor.place(x=160,y=380)
         
         et_A = Label(self.inf_categoria,text="CATEGORIA A: ",justify="center",font=("arial",11,"bold"))
         et_A.place(x=20,y=50)
@@ -535,6 +538,54 @@ class VentanaPrincipal():
         """
         web = self.mibase_config.return_config('link_afip')
         webbrowser.open(web)
+
+    def clienteserver(self):
+
+
+        clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        host = 'DESKTOP-PP1EQCP'
+        puerto = 5002
+
+        # Conectar al servidor
+        clientsocket.connect((host, puerto))
+
+        # Recibir los datos del servidor
+        serialized_data = clientsocket.recv(4096)
+        datos_recibidos = pickle.loads(serialized_data)
+
+        # Imprimir los datos recibidos
+        print("Datos recibidos del servidor:")
+        print(datos_recibidos)
+
+        self.modificar_categorias_aux()
+        resultado = {}
+        for dato in datos_recibidos:
+            letra = dato[1]
+            importe = dato[2]
+            resultado[letra] = importe
+
+        self.txt_A.delete(0, tk.END)
+        self.txt_A.insert(0,resultado['A'])
+        self.txt_B.delete(0, tk.END)
+        self.txt_B.insert(0,resultado['B'])
+        self.txt_C.delete(0, tk.END)
+        self.txt_C.insert(0,resultado['C'])
+        self.txt_D.delete(0, tk.END)
+        self.txt_D.insert(0,resultado['D'])
+        self.txt_E.delete(0, tk.END)
+        self.txt_E.insert(0,resultado['E'])
+        self.txt_F.delete(0, tk.END)
+        self.txt_F.insert(0,resultado['F'])
+        self.txt_G.delete(0, tk.END)
+        self.txt_G.insert(0,resultado['G'])
+        self.txt_H.delete(0, tk.END)
+        self.txt_H.insert(0,resultado['H'])
+
+        messagebox.showwarning ("AVISO","Datos actualizados correctamente, para guardar de click en GUARDAR DATOS.")
+        self.inf_categoria.focus_set()
+        # Cerrar la conexión con el servidor
+        clientsocket.close()
+
 
     def ab_concepto(self,concepto_elegido):
         """
